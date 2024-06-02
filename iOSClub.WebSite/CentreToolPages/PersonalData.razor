@@ -106,7 +106,9 @@
     {
         base.OnInitialized();
         Id = Member.UserId;
-        Console.WriteLine(Member.UserId);
+        if (Member.Identity != "Founder") return;
+        Member.ClassName = "软件工程2019";
+        Member.PhoneNum = "12345678901";
     }
 
     private void OnFinish()

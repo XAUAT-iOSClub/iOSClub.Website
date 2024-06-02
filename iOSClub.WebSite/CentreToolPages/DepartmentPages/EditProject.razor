@@ -88,13 +88,14 @@
         if (string.IsNullOrEmpty(Id))
         {
             var p = Project.ToProject();
-            var staff = await  context.Staffs.FirstOrDefaultAsync(x => x.UserId == Member.UserId);
+            var staff = await context.Staffs.FirstOrDefaultAsync(x => x.UserId == Member.UserId);
             if (staff == null)
             {
                 await MessageService.Error("用户不存在");
                 return;
             }
             p.Staffs.Add(staff);
+            p.Id = DataTool.StringToHash(p.ToString());
             await context.Projects.AddAsync(p);
             await context.SaveChangesAsync();
             await MessageService.Success("添加成功");

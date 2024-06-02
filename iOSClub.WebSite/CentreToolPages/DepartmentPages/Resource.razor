@@ -104,6 +104,7 @@
         }
         else
         {
+            FormData.Id = DataTool.StringToHash(FormData.ToString());
             await context.Resources.AddAsync(FormData);
             await context.SaveChangesAsync();
             Resources.Add(FormData);

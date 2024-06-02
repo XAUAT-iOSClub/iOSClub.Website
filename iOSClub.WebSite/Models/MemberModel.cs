@@ -47,7 +47,4 @@ public class MemberModel : StudentModel
 
         return child;
     }
-
-    public StaffModel ToStaff()
-        => new() { Identity = Identity, UserId = UserId, Name = UserName };
 }

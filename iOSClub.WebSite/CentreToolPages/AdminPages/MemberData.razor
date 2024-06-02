@@ -9,7 +9,6 @@
 @using System.IO
 @using iOSClub.Data
 @using iOSClub.Data.DataModels
-@using iOSClub.WebSite.Models
 @inject IJSRuntime JS
 @inject IDbContextFactory<SignContext> DbFactory
 
@@ -300,7 +299,7 @@
         var result = await reader.ReadToEndAsync();
         reader.Dispose();
         if (string.IsNullOrEmpty(result)) return;
-        var list = GetList(result);
+        var list = JsonConvert.DeserializeObject<List<StudentModel>>(result)!;
         var context = await DbFactory.CreateDbContextAsync();
 
         RunningStyle = true;
@@ -322,12 +321,6 @@
         RunningStyle = false;
         Models = await context.Students.ToListAsync();
         await context.DisposeAsync();
-    }
-
-    private static List<StudentModel> GetList(string result)
-    {
-        var oldList = JsonConvert.DeserializeObject<List<OldSignModel>>(result)!;
-        return oldList.Any(x => string.IsNullOrEmpty(x.Id)) ? JsonConvert.DeserializeObject<List<StudentModel>>(result)! : oldList.Select(oldModel => oldModel.To()).ToList();
     }
 
     private void FileDownload() => _visible = true;

@@ -5,7 +5,7 @@ namespace iOSClub.Data.DataModels;
 
 public class ProjectModel : DataModel
 {
-    [Column(TypeName = "varchar(20)")] public string DepartmentName { get; set; } = "";
+    [Column(TypeName = "varchar(20)")] public string DepartmentName { get; init; } = "";
     [Column(TypeName = "varchar(20)")] public string Title { get; set; } = "";
 
     [Key] [Column(TypeName = "varchar(33)")]public string Id { get; set; } = "";

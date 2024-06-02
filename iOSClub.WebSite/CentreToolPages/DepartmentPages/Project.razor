@@ -182,7 +182,7 @@
     {
         await using var context = await DbFactory.CreateDbContextAsync();
         var task = TaskData.ToTask();
-        if (!string.IsNullOrEmpty(TaskData.Id))
+        if (string.IsNullOrEmpty(TaskData.Id))
         {
             var p = await context.Projects.FirstOrDefaultAsync(x => x.Id.ToString() == Id);
             if (p == null)
@@ -194,6 +194,7 @@
             task.Project = Data;
             var staff = await context.Staffs.FirstAsync(x => x.UserId == Member.UserId);
             task.Users.Add(staff);
+            task.Id = DataTool.StringToHash(task.ToString());
             p.Tasks.Add(task);
             Data.Tasks.Add(task);
             await context.SaveChangesAsync();

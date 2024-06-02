@@ -87,6 +87,12 @@
 @code {
     private double Percent { get; set; } = 30;
     [CascadingParameter] public bool IsMobile { get; set; }
+    private bool IsInit { get; set; }
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        IsInit = true;
+    }
 
     private record CardModel(string ImageUrl, string Title, string Content, string Url = "");
 
@@ -142,7 +148,7 @@
     }
     
     .block-opacity{
-        opacity: @(IsMobile || Percent >= 70 ? 1 : (Percent - 30) / 30);
+        opacity: @(!IsInit || IsMobile || Percent >= 70 ? 1 : (Percent - 30) / 30);
     }
 
     .first-button {

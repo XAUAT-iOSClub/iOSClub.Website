@@ -1,0 +1,72 @@
+﻿@layout HomeLayout
+@inherits LayoutComponentBase
+
+<GridRow>
+    <GridCol Class="desktop-laptop" Xs="0" Sm="0" Md="0" Lg="0" Xl="4" Xxl="4">
+        <Menu Theme="MenuTheme.Light"
+              Mode="MenuMode.Inline" Class="menu-block">
+            <MenuItemGroup Class="group-block">
+                <TitleTemplate>
+                    <div class="group-title">
+                        社团简介
+                    </div>
+                </TitleTemplate>
+                <ChildContent>
+                    <MenuItem RouterLink="/About" RouterMatch="NavLinkMatch.All">关于我们</MenuItem>
+                    <MenuItem RouterLink="/Structure" RouterMatch="NavLinkMatch.All">社团结构</MenuItem>
+                    <MenuItem RouterLink="/OtherOrg" RouterMatch="NavLinkMatch.All">其他组织</MenuItem>
+                </ChildContent>
+            </MenuItemGroup>
+            <MenuItemGroup Class="group-block">
+                <TitleTemplate>
+                    <div class="group-title">
+                        部门简介
+                    </div>
+                </TitleTemplate>
+                <ChildContent>
+                    <MenuItem RouterLink="/Department/Technology" RouterMatch="NavLinkMatch.All">科技部</MenuItem>
+                    <MenuItem RouterLink="/Department/Practical" RouterMatch="NavLinkMatch.All">交流实践部</MenuItem>
+                    <MenuItem RouterLink="/Department/NewMedia" RouterMatch="NavLinkMatch.All">新媒体部</MenuItem>
+                </ChildContent>
+            </MenuItemGroup>
+        </Menu>
+    </GridCol>
+    <GridCol Xs="24" Sm="24" Md="24" Lg="24" Xl="20" Xxl="20">
+        <div style="padding: 20px;min-height: 100%;overflow: auto">
+            @Body
+            <BackTop Style="margin-bottom:60px">
+                <div class="ant-back-top-inner">
+                    <Icon Type="arrow-up" Theme="outline"/>
+                </div>
+            </BackTop>
+        </div>
+    </GridCol>
+</GridRow>
+
+<style>
+    
+    .group-block{
+        padding: 10px;
+    }
+    
+    .menu-block{
+        padding-top: 10px;
+        padding-left: 10px;
+    }
+
+    .group-title {
+        padding-bottom: 10px;
+        border-bottom: 1px solid #ededed;
+    }
+    
+    .ant-back-top-inner {
+        height: 40px;
+        width: 40px;
+        line-height: 40px;
+        border-radius: 20px;
+        background-color: #1088e9;
+        color: #fff;
+        text-align: center;
+        font-size: 20px;
+    }
+</style>

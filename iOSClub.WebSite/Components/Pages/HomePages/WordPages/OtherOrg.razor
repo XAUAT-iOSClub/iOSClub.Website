@@ -1,0 +1,65 @@
+﻿@page "/OtherOrg"
+
+<PageTitle>其他组织 - 西建大iOS Club</PageTitle>
+
+<Breadcrumb Style="margin-bottom: 10px">
+    <BreadcrumbItem>
+        <a href="/NewAbout">社团简介</a>
+    </BreadcrumbItem>
+    <BreadcrumbItem>
+        <a href="/OtherOrg">其他组织</a>
+    </BreadcrumbItem>
+</Breadcrumb>
+
+<GridRow>
+    <GridCol Xs="24" Sm="24" Md="24" Lg="16" Xl="20" Xxl="20">
+        <div id="other">
+            <Title Level="2">其他组织</Title>
+            <Paragraph>
+                iOS Club是一个包容性非常强的社团，我们欢迎所有对数码技术和编写程序感兴趣的成员加入
+            </Paragraph>
+        </div>
+
+        <div id="xiaomi">
+            <GridRow>
+                <GridCol Xs="24" Sm="24" Md="24" Lg="16" Xl="16" Xxl="16">
+                    <Title Level="2">米粉俱乐部</Title>
+                    <p>欢迎来到西建大米粉俱乐部——一个充满创新和科技热情的社区！我们是由小米公司在西安建筑科技大学创办的科技类俱乐部。这里，我们共同探索科技的无限可能，分享智能生活的每一个精彩瞬间。</p>
+                    <p>作为米粉俱乐部的一员，你将有机会参与到最前沿的科技讨论，体验最新的小米产品，甚至参与产品测试和反馈。我们的活动涵盖了科技讲座、工作坊、创新竞赛等多种形式，旨在激发每一位成员的创造力和潜能。</p>
+                    <p>我们诚挚邀请每一位对科技充满热情的朋友加入我们的大家庭。无论你是科技爱好者，还是寻求创新灵感的学者，西建大米粉俱乐部都是你理想的归宿。在这里，你可以与志同道合的伙伴交流思想，共同成长。</p>
+                    <p>加入我们，一起在科技的道路上，启航新征程！我们期待着你的加入，一起创造属于我们的未来。立即联系我们，开启你的米粉之旅吧</p>
+                </GridCol>
+                <GridCol Xs="24" Sm="24" Md="24" Lg="8" Xl="8" Xxl="8">
+                    <Image Width="200px" Src="/other/xiaomi.jpg"/>
+                </GridCol>
+            </GridRow>
+        </div>
+        <Divider/>
+        <div id="huawei">
+            <GridRow>
+                <GridCol Xs="24" Sm="24" Md="24" Lg="16" Xl="16" Xxl="16">
+                    <Title Level="2">花粉俱乐部</Title>
+                    <p>欢迎来到西建大花粉俱乐部! 我们是由华为公司在西安建筑科技大学创办的科技类俱乐部。这里，我们共同探索科技的无限可能，分享智能生活的每一个精彩瞬间。</p>
+                    <p>我们诚挚邀请每一位对科技充满热情的朋友加入我们的大家庭。无论你是科技爱好者，还是寻求创新灵感的学者，西建大花粉俱乐部都是你理想的归宿。在这里，你可以与志同道合的伙伴交流思想，共同成长。</p>
+                    <p>加入我们，一起在科技的道路上，启航新征程！我们期待着你的加入，一起创造属于我们的未来。立即联系我们，开启你的花粉之旅吧</p>
+                </GridCol>
+                <GridCol Xs="24" Sm="24" Md="24" Lg="8" Xl="8" Xxl="8">
+                    <Image Width="200px" Src="/other/huawei.jpg"/>
+                </GridCol>
+            </GridRow>
+        </div>
+    </GridCol>
+    <GridCol Xs="0" Sm="0" Md="0" Lg="4" Xl="4" Xxl="4" Class="desktop-phone">
+        <Affix>
+            <Anchor >
+                <AnchorLink Href="/NewAbout#other" Title="其他组织"/>
+                <AnchorLink Href="/NewAbout#xiaomi" Title="米粉俱乐部"/>
+                <AnchorLink Href="/NewAbout#huawei" Title="花粉俱乐部"/>
+            </Anchor>
+        </Affix>
+    </GridCol>
+</GridRow>
+
+@code {
+    
+}

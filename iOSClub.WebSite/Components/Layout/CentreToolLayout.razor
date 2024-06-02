@@ -1,0 +1,38 @@
+﻿@layout CentreLayout
+@using iOSClub.WebSite.Models
+@inherits LayoutComponentBase
+
+<Layout Style="max-height: 100%;overflow:hidden">
+    <Sider Breakpoint="@BreakpointType.Md" Class="desktop-phone sider"
+           CollapsedWidth="64" Trigger="@null">
+        <CentreMenu State="@Member.Identity"/>
+    </Sider>
+    <Content Class="layout-context">
+        <CascadingValue Value="@Member">
+            @Body
+        </CascadingValue>
+    </Content>
+</Layout>
+
+@code
+{
+    [CascadingParameter] private MemberModel Member { get; set; } = new();
+}
+
+<style>
+    .sider {
+        background-color: #f3f5f7;
+        overflow: auto;
+        height: 100%;
+    }
+
+    body {
+        height: 100% !important;
+    }
+
+    .layout-context {
+        overflow: auto;
+        background-color: #f3f5f7;
+        margin: 24px 16px 0;
+    }
+</style>

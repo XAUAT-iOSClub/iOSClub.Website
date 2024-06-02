@@ -1,0 +1,68 @@
+﻿<Menu Theme="MenuTheme.Light"
+      Mode="MenuMode.Inline">
+    <MenuItem RouterLink="/Centre" RouterMatch="NavLinkMatch.All">
+        <Icon Type="home" Theme="outline"/>
+        <span class="nav-text">主页</span>
+    </MenuItem>
+
+    @if (State != "Founder")
+    {
+        <MenuItem RouterLink="/Centre/PersonalData" RouterMatch="NavLinkMatch.All">
+            <Icon Type="user" Theme="outline"/>
+            <span class="nav-text">成员信息</span>
+        </MenuItem>
+        @if (State != "Member")
+        {
+            <MenuItem RouterLink="/Centre/Department" RouterMatch="NavLinkMatch.All">
+                <Icon Type="project" Theme="outline"/>
+                <span class="nav-text">社团项目</span>
+            </MenuItem>
+            <MenuItem RouterLink="/Centre/Resource" RouterMatch="NavLinkMatch.All">
+                <Icon Type="file-text" Theme="outline"/>
+                <span class="nav-text">社团资源</span>
+            </MenuItem>
+        }
+    }
+
+    @if (State.Contains("Minister") || State == "President" || State == "Founder")
+    {
+        <SubMenu>
+            <TitleTemplate>
+                <Icon Type="upload" Theme="outline"/>
+                <span class="nav-text">管理</span>
+            </TitleTemplate>
+            <ChildContent>
+                <MenuItem RouterLink="/Admin/MemberData" RouterMatch="NavLinkMatch.All">
+                    <Icon Type="team" Theme="outline"/>
+                    <span class="nav-text">成员管理</span>
+                </MenuItem>
+                <MenuItem RouterLink="/Admin/ArticleManager" RouterMatch="NavLinkMatch.All">
+                    <Icon Type="trophy" Theme="outline"/>
+                    <span class="nav-text">文章管理</span>
+                </MenuItem>
+                <MenuItem RouterLink="/Admin/Env" RouterMatch="NavLinkMatch.All">
+                    <Icon Type="setting" Theme="outline"/>
+                    <span class="nav-text">环境管理</span>
+                </MenuItem>
+                <MenuItem RouterLink="/Admin/Permissions" RouterMatch="NavLinkMatch.All">
+                    <Icon Type="alert" Theme="outline"/>
+                    <span class="nav-text">权限管理</span>
+                </MenuItem>
+            </ChildContent>
+        </SubMenu>
+    }
+
+    <MenuItem RouterLink="/Centre/Tool" RouterMatch="NavLinkMatch.All">
+        <Icon Type="tool" Theme="outline"/>
+        <span class="nav-text">社团小工具</span>
+    </MenuItem>
+
+    <MenuItem RouterLink="/Logout" Class="phone-desktop-flex" RouterMatch="NavLinkMatch.All">
+        <Icon Type="logout" Theme="outline"/>
+        <span class="nav-text">退出登录</span>
+    </MenuItem>
+</Menu>
+
+@code {
+    [Parameter] public string State { get; set; } = "Member";
+}

@@ -1,0 +1,156 @@
+﻿@layout MainLayout
+@inherits LayoutComponentBase
+@using System.Security.Claims
+@using iOSClub.Data
+@using iOSClub.Data.DataModels
+@using iOSClub.WebSite.Models
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.EntityFrameworkCore
+@inject IDbContextFactory<SignContext> DbFactory
+@inject AuthenticationStateProvider authStateProvider
+@inject NavigationManager Nav
+
+<Drawer Placement="bottom" Closable="false"
+        Visible="@_drawerVisible"
+        OnClose="@(() => _drawerVisible = false)">
+    <CentreMenu State="@Member.Identity"/>
+</Drawer>
+
+@if (_isAuth)
+{
+    <Layout Style="height: 100vh">
+        <Header Class="Layout-Header">
+            <Flex Align="center" Justify="space-between">
+                @* ReSharper disable once Html.PathError *@
+                <a href="/NewIndex">
+                    <Flex Gap="large">
+                        <Image Src="iOS_Club_LOGO.png" Preview="false" Style="width:40px; height:40px"/>
+                        <div class="Layout-Title">iMember</div>
+                    </Flex>
+                </a>
+                <Flex class="desktop-phone-flex">
+                    <Popover Class="Layout-Popover" Trigger="@(new[] { Trigger.Click })">
+                        <TitleTemplate>
+                            <Space Size="@("middle")">
+                                <SpaceItem>
+                                    @if (Member.Identity != "Founder")
+                                    {
+                                        <Image Style="height: 60px;width: 60px" Preview="false"
+                                               Src="@(Member.Gender == "男" ? "Centre/男生.png" : "Centre/女生.png")"/>
+                                    }
+                                    else
+                                    {
+                                        <Image Style="height: 60px;width: 60px" Preview="false" Src="iOS_Club_LOGO.png"/>
+                                    }
+                                </SpaceItem>
+                                <SpaceItem>
+                                    <div>
+                                        <span style="font-size: 22px;font-weight: bold">@Member.UserName</span>
+                                        <Paragraph Type="secondary">@Member.UserId</Paragraph>
+                                    </div>
+                                </SpaceItem>
+                            </Space>
+                        </TitleTemplate>
+                        <ContentTemplate>
+                            <Paragraph Type="secondary">
+                                当前身份:@MemberModel.IdentityDictionary[Member.Identity]
+                            </Paragraph>
+                            <Button Type="@ButtonType.Text" Danger OnClick="@(() => Nav.NavigateTo("/Logout"))">
+                                退出登录
+                            </Button>
+                        </ContentTemplate>
+                        <ChildContent>
+                            <Button Type="@ButtonType.Text">
+                                <Icon Type="user" Theme="outline" Class="Layout-Title"/>
+                            </Button>
+                        </ChildContent>
+                    </Popover>
+                </Flex>
+                <Button Size="@AntSizeLDSType.Large" class="phone-desktop-flex" Type="@ButtonType.Text"
+                        OnClick="@(() => _drawerVisible = !_drawerVisible)">
+                    <Icon Type="menu" Theme="outline" Class="Layout-Title"/>
+                </Button>
+            </Flex>
+        </Header>
+        <Content>
+            <CascadingValue Value="@Member">
+                @Body
+            </CascadingValue>
+        </Content>
+    </Layout>
+}
+else
+{
+    <div class="body">
+        <div class="main">
+            <ReturnView ReturnInfo="" FlushedUrl="@Nav.Uri"/>
+        </div>
+    </div>
+}
+
+@code
+{
+    private bool _isAuth { get; set; } = true;
+
+    private MemberModel Member { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await authStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity is not null && user.Identity.IsAuthenticated)
+        {
+            var name = user.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value;
+            var identity = user.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value;
+            var id = user.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(identity) || string.IsNullOrEmpty(id)) return;
+            await using var context = await DbFactory.CreateDbContextAsync();
+            var model = await context.Students.FirstOrDefaultAsync(x => x.UserId == id && x.UserName == name);
+
+            if (model == null)
+            {
+                var f = await context.Staffs.FirstOrDefaultAsync(x => x.UserId == id && x.Name == name);
+                if (f == null) return;
+                model = new MemberModel()
+                {
+                    UserId = f.UserId,
+                    UserName = f.Name,
+                    Identity = f.Identity
+                };
+            }
+
+            Member = MemberModel.AutoCopy<StudentModel, MemberModel>(model);
+            Member.Identity = identity;
+        }
+        else
+        {
+            _isAuth = false;
+        }
+
+        await base.OnInitializedAsync();
+    }
+
+    private bool _drawerVisible;
+}
+
+<style>
+    .Layout-Header {
+
+    }
+
+    .Layout-Title {
+        font-size: 24px;
+        font-weight: bold;
+        color: #f3f5f7;
+    }
+    
+    .Layout-Popover{
+        border-radius: 10px;
+    }
+
+    .ant-popover-inner {
+        border-radius: 12px;
+        padding: 10px;
+    }
+</style>

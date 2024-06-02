@@ -1,0 +1,266 @@
+﻿@page "/Admin/Permissions"
+@using iOSClub.Data.DataModels
+
+<PageTitle>权限管理 - iAdmin</PageTitle>
+
+<InputFile id="fileInput" OnChange="@UploadFiles" hidden multiple/>
+
+<Modal Title="@("添加")"
+       Visible="@_visible"
+       OnCancel="@HandleCancel"
+       Footer="null">
+    <GridRow>
+        <GridCol Span="6"/>
+        <GridCol Span="12">
+            <Space>
+                <SpaceItem>
+                    <Search EnterButton="@("搜索")" OnSearch="@(async s => await Search(s))" Size="large"/>
+                </SpaceItem>
+            </Space>
+        </GridCol>
+        <GridCol Span="6"/>
+    </GridRow>
+    <Table TItem="StudentModel" PageSize="3" DataSource="@SearchResult">
+        <PropertyColumn Title="姓名" Property="c => c.UserName"/>
+        <PropertyColumn Title="学号" Property="c => c.UserId"/>
+        <PropertyColumn Title="学院" Property="c => c.Academy"/>
+        <ActionColumn Title="操作">
+            <Button OnClick="@(() => Add(context))">添加</Button>
+        </ActionColumn>
+    </Table>
+</Modal>
+
+<PageView Style="min-height: 100%" ContextStyle="padding:10px;">
+<Extra>
+    <Space>
+        <SpaceItem>
+            <Button Type="@ButtonType.Primary" OnClick="@FileDownload">下载文件</Button>
+        </SpaceItem>
+        <SpaceItem>
+            <Upload Name="files">
+                <label class="ant-btn" for="fileInput">上传Json数据</label>
+            </Upload>
+        </SpaceItem>
+    </Space>
+</Extra>
+<Context>
+    <Tabs TabPosition="TabPosition.Top" Centered>
+        <TabPane Tab="社长/副社长/秘书长">
+            <header class="header">
+                <h3>社长/副社长/秘书长</h3>
+                <Space>
+                    <div class="phone-top-display">
+                        <SpaceItem Class="phone-top-display">
+                            <Button Type="@ButtonType.Primary" OnClick="@(() => _operaVisible = true)">操作</Button>
+                        </SpaceItem>
+                    </div>
+                    <div class="phone-left-display">
+                        <SpaceItem>
+                            <Button OnClick="@(() => OpenTable("President"))">添加成员</Button>
+                            <Button Danger OnClick="@(async () => await DeleteAll("President"))">全部删除</Button>
+                        </SpaceItem>
+                    </div>
+                </Space>
+            </header>
+            <Space>
+                @foreach (var item in President)
+                {
+                    <SpaceItem>
+                        <Popconfirm Title="确定删除这条数据?"
+                                    Placement="Placement.TopLeft"
+                                    OnConfirm="@(async () => await Delete(item, "President"))">
+                            <Button Type="@ButtonType.Primary">@item.Name</Button>
+                        </Popconfirm>
+                    </SpaceItem>
+                }
+            </Space>
+        </TabPane>
+        <TabPane Tab="科技部">
+            <header class="header">
+                <h3>部长/副部长</h3>
+                <Space>
+                    <div class="phone-top-display">
+                        <SpaceItem Class="phone-top-display">
+                            <Button Type="@ButtonType.Primary" OnClick="@(() => OpenOrClose("TechnologyMinister"))">操作</Button>
+                        </SpaceItem>
+                    </div>
+                    <div class="phone-left-display">
+                        <SpaceItem>
+                            <Button OnClick="@(() => OpenTable("TechnologyMinister"))">添加成员</Button>
+                            <Button Danger OnClick="@(async () => await DeleteAll("TechnologyMinister"))">全部删除</Button>
+                        </SpaceItem>
+                    </div>
+                </Space>
+            </header>
+            <Space>
+                @foreach (var item in TechnologyMinister)
+                {
+                    <SpaceItem>
+                        <Popconfirm Title="确定删除这条数据?"
+                                    Placement="Placement.TopLeft"
+                                    OnConfirm="@(async () => await Delete(item, "TechnologyMinister"))">
+                            <Button Type="@ButtonType.Primary">@item.Name</Button>
+                        </Popconfirm>
+                    </SpaceItem>
+                }
+            </Space>
+            <Divider/>
+            <header class="header">
+                <h3>成员</h3>
+                <Space>
+                    <div class="phone-top-display">
+                        <SpaceItem>
+                            <Button Type="@ButtonType.Primary" OnClick="@(() => OpenOrClose("TechnologyMember"))">操作</Button>
+                        </SpaceItem>
+                    </div>
+                    <div class="phone-left-display">
+                        <SpaceItem>
+                            <Button OnClick="@(() => OpenTable("TechnologyMember"))">添加成员</Button>
+                            <Button Danger OnClick="@(async () => await DeleteAll("TechnologyMember"))">全部删除</Button>
+                        </SpaceItem>
+                    </div>
+                </Space>
+            </header>
+            <Table TItem="StaffModel" DataSource="@TechnologyMember">
+                <PropertyColumn Title="姓名" Property="c => c.Name"/>
+                <PropertyColumn Title="学号" Property="c => c.UserId"/>
+                <ActionColumn Title="操作">
+                    <Space>
+                        <SpaceItem>
+                            <Button Danger OnClick="@(async () => await Delete(context, "TechnologyMember"))">删除</Button>
+                        </SpaceItem>
+                    </Space>
+                </ActionColumn>
+            </Table>
+        </TabPane>
+        <TabPane Tab="交流实践部">
+            <header class="header">
+                <h3>部长/副部长</h3>
+                <Space>
+                    <div class="phone-top-display">
+                        <SpaceItem Class="phone-top-display">
+                            <Button Type="@ButtonType.Primary" OnClick="@(() => OpenOrClose("PracticalMinister"))">操作</Button>
+                        </SpaceItem>
+                    </div>
+                    <div class="phone-left-display">
+                        <SpaceItem>
+                            <Button OnClick="@(() => OpenTable("PracticalMinister"))">添加成员</Button>
+                            <Button Danger OnClick="@(async () => await DeleteAll("PracticalMinister"))">全部删除</Button>
+                        </SpaceItem>
+                    </div>
+                </Space>
+            </header>
+            <Space>
+                @foreach (var item in PracticalMinister)
+                {
+                    <SpaceItem>
+                        <Popconfirm Title="确定删除这条数据?"
+                                    Placement="Placement.TopLeft"
+                                    OnConfirm="@(async () => await Delete(item, "PracticalMinister"))">
+                            <Button Type="@ButtonType.Primary">@item.Name</Button>
+                        </Popconfirm>
+                    </SpaceItem>
+                }
+            </Space>
+            <Divider/>
+            <header class="header">
+                <h3>成员</h3>
+                <Space>
+                    <div class="phone-top-display">
+                        <SpaceItem>
+                            <Button Type="@ButtonType.Primary" OnClick="@(() => OpenOrClose("PracticalMember"))">操作</Button>
+                        </SpaceItem>
+                    </div>
+                    <div class="phone-left-display">
+                        <SpaceItem>
+                            <Button OnClick="@(() => OpenTable("PracticalMember"))">添加成员</Button>
+                            <Button Danger OnClick="@(async () => await DeleteAll("PracticalMember"))">全部删除</Button>
+                        </SpaceItem>
+                    </div>
+                </Space>
+            </header>
+            <Table TItem="StaffModel" DataSource="@PracticalMember">
+                <PropertyColumn Title="姓名" Property="c => c.Name"/>
+                <PropertyColumn Title="学号" Property="c => c.UserId"/>
+                <ActionColumn Title="操作">
+                    <Space>
+                        <SpaceItem>
+                            <Button Danger OnClick="@(async () => await Delete(context, "PracticalMember"))">删除</Button>
+                        </SpaceItem>
+                    </Space>
+                </ActionColumn>
+            </Table>
+        </TabPane>
+        <TabPane Tab="新媒体部">
+            <header class="header">
+                <h3>部长/副部长</h3>
+                <Space>
+                    <div class="phone-top-display">
+                        <SpaceItem Class="phone-top-display">
+                            <Button Type="@ButtonType.Primary" OnClick="@(() => OpenOrClose("NewMediaMinister"))">操作</Button>
+                        </SpaceItem>
+                    </div>
+                    <div class="phone-left-display">
+                        <SpaceItem>
+                            <Button OnClick="@(() => OpenTable("NewMediaMinister"))">添加成员</Button>
+                            <Button Danger OnClick="@(async () => await DeleteAll("NewMediaMinister"))">全部删除</Button>
+                        </SpaceItem>
+                    </div>
+                </Space>
+            </header>
+            <Space>
+                @foreach (var item in NewMediaMinister)
+                {
+                    <SpaceItem>
+                        <Popconfirm Title="确定删除这条数据?"
+                                    Placement="Placement.TopLeft"
+                                    OnConfirm="@(async () => await Delete(item, "NewMediaMinister"))">
+                            <Button Type="@ButtonType.Primary">@item.Name</Button>
+                        </Popconfirm>
+                    </SpaceItem>
+                }
+            </Space>
+            <Divider/>
+            <header class="header">
+                <h3>成员</h3>
+                <Space>
+                    <div class="phone-top-display">
+                        <SpaceItem>
+                            <Button Type="@ButtonType.Primary" OnClick="@(() => OpenOrClose("NewMediaMember"))">操作</Button>
+                        </SpaceItem>
+                    </div>
+                    <div class="phone-left-display">
+                        <SpaceItem>
+                            <Button OnClick="@(() => OpenTable("NewMediaMember"))">添加成员</Button>
+                            <Button Danger OnClick="@(async () => await DeleteAll("NewMediaMember"))">全部删除</Button>
+                        </SpaceItem>
+                    </div>
+                </Space>
+            </header>
+            <Table TItem="StaffModel" DataSource="@NewMediaMember">
+                <PropertyColumn Title="姓名" Property="c => c.Name"/>
+                <PropertyColumn Title="学号" Property="c => c.UserId"/>
+                <ActionColumn Title="操作">
+                    <Space>
+                        <SpaceItem>
+                            <Button Danger OnClick="@(async () => await Delete(context, "NewMediaMember"))">删除</Button>
+                        </SpaceItem>
+                    </Space>
+                </ActionColumn>
+            </Table>
+        </TabPane>
+    </Tabs>
+</Context>
+</PageView>
+
+<Modal Title="@("操作")"
+       Visible="@_operaVisible"
+       OnCancel="@(() => OpenOrClose())"
+       Footer="null">
+    <Space>
+        <SpaceItem>
+            <Button OnClick="@(() => OpenTable(_department))">添加成员</Button>
+            <Button Danger OnClick="@(async () => await DeleteAll(_department))">全部删除</Button>
+        </SpaceItem>
+    </Space>
+</Modal>

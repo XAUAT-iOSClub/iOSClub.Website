@@ -1,0 +1,38 @@
+﻿@inject IMessageService _message
+@inject NavigationManager navigation
+
+@if (string.IsNullOrEmpty(ReturnInfo))
+{
+    <Result Status="warning"
+            Title="未登录">
+        <Extra>
+            <Button Type="@ButtonType.Primary" OnClick="@GoBackToLogin">回到登录界面</Button>
+            <Button Type="@ButtonType.Primary" OnClick="@Flushed">或者试着刷新一下?</Button>
+        </Extra>
+    </Result>
+}
+
+@code {
+
+    [Parameter] public string FlushedUrl { get; set; } = "";
+
+    [Parameter] public string ReturnInfo { get; set; } = "未登录!正在为您跳转到登陆界面";
+
+    [Parameter] public string ReturnUrl { get; set; } = "/Login";
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+        if (string.IsNullOrEmpty(ReturnInfo)) return;
+        if (firstRender)
+        {
+            await _message.Info(ReturnInfo, 3);
+            navigation.NavigateTo(ReturnUrl);
+        }
+    }
+
+    private void GoBackToLogin() => navigation.NavigateTo("/Login");
+
+    private void Flushed() => navigation.NavigateTo(FlushedUrl, true);
+
+}

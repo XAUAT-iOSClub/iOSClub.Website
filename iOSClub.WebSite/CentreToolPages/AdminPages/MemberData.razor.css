@@ -1,0 +1,24 @@
+﻿.phone-left-display{
+    display: initial !important;
+    width: 100%;
+    height: 100%;
+}
+
+.phone-top-display{
+    display: none !important;
+    width: 100%;
+}
+
+@media screen and (max-width: 768px) {
+    .phone-left-display{
+        display: none !important;
+    }
+
+    .phone-top-display {
+        display: initial !important;
+    }
+}
+
+body{
+    height: 100%;
+}

@@ -1,0 +1,347 @@
+﻿@page "/Admin/MemberData"
+@using Microsoft.EntityFrameworkCore
+@using System.Text.Json
+@using System.Text
+@using System.Text.Encodings.Web
+@using System.Text.Unicode
+@using Newtonsoft.Json
+@using JsonSerializer = System.Text.Json.JsonSerializer
+@using System.IO
+@using iOSClub.Data
+@using iOSClub.Data.DataModels
+@using iOSClub.WebSite.Models
+@inject IJSRuntime JS
+@inject IDbContextFactory<SignContext> DbFactory
+
+<PageTitle>成员数据 - iAdmin</PageTitle>
+
+<InputFile id="fileInput" OnChange="@UploadFiles" hidden multiple/>
+<Modal Title="@("Title")"
+       Visible="@_visible"
+       OnCancel="@HandleCancel"
+       Footer="null">
+    <Space>
+        <SpaceItem>
+            <Button Type="@ButtonType.Primary" OnClick="@CsvDownload">下载Csv文件</Button>
+        </SpaceItem>
+        <SpaceItem>
+            <Button Type="@ButtonType.Primary" OnClick="@JsonDownload">下载Json文件</Button>
+        </SpaceItem>
+        <SpaceItem>
+            <Button Type="@ButtonType.Primary" OnClick="@HandleCancel">取消</Button>
+        </SpaceItem>
+    </Space>
+
+</Modal>
+
+@code
+{
+
+    private bool _runningStyle;
+
+    private bool RunningStyle
+    {
+        get => _runningStyle;
+        set
+        {
+            _runningStyle = value;
+            StateHasChanged();
+        }
+    }
+
+    private async Task JsonDownload()
+    {
+        var options = new JsonSerializerOptions
+        {
+            Encoder = JavaScriptEncoder.Create(UnicodeRanges.All)
+        };
+        var jsonString = JsonSerializer.Serialize(Models, options);
+        var data = Encoding.UTF8.GetBytes(jsonString);
+
+        await Download("data.json", data);
+    }
+
+    private async Task Download(string fileName, byte[] data)
+    {
+        RunningStyle = true;
+        await JS.InvokeVoidAsync("jsSaveAsFile", fileName, Convert.ToBase64String(data));
+        HandleCancel();
+        RunningStyle = false;
+    }
+
+    private async Task CsvDownload()
+    {
+        var jsonString = StudentModel.GetCsv(Models);
+        var data = Encoding.UTF8.GetBytes(jsonString);
+        await Download("data.csv", data);
+    }
+}
+
+<Drawer Closable="true" Width="600" Visible="Visible"
+        Title='"更改"' OnClose="@CloseTable"
+        Mask="false">
+    <Template Style="height:90%">
+        <MemberTable CallBack="() => Visible = false" ChangeModel="ChangeModel"/>
+    </Template>
+</Drawer>
+
+<PageView ContextStyle="padding:10px;">
+    <Extra>
+        <Space>
+            <SpaceItem>
+                <Button Type="@ButtonType.Primary" OnClick="@FileDownload">下载文件</Button>
+            </SpaceItem>
+            <SpaceItem>
+                <div class="phone-left-display">
+                    <Upload Name="files">
+                        <label class="ant-btn" for="fileInput">上传Json数据</label>
+                    </Upload>
+                </div>
+            </SpaceItem>
+            <SpaceItem>
+                <div class="phone-left-display">
+                    <Button Type="@ButtonType.Primary" OnClick="@RemoveAll">删除所有数据</Button>
+                </div>
+            </SpaceItem>
+            <SpaceItem>
+                <Button Type="@ButtonType.Primary" OnClick="@Flushed">刷新</Button>
+            </SpaceItem>
+            <SpaceItem>
+                <div class="phone-left-display">
+                    @if (DeleteModels.Count > 0)
+                    {
+                        <Button Type="@ButtonType.Primary" OnClick="@Recover">恢复</Button>
+                    }
+                </div>
+            </SpaceItem>
+        </Space>
+    </Extra>
+    <Context>
+        <div class="phone-left-display">
+            <Flex Justify="center" Gap="middle">
+                <Space>
+                    <SpaceItem>
+                        <select class="form-control" @bind="@SearchItem">
+                            @foreach (var item in SearchItems)
+                            {
+                                <option value="@item">@item</option>
+                            }
+                        </select>
+                    </SpaceItem>
+                    <SpaceItem>
+                        <Search Placeholder="请输入搜索项" EnterButton="@("搜索")" @bind-Value="@SearchValue" Size="large"/>
+                    </SpaceItem>
+                </Space>
+                <Statistic GroupSeparator=" " Title="当前成员" Value="@Total" TValue="int">
+                    <PrefixTemplate>
+                        <Icon Type="team" Theme="outline"/>
+                    </PrefixTemplate>
+                </Statistic>
+            </Flex>
+        </div>
+        <div class="phone-top-display" style="text-align: center">
+            <Space>
+                <SpaceItem>
+                    <select class="form-control" @bind="@SearchItem">
+                        @foreach (var item in SearchItems)
+                        {
+                            <option value="@item">@item</option>
+                        }
+                    </select>
+                </SpaceItem>
+                <SpaceItem>
+                    <Search Placeholder="请输入搜索项" EnterButton="@("搜索")" @bind-Value="@SearchValue" Size="large"/>
+                </SpaceItem>
+            </Space>
+        </div>
+        <Spin Spinning="@RunningStyle">
+            <Table TItem="StudentModel" DataSource="@Models" Responsive>
+                <PropertyColumn Title="姓名" Property="c => c.UserName"/>
+                <PropertyColumn Title="学号" Property="c => c.UserId"/>
+                <PropertyColumn Title="学院" Property="c => c.Academy"/>
+                <PropertyColumn Title="政治面貌" Property="c => c.PoliticalLandscape"/>
+                <PropertyColumn Title="性别" Property="c => c.Gender"/>
+                <PropertyColumn Title="专业班级" Property="c => c.ClassName"/>
+                <PropertyColumn Title="手机号码" Property="c => c.PhoneNum"/>
+                <ActionColumn Title="操作">
+                    <Space>
+                        <SpaceItem>
+                            <Button Danger OnClick="@(() => Delete(context))">删除</Button>
+                        </SpaceItem>
+                        <SpaceItem>
+                            <div class="phone-left-display">
+                                <Button Danger OnClick="@(() => OpenTable(context))">更改</Button>
+                            </div>
+                        </SpaceItem>
+                    </Space>
+                </ActionColumn>
+            </Table>
+        </Spin>
+    </Context>
+</PageView>
+
+@code {
+
+    private static IEnumerable<string> SearchItems => new[] { "姓名", "学号", "学院" };
+    private string SearchItem { get; set; } = "姓名";
+
+    private string _searchValue = "";
+
+    private string SearchValue
+    {
+        get => _searchValue;
+        set
+        {
+            _searchValue = value;
+            GetData();
+        }
+    }
+
+    private async void GetData()
+    {
+        if (string.IsNullOrEmpty(_searchValue))
+        {
+            Models = [];
+            return;
+        }
+
+        RunningStyle = true;
+        var context = await DbFactory.CreateDbContextAsync();
+        Models = SearchItem switch
+        {
+            "姓名" => await context.Students.Where(x => x.UserName.StartsWith(_searchValue)).ToListAsync(),
+            "学号" => await context.Students.Where(x => x.UserId.StartsWith(_searchValue)).ToListAsync(),
+            "学院" => await context.Students.Where(x => x.Academy.StartsWith(_searchValue)).ToListAsync(),
+            _ => Models
+        };
+        RunningStyle = false;
+
+        await context.DisposeAsync();
+    }
+
+    private List<StudentModel> DeleteModels { get; } = [];
+
+    private List<StudentModel> _models = [];
+
+    private int Total { get; set; }
+
+    private List<StudentModel> Models
+    {
+        get => _models;
+        set
+        {
+            _models = value;
+            Total = value.Count;
+            StateHasChanged();
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        await Flushed();
+    }
+
+
+    private async Task Flushed()
+    {
+        var context = await DbFactory.CreateDbContextAsync();
+        Models = await context.Students.ToListAsync();
+        await context.DisposeAsync();
+    }
+
+    private async Task Delete(StudentModel model)
+    {
+        var context = await DbFactory.CreateDbContextAsync();
+        context.Students.Remove(model);
+        await context.SaveChangesAsync();
+        Models.Remove(model);
+        DeleteModels.Add(model);
+        await context.DisposeAsync();
+    }
+
+
+    private async Task Recover()
+    {
+        var context = await DbFactory.CreateDbContextAsync();
+        foreach (var item in DeleteModels)
+        {
+            await context.Students.AddAsync(item);
+            Models.Add(item);
+        }
+
+        DeleteModels.Clear();
+        await context.SaveChangesAsync();
+        await context.DisposeAsync();
+    }
+
+}
+
+@code
+{
+    private bool Visible;
+    private StudentModel ChangeModel { get; set; } = new();
+
+    private void CloseTable()
+    {
+        Visible = false;
+        ChangeModel = new StudentModel();
+    }
+
+    private void OpenTable(StudentModel model)
+    {
+        Visible = true;
+        ChangeModel = model;
+    }
+
+    private async Task UploadFiles(InputFileChangeEventArgs e)
+    {
+        var reader = new StreamReader(e.File.OpenReadStream());
+        var result = await reader.ReadToEndAsync();
+        reader.Dispose();
+        if (string.IsNullOrEmpty(result)) return;
+        var list = GetList(result);
+        var context = await DbFactory.CreateDbContextAsync();
+
+        RunningStyle = true;
+        
+        foreach (var model in list)
+        {
+            try
+            {
+                await context.Students.AddAsync(model.Standardization());
+            }
+            catch
+            {
+                continue;
+            }
+
+            await context.SaveChangesAsync();
+        }
+
+        RunningStyle = false;
+        Models = await context.Students.ToListAsync();
+        await context.DisposeAsync();
+    }
+
+    private static List<StudentModel> GetList(string result)
+    {
+        var oldList = JsonConvert.DeserializeObject<List<OldSignModel>>(result)!;
+        return oldList.Any(x => string.IsNullOrEmpty(x.Id)) ? JsonConvert.DeserializeObject<List<StudentModel>>(result)! : oldList.Select(oldModel => oldModel.To()).ToList();
+    }
+
+    private void FileDownload() => _visible = true;
+
+    private bool _visible;
+
+    private void HandleCancel() => _visible = false;
+
+    private async Task RemoveAll()
+    {
+        var context = await DbFactory.CreateDbContextAsync();
+        await context.Students.ExecuteDeleteAsync();
+        await context.SaveChangesAsync();
+        Models.Clear();
+        await context.DisposeAsync();
+    }
+}

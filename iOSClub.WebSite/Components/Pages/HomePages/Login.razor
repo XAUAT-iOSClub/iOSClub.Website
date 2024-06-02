@@ -1,0 +1,122 @@
+﻿@page "/Login"
+@using iOSClub.Data
+@using iOSClub.Data.DataModels
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Components.Authorization
+
+@using iOSClub.WebSite.Models
+@inject IMessageService _message
+@inject IDbContextFactory<SignContext> DbFactory
+@inject AuthenticationStateProvider authStateProvider
+@inject NavigationManager navigation
+
+<PageTitle>登录到您的iMember - 西建大iOS Club</PageTitle>
+
+<GridRow Type="flex" Justify="center" Style="height: 80vh;">
+    <GridCol Xs="24" Sm="24" Md="24" Lg="24" Xl="12" Xxl="12">
+        <Card Class="login-form" Bordered="false">
+            <Title Level="2" Style="text-align: center">登录</Title>
+            <Form Model="Model"
+                  OnFinish="Submit"
+                  OnFinishFailed="OnFinishFailed">
+                <FormItem Class="item">
+                    <div class="input-box">
+                        <input @bind="@context.Name" required=""/>
+                        <label>姓名</label>
+                    </div>
+                </FormItem>
+                <FormItem Class="item">
+                    <div class="input-box">
+                        <input @bind="@context.Id" required=""/>
+                        <label>学号</label>
+                    </div>
+                </FormItem>
+                <FormItem Class="item" Style="text-align: center">
+                    <Button Style="border-radius: 4px;" Type="@ButtonType.Primary" HtmlType="submit">提交</Button>
+                </FormItem>
+                <FormItem Class="item">
+                    <Paragraph class="Submit" Style="text-align: center">
+                        没有账号？去
+                        <NavLink href="NewSignup" Match="NavLinkMatch.All">注册</NavLink>
+                        一个
+                    </Paragraph>
+                </FormItem>
+            </Form>
+        </Card>
+    </GridCol>
+</GridRow>
+
+@code {
+    public LoginModel Model { get; } = new();
+
+    private async Task Submit()
+    {
+        if (string.IsNullOrEmpty(Model.Name) || string.IsNullOrEmpty(Model.Id))
+        {
+            await _message.Info("没数据!");
+            return;
+        }
+
+        await using var context = await DbFactory.CreateDbContextAsync();
+
+        var permission = await context.Staffs.FirstOrDefaultAsync(x => x.UserId == Model.Id && x.Name == Model.Name);
+
+        var identity = "Member";
+        if (permission != null) identity = permission.Identity;
+        else
+        {
+            var signModel = await context.Students.FirstOrDefaultAsync(x => x.UserId == Model.Id && x.UserName == Model.Name);
+
+            if (signModel == null)
+            {
+                await _message.Info("用户账号密码出错!");
+                return;
+            }
+        }
+
+        var provider = (Provider)authStateProvider;
+        await provider.UpdateAuthState(new StaffModel() { Identity = identity, UserId = Model.Id, Name = Model.Name });
+
+        await _message.Info("登陆成功!");
+        navigation.NavigateTo("/Centre", true);
+    }
+
+    private void OnFinishFailed()
+    {
+        _message.Error("出错了!");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await authStateProvider.GetAuthenticationStateAsync() ;
+        var user = authState.User;
+
+        if (user.Identity is not null && user.Identity.IsAuthenticated)
+        {
+            navigation.NavigateTo("/Centre");
+        }
+
+        await base.OnInitializedAsync();
+    }
+
+}
+
+<style>
+    .login-form {
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.3);
+        -webkit-backdrop-filter: blur(20px);
+        backdrop-filter: blur(20px);
+        box-shadow: 0 0 10px #c8c8c8;
+        margin-top: 30px; 
+        margin-bottom: 30px;
+        max-width: 100vw
+    }
+
+    @@media screen and (max-width: 768px) {
+        .login-form{
+            box-shadow: none;
+            margin : 0;
+        }
+    }
+</style>

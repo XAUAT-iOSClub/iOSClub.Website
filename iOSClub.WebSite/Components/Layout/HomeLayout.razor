@@ -1,0 +1,125 @@
+﻿@layout MainLayout
+@inherits LayoutComponentBase
+@inject NavigationManager Nav
+
+<Row OnBreakpoint="OnBreakpoint"/>
+
+<Drawer Placement="bottom" Closable="false"
+        Visible="@_drawerVisible"
+        OnClose="@(() => _drawerVisible = false)">
+    @Menu
+</Drawer>
+
+<Layout Class="layout">
+    <Header Style="background: #fff">
+        <Flex Align="center" Justify="space-between" Class="phone-desktop-flex">
+            <a href="/">
+                <Image Src="iOS_Club_LOGO.png" Preview="false" Style="width:40px; height:40px"/>
+            </a>
+            <Button Size="@AntSizeLDSType.Large" Type="@ButtonType.Text"
+                    OnClick="@(() => _drawerVisible = !_drawerVisible)">
+                <Icon Type="menu" Theme="outline" Style="font-size: 30px;"/>
+            </Button>
+        </Flex>
+        <Flex Align="center" Justify="space-between" Class="desktop-phone-flex">
+            <a href="/">
+                <Flex Gap="large">
+                    <Image Src="iOS_Club_LOGO.png" Preview="false" Style="width:40px; height:40px"/>
+                    <div style="font-size: 24px;font-weight: bold;color: #1c1f23">XAUAT iOS Club</div>
+                </Flex>
+            </a>
+            @Menu
+        </Flex>
+    </Header>
+    <Content Style="background: #ffffff">
+        <CascadingValue Value="IsMobile">
+            @Body
+        </CascadingValue>
+    </Content>
+    <Footer Class="footer">
+        <p>
+            Copyright
+            <Icon Type="copyright" Theme="outline"/>
+            2023 - 2024 XAUAT iOS Club
+        </p>
+        <div>
+            @if (IsMobile)
+            {
+                <a href="https://beian.miit.gov.cn/" target="_blank">备案号 陕ICP备2024031872号</a>
+            }
+            else
+            {
+                <Space>
+                    <Split>
+                        <Divider Type="DirectionVHType.Vertical"/>
+                    </Split>
+                    <ChildContent>
+                        <SpaceItem>
+                            <a href="https://cn.xauat.edu.cn/" target="_blank">西安建筑科技大学</a>
+                        </SpaceItem>
+                        <SpaceItem>
+                            <a href="https://beian.miit.gov.cn/" target="_blank">备案号 陕ICP备2024031872号</a>
+                        </SpaceItem>
+                        <SpaceItem>
+                            <a href="https://gitee.com/XAUATiOSClub" target="_blank">我们的Gitee组织</a>
+                        </SpaceItem>
+                    </ChildContent>
+                </Space>
+            }
+        </div>
+    </Footer>
+</Layout>
+
+@code
+{
+    private void OnBreakpoint(BreakpointType breakpoint)
+    {
+        IsMobile = breakpoint.IsIn(BreakpointType.Sm, BreakpointType.Xs, BreakpointType.Md);
+    }
+
+    private bool IsMobile;
+    private bool _drawerVisible;
+
+    private RenderFragment Menu
+        => @<Template>
+               <Flex Vertical="@IsMobile" Gap="large">
+                   <Button Type="@ButtonType.Text" Class="menu-button"
+                           OnClick="@(() => { Nav.NavigateTo("/About"); _drawerVisible = false; })">
+                       关于我们
+                   </Button>
+                   <Button Type="@ButtonType.Text" Class="menu-button"
+                           OnClick="@(() => { Nav.NavigateTo("/Event"); _drawerVisible = false; })">
+                       社团活动
+                   </Button>
+                   <Button Type="@ButtonType.Primary" Class="menu-button"
+                           OnClick="@(() => { Nav.NavigateTo("/Login"); _drawerVisible = false; })">
+        登录/注册
+    </Button>
+    </Flex>
+    </Template>;
+}
+
+<style>
+    .layout {
+        min-height: 100vh;
+    }
+
+    .footer {
+        text-align: center;
+    }
+
+    .menu-button {
+        border-radius: 10px;
+    }
+    
+    @@media screen and (max-width: 768px) {
+        .menu-button {
+            border-radius: 0;
+        }
+    }
+
+    .ant-drawer-content {
+        border-radius: 15px 15px 0 0;
+        padding-top: 10px;
+    }
+</style>

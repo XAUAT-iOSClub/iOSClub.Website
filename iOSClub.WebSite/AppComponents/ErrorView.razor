@@ -1,0 +1,19 @@
+﻿<Result Status="error"
+        Title="对不起,我们出了点问题"
+        SubTitle="@SubTitle">
+    <Extra>
+        @Extra
+    </Extra>
+    <ChildContent>
+        @Context
+    </ChildContent>
+</Result>
+
+@code
+{
+    [Parameter] public string? SubTitle { get; set; }
+
+    [Parameter] public RenderFragment? Extra { get; set; }
+
+    [Parameter] public RenderFragment? Context { get; set; }
+}

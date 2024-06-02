@@ -1,0 +1,181 @@
+﻿@page "/Centre/Department/{DepartmentName?}"
+@using iOSClub.Data
+@using iOSClub.Data.DataModels
+@using iOSClub.WebSite.Models
+@using Microsoft.EntityFrameworkCore
+@inject IDbContextFactory<SignContext> DbFactory
+@inject NavigationManager Nav
+@inject MessageService MessageService
+
+<PageTitle>@(string.IsNullOrEmpty(DepartmentName) ? "社团" : SignRecord.DepartmentDictionary[DepartmentName]))项目 -iStaff</PageTitle>
+
+<PageView Style="min-height: 100%" ContextStyle="margin: 20px">
+    <Extra>
+        @if (IsAdmin)
+        {
+            <Button Type="@ButtonType.Primary" OnClick="@(() => Nav.NavigateTo($"/Centre/EditProject"))">
+                添加项目
+            </Button>
+        }
+    </Extra>
+    <Context>
+        @if (string.IsNullOrEmpty(DepartmentName))
+        {
+            <Title Level="2">我的项目</Title>
+            @if (MyProjects.Count == 0)
+            {
+                <Empty Image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg" Style="padding: 20px">
+                    <DescriptionTemplate>
+                        <span>您还未加入任何项目</span>
+                    </DescriptionTemplate>
+                </Empty>
+            }
+            else
+            {
+                <AntList Grid="grid" DataSource="@MyProjects">
+                    <ListItem >
+                        <Card Hoverable Style="border-radius: 10px;" BodyStyle="margin: 5px auto">
+                            <Flex Vertical Align="flex-end" Justify="space-between" Style="height: 200px">
+                                <div>
+                                    <Flex Justify="space-between" Align="center">
+                                        <Title Level="2">@context.Title</Title>
+                                        <Tag OnClick="@(() => Nav.NavigateTo($"/Centre/Department/{context.DepartmentName}"))"
+                                             Icon="apple" Color="blue-inverse">
+                                            @SignRecord.DepartmentDictionary[context.DepartmentName]
+                                        </Tag>
+                                    </Flex>
+                                    <Text Type="secondary">@($"{context.StartTime} - {context.EndTime}")</Text>
+                                </div>
+                                <Space>
+                                    <SpaceItem>
+                                        <Button Danger OnClick="@(() => Quit(context))">退出项目</Button>
+                                    </SpaceItem>
+                                    <SpaceItem>
+                                        <Button Type="@ButtonType.Primary" OnClick="@(() => Nav.NavigateTo($"/Centre/Project/{context.Id}"))">
+                                            去看看
+                                        </Button>
+                                    </SpaceItem>
+                                </Space>
+                            </Flex>
+                        </Card>
+                    </ListItem>
+                </AntList>
+            }
+
+            <Divider/>
+        }
+        <Title Level="2">@(string.IsNullOrEmpty(DepartmentName) ? "所有" : SignRecord.DepartmentDictionary[DepartmentName])项目</Title>
+        @if (AllProjects.Count == 0)
+        {
+            <Empty Image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg" Style="padding: 20px">
+                <DescriptionTemplate>
+                    <span>社团目前还没有项目</span>
+                </DescriptionTemplate>
+            </Empty>
+        }
+        else
+        {
+            <AntList Grid="grid" DataSource="@AllProjects">
+                <ListItem >
+                    <Card Hoverable Style="border-radius: 10px;" BodyStyle="margin: 5px auto">
+                        <Flex Vertical Align="flex-end" Justify="space-between" Style="height: 200px">
+                            <div>
+                                <Flex Justify="space-between" Align="center">
+                                    <Title Level="2">@context.Title</Title>
+                                    <Tag OnClick="@(() => Nav.NavigateTo($"/Centre/Department/{context.DepartmentName}"))"
+                                         Icon="apple" Color="blue-inverse">
+                                        @SignRecord.DepartmentDictionary[context.DepartmentName]
+                                    </Tag>
+                                </Flex>
+                                <Text Type="secondary">@($"{context.StartTime} - {context.EndTime}")</Text>
+                            </div>
+
+                            <Space>
+                                @if (IsAdmin)
+                                {
+                                    <SpaceItem>
+                                        <Button Danger OnClick="@(() => Delete(context))">删除项目</Button>
+                                    </SpaceItem>
+                                }
+                                <SpaceItem>
+                                    <Button Type="@ButtonType.Primary" OnClick="@(() => Nav.NavigateTo($"/Centre/Project/{context.Id}"))">
+                                        去看看
+                                    </Button>
+                                </SpaceItem>
+                            </Space>
+                        </Flex>
+                    </Card>
+                </ListItem>
+            </AntList>
+        }
+    </Context>
+</PageView>
+
+@code {
+    [Parameter] public string? DepartmentName { get; set; }
+    private bool IsAdmin { get; set; }
+    private List<ProjectModel> MyProjects { get; set; } = [];
+    private List<ProjectModel> AllProjects { get; set; } = [];
+    [CascadingParameter] private MemberModel Member { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Member.Identity == "Member")
+        {
+            Nav.NavigateTo("/Centre");
+            return;
+        }
+
+        IsAdmin = Member.Identity.Contains("President") || Member.Identity.Contains("Minister");
+        await using var context = await DbFactory.CreateDbContextAsync();
+        if (string.IsNullOrEmpty(DepartmentName))
+        {
+            var staff = await context.Staffs.Include(staffModel => staffModel.Projects)
+                .ThenInclude(x => x.Tasks).FirstAsync(x => x.UserId == Member.UserId);
+            MyProjects = staff.Projects;
+
+            AllProjects = await context.Projects.Include(x => x.Tasks)
+                .Include(x => x.Staffs).ToListAsync();
+        }
+        else
+        {
+            AllProjects = await context.Projects.Include(x => x.Tasks)
+                .Include(x => x.Staffs).Where(x => x.DepartmentName == DepartmentName).ToListAsync();
+        }
+
+        await base.OnInitializedAsync();
+    }
+
+    private static ListGridType grid => new()
+    {
+        Gutter = 16,
+        Xs = 1,
+        Sm = 2,
+        Md = 3,
+        Lg = 3,
+        Xl = 4,
+        Xxl = 4,
+    };
+
+    private async Task Delete(ProjectModel project)
+    {
+        await using var context = await DbFactory.CreateDbContextAsync();
+        var projectModel = await context.Projects.FirstAsync(x => x.Id == project.Id);
+        context.Projects.Remove(projectModel);
+        await context.SaveChangesAsync();
+        AllProjects.Remove(project);
+        await MessageService.Success("删除成功");
+    }
+
+    private async Task Quit(ProjectModel model)
+    {
+        await using var context = await DbFactory.CreateDbContextAsync();
+        var staff = await context.Staffs.FirstAsync(x => x.UserId == Member.UserId);
+        var p = await context.Projects.FirstAsync(x => x.Id == model.Id);
+        staff.Projects.Remove(p);
+        await context.SaveChangesAsync();
+        MyProjects.Remove(model);
+        await MessageService.Success("退出成功");
+    }
+
+}

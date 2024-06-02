@@ -1,0 +1,55 @@
+﻿<div id="@Id" style="@Style" class="apple-card @Class @(FrostedGlass ? "FrostedGlass" : "")">
+    <div class="apple-card-header">
+        @TitleTemplate
+    </div>
+    <div class="apple-card-context">
+        @ContextTemplate
+    </div>
+</div>
+
+@code {
+    [Parameter] public RenderFragment? TitleTemplate { get; set; }
+    [Parameter] public RenderFragment? ContextTemplate { get; set; }
+    [Parameter] public string? Class { get; set; }
+    [Parameter] public string? Style { get; set; }
+    [Parameter] public string? Id { get; set; }
+    [Parameter] public bool FrostedGlass { get; set; }
+}
+
+<style>
+    .apple-card {
+        border-radius: 20px;
+        height: 300px;
+        background-color: #fff;
+    }
+
+    .apple-card:hover {
+        box-shadow: 0 0 10px #3c3c43;
+        animation: CardDisplay 0.2s ease;
+        transform: scale(1.02)
+    }
+
+    .apple-card:not(:hover) {
+        animation: CardDisplay2 0.2s ease;
+    }
+
+    .FrostedGlass {
+        padding: 30px;
+        background: rgba(255, 255, 255, 0.5);
+        -webkit-backdrop-filter: blur(20px);
+        backdrop-filter: blur(20px);
+        box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.3);
+    }
+
+    .apple-card .apple-card-header {
+        background-color: rgba(248, 248, 252, .85);
+        border-radius: 20px 20px 0 0;
+        padding: 15px 30px 1px;
+    }
+
+    .apple-card .apple-card-context {
+        border-radius: 0 0 20px 20px;
+        padding: 1px 30px 1px;
+        overflow: auto;
+    }
+</style>

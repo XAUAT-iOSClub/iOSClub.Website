@@ -1,0 +1,114 @@
+﻿@page "/Admin/ArticleManager"
+@using Microsoft.EntityFrameworkCore
+@using System.Text.Json
+@using System.Text
+@using System.Text.Encodings.Web
+@using System.Text.Unicode
+@using iOSClub.Data
+@using iOSClub.Data.DataModels
+@using Newtonsoft.Json
+@using JsonSerializer = System.Text.Json.JsonSerializer
+@inject IJSRuntime JS
+@inject IDbContextFactory<SignContext> DbFactory
+
+<InputFile id="fileInput" OnChange="@UploadFiles" hidden multiple/>
+
+<PageView Style="min-height: 100%">
+    <Extra>
+        <Space>
+            <SpaceItem>
+                <Button Type="@ButtonType.Primary" OnClick="@FileDownload">下载文件</Button>
+            </SpaceItem>
+            <SpaceItem>
+                <Upload Name="files">
+                    <label class="ant-btn" for="fileInput">上传Json数据</label>
+                </Upload>
+            </SpaceItem>
+        </Space>
+    </Extra>
+    <Context>
+        <Table TItem="ArticleModel" DataSource="@Models">
+            <PropertyColumn Title="标题" Property="c => c.Title"/>
+            <PropertyColumn Title="简介" Property="c => c.Digest"/>
+            <ActionColumn Title="操作">
+                <Space>
+                    <SpaceItem>
+                        <NavLink Match="NavLinkMatch.All" href="@context.Link">打开链接</NavLink>
+                    </SpaceItem>
+                    <SpaceItem>
+                        <Button Danger OnClick="@(() => Delete(context))">删除</Button>
+                    </SpaceItem>
+                </Space>
+            </ActionColumn>
+        </Table>
+    </Context>
+</PageView>
+
+@code {
+
+    private List<ArticleModel> Models { get; set; } = [];
+
+    private async Task UploadFiles(InputFileChangeEventArgs e)
+    {
+        var reader = new StreamReader(e.File.OpenReadStream());
+        var result = await reader.ReadToEndAsync();
+        reader.Dispose();
+        if (string.IsNullOrEmpty(result)) return;
+        var context = await DbFactory.CreateDbContextAsync();
+
+        var list = JsonConvert.DeserializeObject<List<ArticleModel>>(result)!;
+
+        for (var i = list.Count - 1; i >= 0; i--)
+        {
+            var model = list[i];
+            try
+            {
+                await context.Events.AddAsync(model);
+            }
+            catch
+            {
+                continue;
+            }
+            await context.SaveChangesAsync();
+        }
+
+        await context.SaveChangesAsync();
+        Models = await context.Events.ToListAsync();
+        await context.DisposeAsync();
+        StateHasChanged();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        await using var context = await DbFactory.CreateDbContextAsync();
+        Models = await context.Events.ToListAsync();
+    }
+
+    private async Task Download(string fileName, byte[] data)
+    {
+        await JS.InvokeVoidAsync("jsSaveAsFile", fileName, Convert.ToBase64String(data));
+    }
+
+    private async Task FileDownload()
+    {
+        var options = new JsonSerializerOptions
+        {
+            Encoder = JavaScriptEncoder.Create(UnicodeRanges.All)
+        };
+        await using var context = await DbFactory.CreateDbContextAsync();
+        var models = await context.Events.ToArrayAsync();
+        var jsonString = JsonSerializer.Serialize(models, options);
+        var data = Encoding.UTF8.GetBytes(jsonString);
+
+        await Download("event.json", data);
+    }
+
+    private async Task Delete(ArticleModel context)
+    {
+        await using var dbContext = await DbFactory.CreateDbContextAsync();
+        dbContext.Events.Remove(context);
+        await dbContext.SaveChangesAsync();
+    }
+
+}

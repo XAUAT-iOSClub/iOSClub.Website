@@ -11,4 +11,8 @@
       <ProjectReference Include="..\iOSClub.Data\iOSClub.Data.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Markdig" Version="0.37.0" />
+    </ItemGroup>
+
 </Project>

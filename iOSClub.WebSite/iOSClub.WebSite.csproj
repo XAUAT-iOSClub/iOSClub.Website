@@ -29,12 +29,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
-    </ItemGroup>
-
-    <ItemGroup>
       <_ContentIncludedByDefault Remove="iOSClub.WebSite.Client\obj\iOSClub.WebSite.Client.csproj.nuget.dgspec.json" />
       <_ContentIncludedByDefault Remove="iOSClub.WebSite.Client\obj\project.assets.json" />
     </ItemGroup>

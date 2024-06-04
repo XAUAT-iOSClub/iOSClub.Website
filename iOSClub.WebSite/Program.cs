@@ -63,12 +63,6 @@ else
             o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
 }
 
-// 跨域
-builder.Services.AddCors(options =>
-{
-    options.AddDefaultPolicy(
-        policy => { policy.WithOrigins("https://qm.qq.com"); });
-});
 builder.Services.Configure<WebEncoderOptions>(options =>
     options.TextEncoderSettings = new TextEncoderSettings(UnicodeRanges.All));
 
@@ -110,8 +104,6 @@ app.UseAntiforgery();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.UseCors();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()

@@ -2,9 +2,11 @@
 
 <PageTitle>主页 - 西建大iOS Club</PageTitle>
 
+<Row OnBreakpoint="OnBreakpoint"/>
+
 <div @onwheel="FirstWheel">
     <GridRow Class="block" Align="center" Type="flex">
-        <GridCol Style="text-align: center" Xs="24" Sm="24" Md="24" Lg="24" Xl="9" Xxl="9">
+        <GridCol Style="width:75%;text-align: center" Xs="24" Sm="24" Md="24" Lg="9" Xl="9" Xxl="9">
             <div style="text-align: center">
                 <Image Src="iOS_Club_LOGO.png" Preview="false" Style="width:75%;text-align: center"/>
                 <div class="desktop-phone">
@@ -29,7 +31,7 @@
                 </div>
             </div>
         </GridCol>
-        <GridCol Xs="24" Sm="24" Md="24" Lg="24" Xl="15" Xxl="15">
+        <GridCol Xs="24" Sm="24" Md="24" Lg="15" Xl="15" Xxl="15">
             <div class="gradient-text">XAUAT iOS Club</div>
             <div class="phone-desktop">
                 <Title Level="3" Style="text-align: center">一个跨专业与课堂的数码开发爱好者社团</Title>
@@ -51,8 +53,8 @@
         </GridCol>
     </GridRow>
 
-    <div class="block-opacity">
-        <Title Level="2" Style="text-align: center" Class="desktop-phone">
+    <div class="block-opacity desktop-phone">
+        <Title Level="2" Style="text-align: center">
             关于我们
         </Title>
         <GridRow Class="block">
@@ -83,20 +85,45 @@
     </div>
 </div>
 
+<GridRow Class="block phone-desktop">
+    @foreach (var item in Cards)
+    {
+        <GridCol Xs="24" Sm="24" Md="24" Lg="12" Xl="8" Xxl="8">
+            @if (string.IsNullOrEmpty(item.Url))
+            {
+                <Card Hoverable Class="card">
+                    <div class="card-d">@item.ImageUrl</div>
+                    <h3>@item.Title</h3>
+                    <Paragraph Type="secondary">@item.Content</Paragraph>
+                </Card>
+            }
+            else
+            {
+                <a href="@item.Url" target="_blank">
+                    <Card Hoverable Class="card">
+                        <div class="card-d">@item.ImageUrl</div>
+                        <h3>@item.Title</h3>
+                        <Paragraph Type="secondary">@item.Content</Paragraph>
+                    </Card>
+                </a>
+            }
+        </GridCol>
+    }
+</GridRow>
+
 
 @code {
     private double Percent { get; set; } = 30;
-    [CascadingParameter] public bool IsMobile { get; set; }
-    private bool IsInit { get; set; }
-    protected override void OnInitialized()
+    private void OnBreakpoint(BreakpointType breakpoint)
     {
-        base.OnInitialized();
-        IsInit = true;
+        IsMobile = breakpoint.IsIn(BreakpointType.Sm, BreakpointType.Xs, BreakpointType.Md);
     }
+
+    private bool IsMobile;
 
     private record CardModel(string ImageUrl, string Title, string Content, string Url = "");
 
-    private string[] Lyc { get; set; } =
+    private static string[] Lyc =>
     [
         "这里是",
         "梦想家们改变世界的起点",
@@ -108,8 +135,8 @@
     private static CardModel[] Cards =>
     [
         new CardModel("\ud83c\udf4e", "我们是谁?", "我们是由Apple公司资金支持，受南山书院和西安建筑科技大学大学生创新创业实践中心指导的学术型学生团体。", "/About"),
-        new CardModel("\ud83e\udd1d", "和iOS Club一起结伴同行", "不管是零基础的小白还是大神，只要你有兴趣，这里就是你的天堂","/Article"),
-        new CardModel("\ud83c\udf10", "iOS Club,不止iOS", "我们不止只有iOS，西建大iOS Club是一个跨专业与课堂的数码编程爱好者社团","OtherOrg"),
+        new CardModel("\ud83e\udd1d", "和iOS Club一起结伴同行", "不管是零基础的小白还是大神，只要你有兴趣，这里就是你的天堂", "/Article"),
+        new CardModel("\ud83c\udf10", "iOS Club,不止iOS", "我们不止只有iOS，西建大iOS Club是一个跨专业与课堂的数码编程爱好者社团", "OtherOrg"),
         new CardModel("\ud83d\ude00", "Apple \u2716\ufe0f 西建大", "苹果每个学期都会在学校举办大大小小的活动，快来参与", "/Event"),
         new CardModel("\ud83d\udc69\ud83c\udffb\u200d\ud83d\udcbb", "合作软件开发", "加入我们，和志同道合的iMember一起合作开发，一起创造世界"),
         new CardModel("\ud83d\udcc8", "全校数码编程爱好者,联合起来！", "我们意图打造全校最大的科技社区，快来加入我们成为一名iMember吧", "/Login")
@@ -117,7 +144,7 @@
 
     private void FirstWheel(WheelEventArgs obj)
     {
-        if ((Math.Abs(Percent - 100.0) < 0.01 && obj.DeltaY > 0) || (Math.Abs(Percent - 30.0) < 0.01 && obj.DeltaY < 0) || IsMobile) return;
+        if (IsMobile || (Math.Abs(Percent - 100.0) < 0.01 && obj.DeltaY > 0) || (Math.Abs(Percent - 30.0) < 0.01 && obj.DeltaY < 0)) return;
         Percent += obj.DeltaY * 0.1;
         if (Percent - 30 < 0.01) Percent = 30;
         if (Percent - 100 > 0.01) Percent = 100;
@@ -148,7 +175,7 @@
     }
     
     .block-opacity{
-        opacity: @(!IsInit || IsMobile || Percent >= 70 ? 1 : (Percent - 30) / 30);
+        opacity: @(IsMobile || Percent >= 70 ? 1 : (Percent - 30) / 30);
     }
 
     .first-button {

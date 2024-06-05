@@ -19,18 +19,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Components\Pages\" />
-      <Folder Include="wwwroot\DepartmentFile\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\iOSClub.Data\iOSClub.Data.csproj" />
       <ProjectReference Include="..\iOSClub.WebSite.Client\iOSClub.WebSite.Client.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <_ContentIncludedByDefault Remove="iOSClub.WebSite.Client\obj\iOSClub.WebSite.Client.csproj.nuget.dgspec.json" />
-      <_ContentIncludedByDefault Remove="iOSClub.WebSite.Client\obj\project.assets.json" />
     </ItemGroup>
     
 </Project>

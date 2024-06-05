@@ -24,7 +24,7 @@ public sealed class SignContext : DbContext
         {
             Students = Set<StudentModel>();
             Staffs = Set<StaffModel>();
-            Events = Set<ArticleModel>();
+            Articles = Set<ArticleModel>();
             Tasks = Set<TaskModel>();
             Projects = Set<ProjectModel>();
             Resources = Set<ResourceModel>();
@@ -34,7 +34,7 @@ public sealed class SignContext : DbContext
 
     public DbSet<StudentModel> Students { get; init; }
     public DbSet<StaffModel> Staffs { get; init; }
-    public DbSet<ArticleModel> Events { get; init; }
+    public DbSet<ArticleModel> Articles { get; init; }
     public DbSet<TaskModel> Tasks { get; init; }
     public DbSet<ProjectModel> Projects { get; init; }
     public DbSet<ResourceModel> Resources { get; init; }

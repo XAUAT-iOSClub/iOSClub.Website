@@ -1,4 +1,4 @@
-﻿@page "/Article"
+﻿@page "/Articles"
 @using iOSClub.Data
 @using iOSClub.Data.DataModels
 @using Microsoft.EntityFrameworkCore
@@ -38,7 +38,7 @@
     protected override async Task OnInitializedAsync()
     {
         await using var context = await DbFactory.CreateDbContextAsync();
-        Models = await context.Events.Take(4).ToArrayAsync();
+        Models = await context.Articles.Take(4).ToArrayAsync();
         await base.OnInitializedAsync();
     }
 

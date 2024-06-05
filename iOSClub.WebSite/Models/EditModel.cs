@@ -4,7 +4,7 @@ namespace iOSClub.WebSite.Models;
 
 public class TaskEditModel
 {
-    public string Id { get; set; } = "";
+    public string Id { get; private init; } = "";
     public string Title { get; set; } = "";
     public string Description { get; set; } = "";
     public DateTime StartTime { get; set; } = DateTime.Today;

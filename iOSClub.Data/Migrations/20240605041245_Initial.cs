@@ -11,7 +11,7 @@ namespace iOSClub.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Events",
+                name: "Articles",
                 columns: table => new
                 {
                     Link = table.Column<string>(type: "varchar(256)", nullable: false),
@@ -21,7 +21,7 @@ namespace iOSClub.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Events", x => x.Link);
+                    table.PrimaryKey("PK_Articles", x => x.Link);
                 });
 
             migrationBuilder.CreateTable(
@@ -191,7 +191,7 @@ namespace iOSClub.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Events");
+                name: "Articles");
 
             migrationBuilder.DropTable(
                 name: "ProjectModelStaffModel");

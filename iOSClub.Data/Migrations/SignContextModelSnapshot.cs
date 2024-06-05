@@ -65,7 +65,7 @@ namespace iOSClub.Data.Migrations
 
                     b.HasKey("Link");
 
-                    b.ToTable("Events");
+                    b.ToTable("Articles");
                 });
 
             modelBuilder.Entity("iOSClub.Data.DataModels.ProjectModel", b =>

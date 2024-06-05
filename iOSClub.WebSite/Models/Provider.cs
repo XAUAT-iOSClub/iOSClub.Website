@@ -5,40 +5,27 @@ using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 
 namespace iOSClub.WebSite.Models;
 
-public class Provider : AuthenticationStateProvider
+public class Provider(ProtectedSessionStorage sessionStorage) : AuthenticationStateProvider
 {
-    private readonly ProtectedSessionStorage _sessionStorage;
     private readonly ClaimsPrincipal _anonymous = new(new ClaimsIdentity());
-
-    public Provider(ProtectedSessionStorage sessionStorage)
-    {
-        _sessionStorage = sessionStorage;
-    }
 
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
-        try
-        {
-            var storageResult = await _sessionStorage.GetAsync<StaffModel>("Permission");
-            var permission = storageResult.Success ? storageResult.Value : null;
-            if (permission == null)
-            {
-                return await Task.FromResult(new AuthenticationState(_anonymous));
-            }
-    
-            var claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim>
-            {
-                new(ClaimTypes.Name, permission.Name),
-                new(ClaimTypes.Role, permission.Identity),
-                new (ClaimTypes.NameIdentifier,permission.UserId)
-            }, "Auth"));
-            
-            return await Task.FromResult(new AuthenticationState(claimsPrincipal));
-        }
-        catch
+        var storageResult = await sessionStorage.GetAsync<StaffModel>("Permission");
+        var permission = storageResult.Success ? storageResult.Value : null;
+        if (permission == null)
         {
             return await Task.FromResult(new AuthenticationState(_anonymous));
         }
+    
+        var claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim>
+        {
+            new(ClaimTypes.Name, permission.Name),
+            new(ClaimTypes.Role, permission.Identity),
+            new (ClaimTypes.NameIdentifier,permission.UserId)
+        }, "Auth"));
+            
+        return await Task.FromResult(new AuthenticationState(claimsPrincipal));
     }
 
     public async Task UpdateAuthState(StaffModel? permission)
@@ -46,7 +33,7 @@ public class Provider : AuthenticationStateProvider
         ClaimsPrincipal claimsPrincipal;
         if (permission is not null)
         {
-            await _sessionStorage.SetAsync("Permission", permission);
+            await sessionStorage.SetAsync("Permission", permission);
             claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim>
             {
                 new(ClaimTypes.Name, permission.Name),
@@ -56,7 +43,7 @@ public class Provider : AuthenticationStateProvider
         }
         else
         {
-            await _sessionStorage.DeleteAsync("Permission");
+            await sessionStorage.DeleteAsync("Permission");
             claimsPrincipal = _anonymous;
         }
 

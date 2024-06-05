@@ -4,25 +4,19 @@
 
 <Drawer Placement="top" Closable="false"
         Visible="@_drawerVisible"
-        Height="320"
+        Height="340"
         OnClose="@(() => _drawerVisible = false)">
     <Flex Gap="large" Justify="space-between">
         <Image Src="iOS_Club_LOGO.png" Preview="false" Style="width:40px; height:40px"/>
         <div style="font-size: 24px;font-weight: bold;color: #1c1f23">XAUAT iOS Club</div>
     </Flex>
-    <Menu Style="margin-top: 10px;" Mode="@MenuMode.Inline">
-        <MenuItem Key="1" OnClick="@(() => { Nav.NavigateTo("/About"); _drawerVisible = false; })">
-            关于我们
-        </MenuItem>
-        <MenuItem Key="2" OnClick="@(() => { Nav.NavigateTo("/Event"); _drawerVisible = false; })">
-            社团活动
-        </MenuItem>
-        <MenuItem Key="3" OnClick="@(() => { Nav.NavigateTo("/Article"); _drawerVisible = false; })">
-            技术文章
-        </MenuItem>
-        <MenuItem Key="4" OnClick="@(() => { Nav.NavigateTo("/Login"); _drawerVisible = false; })">
-            登录/注册
-        </MenuItem>
+    <Menu Style="margin-top: 10px;"
+          Accordion Mode="@MenuMode.Inline">
+        <MenuItem RouterLink="/" RouterMatch="NavLinkMatch.All" Title="首页" OnClick="@Close"/>
+        <MenuItem RouterLink="/About" RouterMatch="NavLinkMatch.All" Title="关于我们" OnClick="@Close"/>
+        <MenuItem RouterLink="/Event" RouterMatch="NavLinkMatch.All" Title="社团活动" OnClick="@Close"/>
+        <MenuItem RouterLink="/Article" RouterMatch="NavLinkMatch.All" Title="技术文章" OnClick="@Close"/>
+        <MenuItem RouterLink="/Login" RouterMatch="NavLinkMatch.All" Title="登录/注册" OnClick="@Close"/>
     </Menu>
 </Drawer>
 
@@ -88,6 +82,7 @@
 @code
 {
     private bool _drawerVisible;
+    private void Close() => _drawerVisible = false;
 }
 
 <style>

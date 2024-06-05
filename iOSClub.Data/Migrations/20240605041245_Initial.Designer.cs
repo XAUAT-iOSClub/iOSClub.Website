@@ -10,7 +10,7 @@ using iOSClub.Data;
 namespace iOSClub.Data.Migrations
 {
     [DbContext(typeof(SignContext))]
-    [Migration("20240602042717_Initial")]
+    [Migration("20240605041245_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -68,7 +68,7 @@ namespace iOSClub.Data.Migrations
 
                     b.HasKey("Link");
 
-                    b.ToTable("Events");
+                    b.ToTable("Articles");
                 });
 
             modelBuilder.Entity("iOSClub.Data.DataModels.ProjectModel", b =>

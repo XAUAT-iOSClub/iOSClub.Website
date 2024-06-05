@@ -44,6 +44,7 @@ builder.Services.AddAuthentication(options => { options.DefaultScheme = JwtBeare
         };
     });
 
+builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddSingleton(new JwtHelper(builder.Configuration));
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<TokenActionFilter>();

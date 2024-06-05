@@ -86,17 +86,19 @@
         _message.Error("出错了!");
     }
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        var authState = await authStateProvider.GetAuthenticationStateAsync() ;
-        var user = authState.User;
-
-        if (user.Identity is not null && user.Identity.IsAuthenticated)
+        if (firstRender)
         {
-            navigation.NavigateTo("/Centre");
-        }
+            var authState = await authStateProvider.GetAuthenticationStateAsync() ;
+            var user = authState.User;
 
-        await base.OnInitializedAsync();
+            if (user.Identity is not null && user.Identity.IsAuthenticated)
+            {
+                navigation.NavigateTo("/Centre");
+            }
+        }
+        await base.OnAfterRenderAsync(firstRender);
     }
 
 }

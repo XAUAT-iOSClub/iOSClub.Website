@@ -139,13 +139,11 @@
                             <Paragraph Type="secondary">展示社团数据</Paragraph>
                         </TitleTemplate>
                         <ContextTemplate>
-                            <Flex Align="center" Style="margin-top: 10px">
-                                <Statistic GroupSeparator=" " Title="当前成员" Value="@Total" TValue="int">
-                                    <PrefixTemplate>
-                                        <Icon Type="team" Theme="outline"/>
-                                    </PrefixTemplate>
-                                </Statistic>
-                            </Flex>
+                            <Statistic GroupSeparator=" " Title="当前成员" Value="@Total" TValue="int">
+                                <PrefixTemplate>
+                                    <Icon Type="team" Theme="outline"/>
+                                </PrefixTemplate>
+                            </Statistic>
                         </ContextTemplate>
                     </AppleCard>
                 </a>
@@ -160,10 +158,8 @@
                             <Paragraph Type="secondary">显示当前服务器环境</Paragraph>
                         </TitleTemplate>
                         <ContextTemplate>
-                            <Flex Align="center" Style="margin-top: 10px">
-                                <Paragraph Type="secondary">当前储存路径: @HostEnvironment.WebRootPath</Paragraph>
-                                <Paragraph Type="secondary">服务器时间: @DateTime.Today.ToString("yyyy-MM-dd")</Paragraph>
-                            </Flex>
+                            <Paragraph Type="secondary">当前储存路径: @HostEnvironment.WebRootPath</Paragraph>
+                            <Paragraph Type="secondary">服务器时间: @DateTime.Today.ToString("yyyy-MM-dd")</Paragraph>
                         </ContextTemplate>
                     </AppleCard>
                 </a>

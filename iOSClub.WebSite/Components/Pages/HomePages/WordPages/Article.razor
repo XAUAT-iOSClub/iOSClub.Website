@@ -21,9 +21,7 @@
             <Anchor>
                 @foreach (var s in Anchors)
                 {
-                    <AnchorLink Href="@($"/Article/{Name}#{s}")">
-                        @s
-                    </AnchorLink>
+                    <AnchorLink Href="@($"/Article/{Name}#{s}")" Title="@s"/>
                 }
             </Anchor>
         </Affix>
@@ -33,7 +31,7 @@
 @code {
     [Parameter] public string? Name { get; set; }
     private string Content { get; set; } = "";
-    private List<string> Anchors => [];
+    private List<string> Anchors { get; } = [];
 
     protected override async Task OnInitializedAsync()
     {

@@ -11,6 +11,7 @@
 @using iOSClub.Data.DataModels
 @inject IJSRuntime JS
 @inject IDbContextFactory<SignContext> DbFactory
+@attribute [Authorize(Roles = "Founder, President, TechnologyMinister, PracticalMinister, NewMediaMinister")]
 
 <PageTitle>成员数据 - iAdmin</PageTitle>
 

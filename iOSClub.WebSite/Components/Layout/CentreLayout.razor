@@ -16,86 +16,76 @@
     <CentreMenu State="@Member.Identity"/>
 </Drawer>
 
-@if (_isAuth)
-{
-    <Layout Style="height: 100vh">
-        <Header Class="Layout-Header">
-            <Flex Align="center" Justify="space-between">
-                @* ReSharper disable once Html.PathError *@
-                <a href="/NewIndex">
-                    <Flex Gap="large">
-                        <Image Src="iOS_Club_LOGO.png" Preview="false" Style="width:40px; height:40px"/>
-                        <div class="Layout-Title">iMember</div>
-                    </Flex>
-                </a>
-                <Flex class="desktop-phone-flex">
-                    <Popover Class="Layout-Popover" Trigger="@(new[] { Trigger.Click })">
-                        <TitleTemplate>
-                            <Space Size="@("middle")">
-                                <SpaceItem>
-                                    @if (Member.Identity != "Founder")
-                                    {
-                                        <Image Style="height: 60px;width: 60px" Preview="false"
-                                               Src="@(Member.Gender == "男" ? "Centre/男生.png" : "Centre/女生.png")"/>
-                                    }
-                                    else
-                                    {
-                                        <Image Style="height: 60px;width: 60px" Preview="false" Src="iOS_Club_LOGO.png"/>
-                                    }
-                                </SpaceItem>
-                                <SpaceItem>
-                                    <div>
-                                        <span style="font-size: 22px;font-weight: bold">@Member.UserName</span>
-                                        <Paragraph Type="secondary">@Member.UserId</Paragraph>
-                                    </div>
-                                </SpaceItem>
-                            </Space>
-                        </TitleTemplate>
-                        <ContentTemplate>
-                            <Paragraph Type="secondary">
-                                当前身份:@MemberModel.IdentityDictionary[Member.Identity]
-                            </Paragraph>
-                            <Button Type="@ButtonType.Text" Danger OnClick="@(() => Nav.NavigateTo("/Logout"))">
-                                退出登录
-                            </Button>
-                        </ContentTemplate>
-                        <ChildContent>
-                            <Button Type="@ButtonType.Text">
-                                <Icon Type="user" Theme="outline" Class="Layout-Title"/>
-                            </Button>
-                        </ChildContent>
-                    </Popover>
+<Layout Style="height: 100vh">
+    <Header Class="Layout-Header">
+        <Flex Align="center" Justify="space-between">
+            @* ReSharper disable once Html.PathError *@
+            <a href="/NewIndex">
+                <Flex Gap="large">
+                    <Image Src="iOS_Club_LOGO.png" Preview="false" Style="width:40px; height:40px"/>
+                    <div class="Layout-Title">iMember</div>
                 </Flex>
-                <Button Size="@AntSizeLDSType.Large" class="phone-desktop-flex" Type="@ButtonType.Text"
-                        OnClick="@(() => _drawerVisible = !_drawerVisible)">
-                    <Icon Type="menu" Theme="outline" Class="Layout-Title"/>
-                </Button>
+            </a>
+            <Flex class="desktop-phone-flex">
+                <Popover Class="Layout-Popover" Trigger="@(new[] { Trigger.Click })">
+                    <TitleTemplate>
+                        <Space Size="@("middle")">
+                            <SpaceItem>
+                                @if (Member.Identity != "Founder")
+                                {
+                                    <Image Style="height: 60px;width: 60px" Preview="false"
+                                           Src="@(Member.Gender == "男" ? "Centre/男生.png" : "Centre/女生.png")"/>
+                                }
+                                else
+                                {
+                                    <Image Style="height: 60px;width: 60px" Preview="false" Src="iOS_Club_LOGO.png"/>
+                                }
+                            </SpaceItem>
+                            <SpaceItem>
+                                <div>
+                                    <span style="font-size: 22px;font-weight: bold">@Member.UserName</span>
+                                    <Paragraph Type="secondary">@Member.UserId</Paragraph>
+                                </div>
+                            </SpaceItem>
+                        </Space>
+                    </TitleTemplate>
+                    <ContentTemplate>
+                        <Paragraph Type="secondary">
+                            当前身份:@MemberModel.IdentityDictionary[Member.Identity]
+                        </Paragraph>
+                        <Button Type="@ButtonType.Text" Danger OnClick="@(() => Nav.NavigateTo("/Logout"))">
+                            退出登录
+                        </Button>
+                    </ContentTemplate>
+                    <ChildContent>
+                        <Button Type="@ButtonType.Text">
+                            <Icon Type="user" Theme="outline" Class="Layout-Title"/>
+                        </Button>
+                    </ChildContent>
+                </Popover>
             </Flex>
-        </Header>
-        <Content>
-            <CascadingValue Value="@Member">
-                @Body
-            </CascadingValue>
-        </Content>
-    </Layout>
-}
-else
-{
-    <div class="body">
-        <div class="main">
-            <ReturnView ReturnInfo="" FlushedUrl="@Nav.Uri"/>
-        </div>
-    </div>
-}
+            <Button Size="@AntSizeLDSType.Large" class="phone-desktop-flex" Type="@ButtonType.Text"
+                    OnClick="@(() => _drawerVisible = !_drawerVisible)">
+                <Icon Type="menu" Theme="outline" Class="Layout-Title"/>
+            </Button>
+        </Flex>
+    </Header>
+    <Content>
+        <CascadingValue Value="@Member">
+            @Body
+        </CascadingValue>
+    </Content>
+</Layout>
 
 @code
 {
-    private bool _isAuth { get; set; } = true;
 
     private MemberModel Member { get; set; } = new();
 
-    protected override async Task OnInitializedAsync()
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        if (!firstRender) return;
         var authState = await authStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
 
@@ -122,13 +112,10 @@ else
 
             Member = MemberModel.AutoCopy<StudentModel, MemberModel>(model);
             Member.Identity = identity;
-        }
-        else
-        {
-            _isAuth = false;
+            StateHasChanged();
         }
 
-        await base.OnInitializedAsync();
+        await base.OnAfterRenderAsync(firstRender);
     }
 
     private bool _drawerVisible;

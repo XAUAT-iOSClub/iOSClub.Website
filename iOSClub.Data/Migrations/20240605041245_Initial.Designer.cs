@@ -9,7 +9,7 @@ using iOSClub.Data;
 
 namespace iOSClub.Data.Migrations
 {
-    [DbContext(typeof(SignContext))]
+    [DbContext(typeof(iOSContext))]
     [Migration("20240605041245_Initial")]
     partial class Initial
     {

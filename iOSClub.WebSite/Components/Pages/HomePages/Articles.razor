@@ -2,15 +2,16 @@
 @using iOSClub.Data
 @using iOSClub.Data.DataModels
 @using Microsoft.EntityFrameworkCore
-@inject IDbContextFactory<SignContext> DbFactory
+@inject IDbContextFactory<iOSContext> DbFactory
 
 <PageTitle>社团文章 - 西建大iOS Club</PageTitle>
 
 <meta name="referrer" content="never">
 
-<Title Level="1" Style="text-align: center">
-    社团文章
-</Title>
+<Flex Align="center" Justify="center">
+    <div class="gradient-text">社团文章</div>
+</Flex>
+
 <GridRow Gutter="16" Style="padding: 10px">
     @foreach (var context in Models)
     {
@@ -52,8 +53,4 @@
         background: #f3f5f7;
         border-radius: 10px;
     }
-    main{
-        background: #ffffff;
-    }
-
 </style>

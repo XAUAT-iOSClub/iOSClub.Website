@@ -7,9 +7,9 @@ using Microsoft.EntityFrameworkCore.Design;
 
 namespace iOSClub.Data;
 
-public sealed class SignContext : DbContext
+public sealed class iOSContext : DbContext
 {
-    public SignContext(DbContextOptions<SignContext> options)
+    public iOSContext(DbContextOptions<iOSContext> options)
         : base(options)
     {
         try
@@ -47,13 +47,13 @@ public sealed class SignContext : DbContext
     }
 }
 
-public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<SignContext>
+public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<iOSContext>
 {
-    public SignContext CreateDbContext(string[] args)
+    public iOSContext CreateDbContext(string[] args)
     {
-        var optionsBuilder = new DbContextOptionsBuilder<SignContext>();
+        var optionsBuilder = new DbContextOptionsBuilder<iOSContext>();
         optionsBuilder.UseSqlite("Data Source=Data.db");
-        return new SignContext(optionsBuilder.Options);
+        return new iOSContext(optionsBuilder.Options);
     }
 }
 

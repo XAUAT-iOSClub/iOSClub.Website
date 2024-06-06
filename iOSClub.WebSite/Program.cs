@@ -53,13 +53,13 @@ builder.Services.AddScoped<TokenActionFilter>();
 var sql = Environment.GetEnvironmentVariable("SQL", EnvironmentVariableTarget.Process);
 if (string.IsNullOrEmpty(sql))
 {
-    builder.Services.AddDbContextFactory<SignContext>(opt =>
+    builder.Services.AddDbContextFactory<iOSContext>(opt =>
         opt.UseSqlite("Data Source=Data.db",
             o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
 }
 else
 {
-    builder.Services.AddDbContextFactory<SignContext>(opt =>
+    builder.Services.AddDbContextFactory<iOSContext>(opt =>
         opt.UseNpgsql(sql,
             o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
 }
@@ -82,7 +82,7 @@ else
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-    var context = services.GetRequiredService<SignContext>();
+    var context = services.GetRequiredService<iOSContext>();
     if (!context.Staffs.Any())
     {
         var model = new StaffModel

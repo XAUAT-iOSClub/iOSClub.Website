@@ -3,7 +3,7 @@
 @using iOSClub.Data.DataModels
 @using iOSClub.WebSite.Models
 @using Microsoft.EntityFrameworkCore
-@inject IDbContextFactory<SignContext> DbFactory
+@inject IDbContextFactory<iOSContext> DbFactory
 @inject NavigationManager Nav
 @inject MessageService MessageService
 
@@ -29,36 +29,41 @@
         {
             <AntList Grid="grid" DataSource="@Tools">
                 <ListItem >
-                    <Card Hoverable Style="border-radius: 10px;" BodyStyle="margin: 5px auto">
-                        <Flex Vertical Justify="space-between" Align="flex-start" Style="height: 200px">
-                            <div>
-                                <Flex>
-                                    <Image Src="@context.IconUrl"/>
-                                    <Title Level="2">@context.Name</Title>
-                                </Flex>
-                                @foreach (var tag in context.Tag?.Split(",")!)
-                                {
-                                    <Tag Color="blue-inverse">@tag</Tag>
-                                }
-                            </div>
-                            <Space>
-                                <SpaceItem>
-                                    <Button Type="@ButtonType.Primary" OnClick="@(() => Nav.NavigateTo(context.Url))">
-                                        去看看
-                                    </Button>
-                                </SpaceItem>
-                                @if (IsAdmin)
-                                {
+                    <AppleCard>
+                        <TitleTemplate>
+                            <Flex Gap="large" Align="center">
+                                <img src="@context.IconUrl" alt="@context.Name"/>
+                                <Title Level="3">@context.Name</Title>
+                            </Flex>
+                        </TitleTemplate>
+                        <ContextTemplate>
+                            <Flex Vertical Justify="space-between" Align="flex-start" Style="height: 200px">
+                                <div>
+                                    <Paragraph Style="margin-top: 10px" Type="secondary">@context.Description</Paragraph>
+                                    @foreach (var tag in context.Tag?.Split(",")!)
+                                    {
+                                        <Tag Color="blue-inverse">@tag</Tag>
+                                    }
+                                </div>
+                                <Space>
                                     <SpaceItem>
-                                        <Button Type="@ButtonType.Primary" OnClick="@(() => OpenModal(context))">更改</Button>
+                                        <Button Type="@ButtonType.Primary" OnClick="@(() => Nav.NavigateTo(context.Url))">
+                                            去看看
+                                        </Button>
                                     </SpaceItem>
-                                    <SpaceItem>
-                                        <Button Danger OnClick="@(() => Delete(context))">删除</Button>
-                                    </SpaceItem>
-                                }
-                            </Space>
-                        </Flex>
-                    </Card>
+                                    @if (IsAdmin)
+                                    {
+                                        <SpaceItem>
+                                            <Button Type="@ButtonType.Primary" OnClick="@(() => OpenModal(context))">更改</Button>
+                                        </SpaceItem>
+                                        <SpaceItem>
+                                            <Button Danger OnClick="@(() => Delete(context))">删除</Button>
+                                        </SpaceItem>
+                                    }
+                                </Space>
+                            </Flex>
+                        </ContextTemplate>
+                    </AppleCard>
                 </ListItem>
             </AntList>
         }
@@ -68,19 +73,19 @@
 <Modal @bind-Visible="@_visible" Footer="@null">
     <Form Model="Data"
           OnFinish="OnFinish" ValidateMode="FormValidateMode.Rules">
-        <FormItem Class="item" Label="任务名称" Rules="@SignRecord.TaskTitleRules">
+        <FormItem Class="item" Label="App名称" Rules="@SignRecord.TaskTitleRules">
             <Input @bind-Value="@context.Name"/>
         </FormItem>
-        <FormItem Class="item" Label="任务描述" Rules="@SignRecord.TaskDescriptionRules">
+        <FormItem Class="item" Label="App描述" Rules="@SignRecord.TaskDescriptionRules">
             <TextArea @bind-Value="@context.Description" ></TextArea>
         </FormItem>
-        <FormItem Class="item" Label="任务链接">
+        <FormItem Class="item" Label="App链接">
             <Input @bind-Value="@context.Url"/>
         </FormItem>
-        <FormItem Class="item" Label="任务封面">
+        <FormItem Class="item" Label="App封面">
             <Input @bind-Value="@context.IconUrl"/>
         </FormItem>
-        <FormItem Class="item" Label="任务标签">
+        <FormItem Class="item" Label="App标签">
             <Input @bind-Value="@context.Tag"/>
         </FormItem>
         <FormItem Style="text-align: center">

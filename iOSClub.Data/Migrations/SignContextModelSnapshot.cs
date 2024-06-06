@@ -8,7 +8,7 @@ using iOSClub.Data;
 
 namespace iOSClub.Data.Migrations
 {
-    [DbContext(typeof(SignContext))]
+    [DbContext(typeof(iOSContext))]
     partial class SignContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

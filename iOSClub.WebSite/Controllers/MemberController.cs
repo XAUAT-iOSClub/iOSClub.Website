@@ -9,7 +9,7 @@ namespace iOSClub.WebSite.Controllers;
 
 [Route("api/[controller]/[action]")]
 [ApiController]
-public class MemberController(SignContext context, JwtHelper jwtHelper, IHttpContextAccessor httpContextAccessor)
+public class MemberController(iOSContext context, JwtHelper jwtHelper, IHttpContextAccessor httpContextAccessor)
     : ControllerBase
 {
     #region Visitor

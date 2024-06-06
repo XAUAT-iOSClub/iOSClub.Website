@@ -1,4 +1,5 @@
 ﻿<Menu Theme="MenuTheme.Light"
+      Style="@Style"
       Mode="MenuMode.Inline">
     <MenuItem RouterLink="/Centre" RouterMatch="NavLinkMatch.All">
         <Icon Type="home" Theme="outline"/>
@@ -65,4 +66,5 @@
 
 @code {
     [Parameter] public string State { get; set; } = "Member";
+    [Parameter] public string Style { get; set; } = "";
 }

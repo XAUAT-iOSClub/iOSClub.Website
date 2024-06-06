@@ -10,7 +10,7 @@
 @using iOSClub.Data
 @using iOSClub.Data.DataModels
 @inject IJSRuntime JS
-@inject IDbContextFactory<SignContext> DbFactory
+@inject IDbContextFactory<iOSContext> DbFactory
 
 <PageTitle>成员数据 - iAdmin</PageTitle>
 
@@ -116,29 +116,7 @@
         </Space>
     </Extra>
     <Context>
-        <div class="phone-left-display">
-            <Flex Justify="center" Gap="middle">
-                <Space>
-                    <SpaceItem>
-                        <select class="form-control" @bind="@SearchItem">
-                            @foreach (var item in SearchItems)
-                            {
-                                <option value="@item">@item</option>
-                            }
-                        </select>
-                    </SpaceItem>
-                    <SpaceItem>
-                        <Search Placeholder="请输入搜索项" EnterButton="@("搜索")" @bind-Value="@SearchValue" Size="large"/>
-                    </SpaceItem>
-                </Space>
-                <Statistic GroupSeparator=" " Title="当前成员" Value="@Total" TValue="int">
-                    <PrefixTemplate>
-                        <Icon Type="team" Theme="outline"/>
-                    </PrefixTemplate>
-                </Statistic>
-            </Flex>
-        </div>
-        <div class="phone-top-display" style="text-align: center">
+        <Flex Justify="center" Gap="large">
             <Space>
                 <SpaceItem>
                     <select class="form-control" @bind="@SearchItem">
@@ -152,7 +130,12 @@
                     <Search Placeholder="请输入搜索项" EnterButton="@("搜索")" @bind-Value="@SearchValue" Size="large"/>
                 </SpaceItem>
             </Space>
-        </div>
+            <Statistic GroupSeparator=" " Title="当前成员" Value="@Total" TValue="int" Class="desktop-phone">
+                <PrefixTemplate>
+                    <Icon Type="team" Theme="outline"/>
+                </PrefixTemplate>
+            </Statistic>
+        </Flex>
         <Spin Spinning="@RunningStyle">
             <Table TItem="StudentModel" DataSource="@Models" Responsive>
                 <PropertyColumn Title="姓名" Property="c => c.UserName"/>
@@ -303,7 +286,7 @@
         var context = await DbFactory.CreateDbContextAsync();
 
         RunningStyle = true;
-        
+
         foreach (var model in list)
         {
             try

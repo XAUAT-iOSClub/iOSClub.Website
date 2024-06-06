@@ -1,0 +1,56 @@
+﻿@page "/Tools/{Keyword?}"
+@using iOSClub.Data
+@using iOSClub.Data.DataModels
+@using Microsoft.EntityFrameworkCore
+@inject IDbContextFactory<iOSContext> DbFactory
+<PageTitle>iOS App - 西建大iOS Club</PageTitle>
+
+<Flex Align="center" Justify="center">
+    <div class="gradient-text">iOS App - iTools</div>
+</Flex>
+
+<GridRow Gutter="16" Style="margin: 30px">
+    @foreach (var context in Models)
+    {
+        <GridCol Xs="24" Sm="24" Md="24" Lg="12" Xl="8" Xxl="6">
+            <a href="@context.Url" target="_blank">
+                <AppleCard>
+                    <TitleTemplate>
+                        <Flex Gap="large" Align="center">
+                            <img src="@context.IconUrl" alt="@context.Name"/>
+                            <Title Level="3">@context.Name</Title>
+                        </Flex>
+                    </TitleTemplate>
+                    <ContextTemplate>
+                        <Paragraph Style="margin-top: 10px" Type="secondary">@context.Description</Paragraph>
+                        @foreach (var tag in context.Tag?.Split(",")!)
+                        {
+                            <Tag Color="blue-inverse">@tag</Tag>
+                        }
+                    </ContextTemplate>
+                </AppleCard>
+            </a>
+        </GridCol>
+    }
+</GridRow>
+
+@code {
+
+    [Parameter] public string? Keyword { get; set; }
+    private ToolModel[] Models { get; set; } = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        await using var context = await DbFactory.CreateDbContextAsync();
+        if (string.IsNullOrEmpty(Keyword))
+        {
+            Models = await context.Tools.ToArrayAsync();
+        }
+        else
+        {
+            Models = await context.Tools.Where(x => x.Tag!.Contains(Keyword)).ToArrayAsync();
+        }
+        await base.OnInitializedAsync();
+    }
+
+}

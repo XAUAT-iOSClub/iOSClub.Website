@@ -6,14 +6,19 @@
 @using iOSClub.WebSite.Models
 @using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.EntityFrameworkCore
-@inject IDbContextFactory<SignContext> DbFactory
+@inject IDbContextFactory<iOSContext> DbFactory
 @inject AuthenticationStateProvider authStateProvider
 @inject NavigationManager Nav
 
-<Drawer Placement="bottom" Closable="false"
+<Drawer Placement="top" Closable="false"
         Visible="@_drawerVisible"
+        Height="340"
         OnClose="@(() => _drawerVisible = false)">
-    <CentreMenu State="@Member.Identity"/>
+    <Flex Gap="large" Justify="space-between">
+        <Image Src="iOS_Club_LOGO.png" Preview="false" Style="width:40px; height:40px"/>
+        <div style="font-size: 24px;font-weight: bold;color: #1c1f23">XAUAT iOS Club</div>
+    </Flex>
+    <CentreMenu Style="margin-top: 10px;" State="@Member.Identity"/>
 </Drawer>
 
 <Layout Style="height: 100vh">
@@ -80,8 +85,7 @@
 @code
 {
 
-    private MemberModel Member { get; set; } = new();
-
+    private MemberModel Member { get; set; } = new() { UserName = "游客"};
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -139,5 +143,9 @@
     .ant-popover-inner {
         border-radius: 12px;
         padding: 10px;
+    }
+
+    .ant-drawer-content {
+        border-radius: 0 0 20px 20px;
     }
 </style>

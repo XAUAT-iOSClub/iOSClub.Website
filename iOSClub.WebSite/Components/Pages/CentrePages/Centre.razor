@@ -3,7 +3,7 @@
 @using iOSClub.Data.DataModels
 @using iOSClub.WebSite.Models
 @using Microsoft.EntityFrameworkCore
-@inject IDbContextFactory<SignContext> DbFactory
+@inject IDbContextFactory<iOSContext> DbFactory
 @inject NavigationManager Nav
 @inject IWebHostEnvironment HostEnvironment
 
@@ -17,8 +17,9 @@
                 <Card Hoverable Class="card" Bordered="false">
                     @if (Member.Identity != "Founder")
                     {
-                        <Image Style="height: 100px;width: 100px" Preview="false" Src="@(Member.Gender == "男" ? "Centre/男生.png" : "Centre/女生.png")"/>   
-                    }else
+                        <Image Style="height: 100px;width: 100px" Preview="false" Src="@(Member.Gender == "男" ? "Centre/男生.png" : "Centre/女生.png")"/>
+                    }
+                    else
                     {
                         <Image Style="height: 100px;width: 100px" Preview="false" Src="iOS_Club_LOGO.png"/>
                     }
@@ -41,7 +42,7 @@
                     }
                     else
                     {
-                        <Space Size=@(("8", "16")) Wrap>
+                        <Space Size=@(("16", "16")) Wrap>
                             @foreach (var item in Tools)
                             {
                                 <SpaceItem>
@@ -129,8 +130,8 @@
         }
         @if (Member.Identity.Contains("Minister") || Member.Identity == "President" || Member.Identity == "Founder")
         {
-            <GridCol Xs="24" Sm="24" Md="12" Lg="12" 
-                     Xl="@(Member.Identity != "Founder" ? 8 : 16)" 
+            <GridCol Xs="24" Sm="24" Md="12" Lg="12"
+                     Xl="@(Member.Identity != "Founder" ? 8 : 16)"
                      Xxl="@(Member.Identity != "Founder" ? 8 : 16)">
                 <a href="/Admin/MemberData">
                     <AppleCard>
@@ -149,7 +150,7 @@
                 </a>
             </GridCol>
             <GridCol Xs="24" Sm="24" Md="12" Lg="12"
-                     Xl="@(Member.Identity != "Founder" ? 16 : 8)" 
+                     Xl="@(Member.Identity != "Founder" ? 16 : 8)"
                      Xxl="@(Member.Identity != "Founder" ? 16 : 8)">
                 <a href="/Admin/Env">
                     <AppleCard>

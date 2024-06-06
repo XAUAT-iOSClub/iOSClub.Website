@@ -17,7 +17,7 @@ namespace iOSClub.WebSite.CentreToolPages.AdminPages;
 public partial class Permissions
 {
     [Inject] [NotNull] public IJSRuntime? JS { get; set; }
-    [Inject] [NotNull] public IDbContextFactory<SignContext>? DbFactory { get; set; }
+    [Inject] [NotNull] public IDbContextFactory<iOSContext>? DbFactory { get; set; }
 
     private async Task UploadFiles(InputFileChangeEventArgs e)
     {
@@ -151,7 +151,7 @@ public partial class Permissions
         await Update(context);
     }
 
-    private async Task Update(SignContext context)
+    private async Task Update(iOSContext context)
     {
         President = await context.Staffs.Where(x => x.Identity == "President").ToListAsync();
         TechnologyMinister = await context.Staffs.Where(x => x.Identity == "TechnologyMinister").ToListAsync();
@@ -162,7 +162,7 @@ public partial class Permissions
         NewMediaMember = await context.Staffs.Where(x => x.Identity == "NewMediaMember").ToListAsync();
     }
 
-    private async Task Update(SignContext context, StaffsList list)
+    private async Task Update(iOSContext context, StaffsList list)
     {
         context.Staffs.RemoveRange(President);
         context.Staffs.RemoveRange(TechnologyMinister);

@@ -85,12 +85,17 @@ using (var scope = app.Services.CreateScope())
     var context = services.GetRequiredService<iOSContext>();
     if (!context.Staffs.Any())
     {
-        var model = new StaffModel
+        var user = Environment.GetEnvironmentVariable("USER", EnvironmentVariableTarget.Process);
+        var model = new StaffModel() { Identity = "Founder", Name = "root", UserId = "0000000000" };
+        var users = user?.Split(',');
+        if (users != null)
         {
-            UserId = "0000000000",
-            Identity = "Founder",
-            Name = "root"
-        };
+            if (users.Length > 0)
+                model.Name = users[0];
+            if (users.Length > 1)
+                model.UserId = users[1];
+        }
+
         context.Staffs.Add(model);
     }
 

@@ -22,5 +22,6 @@ RUN dotnet publish "iOSClub.WebSite.csproj" -c $BUILD_CONFIGURATION -o /app/publ
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 ENV SQL ""
+ENV USER ""
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "iOSClub.WebSite.dll"]

@@ -3,7 +3,6 @@
 @using Markdig
 @using Markdig.Syntax
 @using Markdig.Syntax.Inlines
-@using Markdig.SyntaxHighlighting
 
 <PageTitle>@Title - iArticle</PageTitle>
 
@@ -51,7 +50,6 @@
             .UseBootstrap()
             .UseGridTables()
             .UseEmojiAndSmiley()
-            .UseSyntaxHighlighting()
             .Build();
         var content = await File.ReadAllTextAsync(info.FullName);
         var document = Markdown.Parse(content, pipeline);

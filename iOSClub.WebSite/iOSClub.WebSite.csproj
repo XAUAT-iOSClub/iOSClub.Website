@@ -8,7 +8,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Markdig.SyntaxHighlighting" Version="1.1.7" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.6" />
     </ItemGroup>
 
@@ -30,14 +29,34 @@
       <_ContentIncludedByDefault Remove="Components\Pages\HomePages\WordPages\OtherOrg.razor" />
       <_ContentIncludedByDefault Remove="Components\Pages\HomePages\WordPages\Structure.razor" />
       <_ContentIncludedByDefault Remove="Components\Pages\HomePages\WordPages\_Imports.razor" />
+      <_ContentIncludedByDefault Remove="Components\Pages\HomePages\Articles.razor" />
+      <_ContentIncludedByDefault Remove="Components\Pages\HomePages\Event.razor" />
+      <_ContentIncludedByDefault Remove="Components\Pages\HomePages\Home.razor" />
+      <_ContentIncludedByDefault Remove="Components\Pages\HomePages\IOSPic.razor" />
+      <_ContentIncludedByDefault Remove="Components\Pages\HomePages\Login.razor" />
+      <_ContentIncludedByDefault Remove="Components\Pages\HomePages\Logout.razor" />
+      <_ContentIncludedByDefault Remove="Components\Pages\HomePages\Signup.razor" />
+      <_ContentIncludedByDefault Remove="Components\Pages\HomePages\Tools.razor" />
+      <_ContentIncludedByDefault Remove="Components\Pages\HomePages\_Imports.razor" />
+      <_ContentIncludedByDefault Remove="Components\Pages\WordPages\About.razor" />
+      <_ContentIncludedByDefault Remove="Components\Pages\WordPages\Article.razor" />
+      <_ContentIncludedByDefault Remove="Components\Pages\WordPages\OtherOrg.razor" />
+      <_ContentIncludedByDefault Remove="Components\Pages\WordPages\Structure.razor" />
+      <_ContentIncludedByDefault Remove="Components\Pages\WordPages\_Imports.razor" />
     </ItemGroup>
 
     <ItemGroup>
-      <AdditionalFiles Include="Components\Pages\WordPages\About.razor" />
-      <AdditionalFiles Include="Components\Pages\WordPages\Article.razor" />
-      <AdditionalFiles Include="Components\Pages\WordPages\OtherOrg.razor" />
-      <AdditionalFiles Include="Components\Pages\WordPages\Structure.razor" />
-      <AdditionalFiles Include="Components\Pages\WordPages\_Imports.razor" />
+      <AdditionalFiles Include="Components\CentrePages\Centre.razor" />
+      <AdditionalFiles Include="Components\CentrePages\_Imports.razor" />
+      <AdditionalFiles Include="Components\HomePages\Articles.razor" />
+      <AdditionalFiles Include="Components\HomePages\Event.razor" />
+      <AdditionalFiles Include="Components\HomePages\Home.razor" />
+      <AdditionalFiles Include="Components\HomePages\IOSPic.razor" />
+      <AdditionalFiles Include="Components\HomePages\Login.razor" />
+      <AdditionalFiles Include="Components\HomePages\Logout.razor" />
+      <AdditionalFiles Include="Components\HomePages\Signup.razor" />
+      <AdditionalFiles Include="Components\HomePages\Tools.razor" />
+      <AdditionalFiles Include="Components\HomePages\_Imports.razor" />
     </ItemGroup>
     
 </Project>

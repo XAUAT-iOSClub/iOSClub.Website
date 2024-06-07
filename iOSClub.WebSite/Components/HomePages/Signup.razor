@@ -17,31 +17,15 @@
                 <Image Src="iOS_Club_LOGO.png" Preview="false" Style="width:40px; height:40px"/>
                 <div style="font-size: 24px;font-weight: bold;">XAUAT iOS Club</div>
             </Flex>
-            <Carousel @ref="_carousel" DotPosition="@CarouselDotPosition.Top">
-                @foreach (var item in steps)
-                {
-                    <CarouselSlick>
-                        @item
-                    </CarouselSlick>
-                }
-            </Carousel>
+            @steps[Index]
         </Card>
     </GridCol>
 </GridRow>
 
 
 @code {
-    private int _index;
 
-    private int Index
-    {
-        get => _index;
-        set
-        {
-            _carousel.GoTo(value);
-            _index = value;
-        }
-    }
+    private int Index { get; set; }
 
     private void OnPreClick()
     {
@@ -124,6 +108,7 @@
         (
             @<Template>
                 <Form Model="Model"
+                      Class="signup-form"
                       OnFinish="OnValidSubmit"
                       RequiredMark="FormRequiredMark.Optional"
                       ValidateMode="@FormValidateMode.Rules">
@@ -144,6 +129,7 @@
         (
             @<Template>
                 <Form Model="Model"
+                      Class="signup-form"
                       RequiredMark="FormRequiredMark.Optional"
                       OnFinish="OnValidSubmit"
                       ValidateMode="@FormValidateMode.Rules">
@@ -176,6 +162,7 @@
         (
             @<Template>
                 <Form Model="Model"
+                      Class="signup-form"
                       RequiredMark="FormRequiredMark.Optional"
                       OnFinish="OnValidSubmit"
                       ValidateMode="@FormValidateMode.Rules">
@@ -209,11 +196,6 @@
     ];
 }
 
-@code {
-    [NotNull] private Carousel? _carousel { get; set; }
-}
-
-
 <style>
     .login-form {
         border-radius: 10px;
@@ -226,6 +208,10 @@
         max-width: 100vw
     }
 
+    .signup-form {
+        animation: fade-in 1s ease;
+    }
+    
     #Mask {
         min-height: 100vh;
     }
@@ -258,16 +244,12 @@
         height: 34px;
         padding: 6px 12px;
         font-size: 14px;
-        line-height: 1.42857143;
         color: #555;
         background-color: #fff;
         background-image: none;
         border: 0;
         border-bottom: 1px solid #ccc;
         border-radius: 4px;
-        -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
-        -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-        transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
     }
     @@media screen and (max-width: 768px) {
         .login-form{

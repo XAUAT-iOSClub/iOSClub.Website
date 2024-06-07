@@ -102,10 +102,7 @@ a, .btn-link {
 /* 手机页面调整 */
 
 @media screen and (max-width: 768px) {
-    .whole {
-        min-height: 80vh;
-    }
-
+    
     .container {
         border-radius: 0;
     }

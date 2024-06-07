@@ -1,7 +1,10 @@
 ﻿<div id="@Id" style="@Style" class="apple-card @Class @(FrostedGlass ? "FrostedGlass" : "")">
-    <div class="apple-card-header">
-        @TitleTemplate
-    </div>
+    @if (TitleTemplate != null)
+    {
+        <div class="apple-card-header">
+            @TitleTemplate
+        </div>
+    }
     <div class="apple-card-context">
         @ContextTemplate
     </div>

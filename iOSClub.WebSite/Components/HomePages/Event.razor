@@ -1,0 +1,57 @@
+﻿@page "/Event"
+<PageTitle>社团活动 - 西建大iOS Club</PageTitle>
+
+<div style="text-align: center;">
+    <Image Preview="false" Style="width: 40%;" Src="/Centre/AppleLogo.jpg"/>
+    <Flex Align="center" Justify="center">
+        <div class="gradient-text">iOS Club 社团活动</div>
+    </Flex>
+    <Paragraph Style="font-size: 22px" Strong Type="secondary">Think Different</Paragraph>
+</div>
+
+<Flex Justify="center" Align="center">
+    <GridRow Class="block" Gutter="(20, 24)">
+        @foreach (var item in Cards)
+        {
+            <GridCol Xs="24" Sm="24" Md="12" Lg="12" Xl="12" Xxl="12">
+                <a href="@item.Url" target="_blank">
+                    <Card Hoverable Class="card" Bordered="false">
+                        <img src="@item.ImageUrl" width="65" height="55" alt="">
+                        <h1 style="margin-top: 10px;margin-bottom: 10px;">@item.Title</h1>
+                        <Paragraph Type="secondary">@item.Content</Paragraph>
+                    </Card>
+                </a>
+            </GridCol>
+        }
+    </GridRow>
+</Flex>
+
+@code
+{
+    private record CardModel(string ImageUrl, string Title, string Content, string Url = "");
+
+    private static CardModel[] Cards =>
+    [
+        new CardModel("https://developer.apple.com/wwdc24/images/icons/glow/state_2x.png",
+            "iOS Club和你一起体验最新产品", "iOS Club与许多企业进行合作，我们将带您体验最新的设备与最新应用",
+            "/Article/VisionPro"),
+        new CardModel("\thttps://developer.apple.com/wwdc24/images/icons/glow/play_2x.png",
+            "iOS Club和你一起看发布会", "iOS Club和你一起见证未来。未来已来，你来不来？",
+            "/Article/PressConference")
+    ];
+}
+
+<style>
+    .block{
+        width: 80%;
+        margin-top: 45px;
+        margin-bottom: 45px;
+    }
+    .card {
+        margin: 10px;
+        height: 200px;
+        max-width: 100%;
+        border-radius: 10px;
+        background: #ffffff;
+    }
+</style>

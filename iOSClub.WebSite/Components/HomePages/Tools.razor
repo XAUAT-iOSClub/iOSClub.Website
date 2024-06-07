@@ -1,4 +1,4 @@
-﻿@page "/Tools/{Keyword?}"
+﻿@page "/Tools"
 @using iOSClub.Data
 @using iOSClub.Data.DataModels
 @using Microsoft.EntityFrameworkCore
@@ -35,21 +35,12 @@
 </GridRow>
 
 @code {
-
-    [Parameter] public string? Keyword { get; set; }
     private ToolModel[] Models { get; set; } = [];
 
     protected override async Task OnInitializedAsync()
     {
         await using var context = await DbFactory.CreateDbContextAsync();
-        if (string.IsNullOrEmpty(Keyword))
-        {
-            Models = await context.Tools.ToArrayAsync();
-        }
-        else
-        {
-            Models = await context.Tools.Where(x => x.Tag!.Contains(Keyword)).ToArrayAsync();
-        }
+        Models = await context.Tools.ToArrayAsync();
         await base.OnInitializedAsync();
     }
 

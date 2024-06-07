@@ -88,13 +88,15 @@ using (var scope = app.Services.CreateScope())
         var user = Environment.GetEnvironmentVariable("USER", EnvironmentVariableTarget.Process);
         var model = new StaffModel() { Identity = "Founder", Name = "root", UserId = "0000000000" };
         var users = user?.Split(',');
-        if (users != null)
+        if (!string.IsNullOrEmpty(user) && users != null)
         {
             if (users.Length > 0)
                 model.Name = users[0];
             if (users.Length > 1)
                 model.UserId = users[1];
         }
+
+        Console.WriteLine($"{model.Name},{model.UserId}");
 
         context.Staffs.Add(model);
     }

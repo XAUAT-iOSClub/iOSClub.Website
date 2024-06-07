@@ -23,5 +23,21 @@
       <ProjectReference Include="..\iOSClub.Data\iOSClub.Data.csproj" />
       <ProjectReference Include="..\iOSClub.WebSite.Client\iOSClub.WebSite.Client.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Components\Pages\HomePages\WordPages\About.razor" />
+      <_ContentIncludedByDefault Remove="Components\Pages\HomePages\WordPages\Article.razor" />
+      <_ContentIncludedByDefault Remove="Components\Pages\HomePages\WordPages\OtherOrg.razor" />
+      <_ContentIncludedByDefault Remove="Components\Pages\HomePages\WordPages\Structure.razor" />
+      <_ContentIncludedByDefault Remove="Components\Pages\HomePages\WordPages\_Imports.razor" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="Components\Pages\WordPages\About.razor" />
+      <AdditionalFiles Include="Components\Pages\WordPages\Article.razor" />
+      <AdditionalFiles Include="Components\Pages\WordPages\OtherOrg.razor" />
+      <AdditionalFiles Include="Components\Pages\WordPages\Structure.razor" />
+      <AdditionalFiles Include="Components\Pages\WordPages\_Imports.razor" />
+    </ItemGroup>
     
 </Project>

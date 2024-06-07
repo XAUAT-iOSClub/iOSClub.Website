@@ -220,16 +220,14 @@
 
     protected override async Task OnInitializedAsync()
     {
-        await base.OnInitializedAsync();
         await Flushed();
     }
 
-
     private async Task Flushed()
     {
-        var context = await DbFactory.CreateDbContextAsync();
+        if(Models.Count != 0)return;
+        await using var context = await DbFactory.CreateDbContextAsync();
         Models = await context.Students.ToListAsync();
-        await context.DisposeAsync();
     }
 
     private async Task Delete(StudentModel model)
@@ -289,17 +287,11 @@
 
         foreach (var model in list)
         {
-            try
-            {
-                await context.Students.AddAsync(model.Standardization());
-            }
-            catch
-            {
-                continue;
-            }
-
-            await context.SaveChangesAsync();
+            if (await context.Students.AnyAsync(x => x.UserId == model.UserId)) continue;
+            await context.Students.AddAsync(model.Standardization());
         }
+        
+        await context.SaveChangesAsync();
 
         RunningStyle = false;
         Models = await context.Students.ToListAsync();

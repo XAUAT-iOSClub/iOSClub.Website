@@ -1,6 +1,4 @@
-﻿# 社团竞赛
-
-## 核心竞赛
+﻿## 核心竞赛
 
 - [Swift学生挑战赛](/Article/Swift)
 - [⭐️ 移动应用创新赛](/Article/MobileApplication)

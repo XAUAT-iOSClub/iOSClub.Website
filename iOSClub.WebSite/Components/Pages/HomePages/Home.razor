@@ -7,7 +7,7 @@
         <GridCol Style="width:75%;text-align: center" Xs="24" Sm="24" Md="24" Lg="9" Xl="9" Xxl="9">
             <div style="text-align: center">
                 <Image Src="iOS_Club_LOGO.png" Preview="false" Style="width:75%;text-align: center"/>
-                <div class="desktop-phone">
+                <div class="desktop-laptop">
                     <Progress Percent="@Percent" ShowInfo="false" Style="width:75%;margin: 10px"></Progress>
                     <Space style="text-align: center">
                         <SpaceItem>
@@ -37,17 +37,16 @@
                     "Stay hungry, stay foolish"
                 </Paragraph>
             </div>
-            <div class="desktop-phone">
-                <Title Level="1" Style="color: #3c3c43">
-                    西安建筑科技大学iOS众创空间俱乐部
-                </Title>
+            <Title Level="1" Class="home-title desktop-phone">西安建筑科技大学iOS众创空间俱乐部</Title>
+            <div class="desktop-laptop">
                 @for (var i = 0; i < Lyrics[LyricIndex].Length; i++)
                 {
-                    <h6 class="@(Math.Abs(i * 10 + 30 - Percent + 10) < 5 ? "Lyr-Display" : "") first-button">
-                        @Lyrics[LyricIndex][i]
-                    </h6>
+                <h6 class="@(Math.Abs(i * 10 + 30 - Percent + 10) < 5 ? "Lyr-Display" : "") first-button">
+                    @Lyrics[LyricIndex][i]
+                </h6>
                 }
             </div>
+
         </GridCol>
     </GridRow>
 
@@ -58,7 +57,7 @@
         <GridRow Class="block">
             @foreach (var item in Cards)
             {
-                <GridCol Xs="24" Sm="24" Md="24" Lg="12" Xl="8" Xxl="8">
+                <GridCol Xs="24" Sm="24" Md="12" Lg="12" Xl="8" Xxl="8">
                     @if (string.IsNullOrEmpty(item.Url))
                     {
                         <Card Hoverable Class="card">
@@ -86,7 +85,7 @@
 <GridRow OnBreakpoint="OnBreakpoint" Class="block phone-desktop">
     @foreach (var item in Cards)
     {
-        <GridCol Xs="24" Sm="24" Md="24" Lg="12" Xl="8" Xxl="8">
+        <GridCol Xs="24" Sm="24" Md="12" Lg="12" Xl="8" Xxl="8">
             @if (string.IsNullOrEmpty(item.Url))
             {
                 <Card Hoverable Class="card">
@@ -113,7 +112,7 @@
     private double Percent { get; set; } = 30;
     private void OnBreakpoint(BreakpointType breakpoint)
     {
-        IsMobile = breakpoint.IsIn(BreakpointType.Sm, BreakpointType.Xs, BreakpointType.Md);
+        IsMobile = (int)breakpoint <= 1200;
     }
 
     private bool IsMobile;
@@ -139,7 +138,7 @@
         new CardModel("\ud83c\udf4e", "我们是谁?", "我们是由Apple公司资金支持，受南山书院和西安建筑科技大学大学生创新创业实践中心指导的学术型学生团体。", "/About"),
         new CardModel("\ud83e\udd1d", "和iOS Club一起结伴同行", "不管是零基础的小白还是大神，只要你有兴趣，这里就是你的天堂", "/Articles"),
         new CardModel("\ud83c\udf10", "iOS Club,不止iOS", "我们不止只有iOS，西建大iOS Club是一个跨专业与课堂的数码编程爱好者社团", "OtherOrg"),
-        new CardModel("\ud83d\ude00", "Apple \u2716\ufe0f 西建大", "苹果每个学期都会在学校举办大大小小的活动，快来参与", "/Event"),
+        new CardModel("\ud83d\ude00", "Apple \u2716\ufe0f 西建大", "苹果公司每个学期都会在学校举办各种活动，俱乐部成员可以参与合作软件开发，共同创造世界", "/Event"),
         new CardModel("\ud83d\udc69\ud83c\udffb\u200d\ud83d\udcbb", "合作软件开发", "加入我们，和志同道合的iMember一起合作开发，一起创造世界"),
         new CardModel("\ud83d\udcc8", "全校数码编程爱好者,联合起来！", "我们意图打造全校最大的科技社区，快来加入我们成为一名iMember吧", "/Login")
     ];
@@ -176,6 +175,30 @@
         width: 100%;
         border-radius: 10px;
         font-size: 22px;
+    }
+    
+    .home-title{
+        color: #3c3c43;
+    }
+    
+    @@media screen and (max-width: 1250px) {
+        .block {
+            padding: 40px;
+            min-height: 0;
+        }
+        .home-title{
+            font-size: 34px !important;
+        }
+    }
+    
+    @@media screen and (max-width: 992px) {
+        .first-button{
+            text-align: center;
+        }
+        
+        .home-title{
+            text-align: center;
+        }
     }
 
     .first-button:hover {

@@ -6,6 +6,13 @@ public class SignRecord
 {
     public static readonly OrgSignRecord ios = new("mqqapi://card/show_pslcard?src_type=internal&version=1&uin=952954710&card_type=group&source=external",
         "https://qm.qq.com/cgi-bin/qm/qr?authKey=MUNgIj%2B1gnkiI175qAQla6EcR44Fa0APCv%2FLo1a7YIlYgpeg76Q%2BGYMoedb8gGHU&k=HvhhArSc7tzuySOhXsnmZ6RgLcWkzXgu&noverify=0");
+
+    public static readonly Dictionary<string, string> MarkdownData = new()
+    {
+        { "Competitions", "竞赛资源" },
+        { "MobileApplication", "移动应用创新赛" },
+        {"Swift","WWDC-Swift学生挑战赛"}
+    };
     
     #region Table
 

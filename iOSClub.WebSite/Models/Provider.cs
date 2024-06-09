@@ -51,3 +51,11 @@ public class Provider(ProtectedSessionStorage sessionStorage) : AuthenticationSt
     }
     
 }
+
+public static class ProviderExtensions
+{
+    public static async Task Logout(this Provider provider)
+    {
+        await provider.UpdateAuthState(null);
+    }
+}

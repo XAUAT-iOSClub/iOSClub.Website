@@ -8,8 +8,8 @@
 
 <meta name="referrer" content="never">
 
-<div style="text-align: center; height: 90vh">
-    <Image Preview="false" Style="width: 40%;" Src="/Centre/Air.png"/>
+<div style="text-align: center;">
+    <Image Preview="false" Src="/Centre/Article.jpg"/>
     <Flex Align="center" Justify="center">
         <div class="gradient-text">iOS Club 技术博客</div>
     </Flex>
@@ -46,7 +46,7 @@
     protected override async Task OnInitializedAsync()
     {
         await using var context = await DbFactory.CreateDbContextAsync();
-        Models = await context.Articles.Take(4).ToArrayAsync();
+        Models = await context.Articles.ToArrayAsync();
         await base.OnInitializedAsync();
     }
 

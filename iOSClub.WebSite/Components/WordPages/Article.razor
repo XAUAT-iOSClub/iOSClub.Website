@@ -40,10 +40,10 @@
     protected override async Task OnParametersSetAsync()
     {
         if (string.IsNullOrEmpty(Name)) return;
-        Title = Name;
+        Title = Name.Replace("-", "/");
         if (SignRecord.MarkdownData.TryGetValue(Name, out var value)) Title = value;
 
-        var info = new FileInfo($"wwwroot/ArticleFile/{Name}.md");
+        var info = new FileInfo($"wwwroot/ArticleFile/{Name.Replace("-", "/")}.md");
         if (!info.Exists) return;
         var pipeline = new MarkdownPipelineBuilder()
             .UseAdvancedExtensions()

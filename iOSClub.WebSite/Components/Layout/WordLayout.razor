@@ -59,12 +59,37 @@
                         </div>
                     </TitleTemplate>
                     <ChildContent>
+                        <MenuItem RouterLink="/Article/Competitions" RouterMatch="NavLinkMatch.All" OnClick="@Close">资源支持</MenuItem>
                         <MenuItem RouterLink="/Article/MobileApplication" RouterMatch="NavLinkMatch.All" OnClick="@Close">移动应用创新赛</MenuItem>
                         <MenuItem RouterLink="/Article/Swift" RouterMatch="NavLinkMatch.All" OnClick="@Close">WWDC-Swift学生挑战赛</MenuItem>
-    </ChildContent>
-    </MenuItemGroup>
-    </Menu>
-    </Template>;
+                    </ChildContent>
+                </MenuItemGroup>
+                <MenuItemGroup Class="group-block">
+                    <TitleTemplate>
+                        <div class="group-title">
+                            社团活动
+                        </div>
+                    </TitleTemplate>
+                    <ChildContent>
+                        <MenuItem RouterLink="/Article/VisionPro" RouterMatch="NavLinkMatch.All" OnClick="@Close">体验最新产品</MenuItem>
+                        <MenuItem RouterLink="/Article/PressConference" RouterMatch="NavLinkMatch.All" OnClick="@Close">一起看发布会</MenuItem>
+                    </ChildContent>
+                </MenuItemGroup>
+                <MenuItemGroup Class="group-block">
+                    <TitleTemplate>
+                        <div class="group-title">
+                            社团历史
+                        </div>
+                    </TitleTemplate>
+                    <ChildContent>
+                        <MenuItem RouterLink="/Article/History-Overview" RouterMatch="NavLinkMatch.All" OnClick="@Close">总述</MenuItem>
+                        <MenuItem RouterLink="/Article/History-Founding" RouterMatch="NavLinkMatch.All" OnClick="@Close">创社史</MenuItem>
+                        <MenuItem RouterLink="/Article/History-PressConference" RouterMatch="NavLinkMatch.All" OnClick="@Close">2022-2023</MenuItem>
+                        <MenuItem RouterLink="/Article/History-PressConference" RouterMatch="NavLinkMatch.All" OnClick="@Close">2023-2024</MenuItem>
+                    </ChildContent>
+                </MenuItemGroup>
+            </Menu>
+        </Template>;
 }
 
 <style>
@@ -92,5 +117,10 @@
         color: #fff;
         text-align: center;
         font-size: 20px;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        font-weight: bold;
+        font-size: x-large;
     }
 </style>

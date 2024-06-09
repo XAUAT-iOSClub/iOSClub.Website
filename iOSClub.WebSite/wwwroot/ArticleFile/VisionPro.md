@@ -1,4 +1,4 @@
-﻿# 《深入了解 Vision Pro》系列活动 <Badge type="info" text="第一期" />
+﻿# iOS Club 和你一起体验最新产品
 
 > 🚀 深入探索Apple Vision Pro，掌握Xcode编程，一起开启visionOS应用之旅！🚀
 

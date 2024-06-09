@@ -4,16 +4,22 @@ namespace iOSClub.WebSite.Models;
 
 public class SignRecord
 {
-    public static readonly OrgSignRecord ios = new("mqqapi://card/show_pslcard?src_type=internal&version=1&uin=952954710&card_type=group&source=external",
+    public static readonly OrgSignRecord ios = new(
+        "mqqapi://card/show_pslcard?src_type=internal&version=1&uin=952954710&card_type=group&source=external",
         "https://qm.qq.com/cgi-bin/qm/qr?authKey=MUNgIj%2B1gnkiI175qAQla6EcR44Fa0APCv%2FLo1a7YIlYgpeg76Q%2BGYMoedb8gGHU&k=HvhhArSc7tzuySOhXsnmZ6RgLcWkzXgu&noverify=0");
 
-    public static readonly Dictionary<string, string> MarkdownData = new()
+    public static Dictionary<string, string> MarkdownData => new()
     {
         { "Competitions", "竞赛资源" },
         { "MobileApplication", "移动应用创新赛" },
-        {"Swift","WWDC-Swift学生挑战赛"}
+        { "Swift", "WWDC-Swift学生挑战赛" },
+        { "PressConference", "iOS Club 和你一起看发布会" },
+        { "VisionPro", "iOS Club 和你一起体验最新产品" },
+        { "History-Founding", "创社史" },
+        { "History-Overview", "历史总述" },
+        { "History-", "2023-2024" }
     };
-    
+
     #region Table
 
     public static readonly string[] Academies =
@@ -97,13 +103,13 @@ public class SignRecord
         new FormValidationRule
             { Len = 20, Message = "项目名称太长了", Required = true }
     ];
-    
+
     public static FormValidationRule[] ProjectDescriptionRules =>
     [
         new FormValidationRule
             { Len = 512, Message = "项目描述太长了", Required = true }
     ];
-    
+
     public static Dictionary<string, string> DepartmentDictionary => new()
     {
         ["All"] = "所有",
@@ -123,7 +129,7 @@ public class SignRecord
         new FormValidationRule
             { Len = 20, Message = "项目名称太长了", Required = true }
     ];
-    
+
     public static FormValidationRule[] ResourceDescriptionRules =>
     [
         new FormValidationRule
@@ -139,7 +145,7 @@ public class SignRecord
         new FormValidationRule
             { Len = 20, Message = "项目名称太长了", Required = true }
     ];
-    
+
     public static FormValidationRule[] TaskDescriptionRules =>
     [
         new FormValidationRule

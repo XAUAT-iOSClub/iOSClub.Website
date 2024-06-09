@@ -1,28 +1,103 @@
-<?xml version="1.0" encoding="utf-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+        xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+  http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+  <!-- created with Free Online Sitemap Generator https://www.eptimize.app -->
   <url>
-    <loc>https://www.xauat.site/</loc>
-    <priority>1.00</priority>
+    <loc>https://www.xauat.site/Article/History-Founding</loc>
+    <lastmod>2024-06-22</lastmod>
+    <priority>0.6</priority>
   </url>
-
   <url>
-    <loc>https://www.xauat.site/About</loc>
-    <priority>1.00</priority>
+    <loc>https://www.xauat.site/Article/VisionPro</loc>
+    <lastmod>2024-06-22</lastmod>
+    <priority>0.6</priority>
   </url>
-
   <url>
-    <loc>https://www.xauat.site/Article</loc>
-    <priority>1.00</priority>
+    <loc>https://www.xauat.site/Article/Competitions</loc>
+    <lastmod>2024-06-22</lastmod>
+    <priority>0.6</priority>
   </url>
-
+  <url>
+    <loc>https://www.xauat.site/Event</loc>
+    <lastmod>2024-06-22</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.xauat.site/Projects</loc>
+    <lastmod>2024-06-22</lastmod>
+    <priority>0.7</priority>
+  </url>
   <url>
     <loc>https://www.xauat.site/Login</loc>
-    <priority>1.00</priority>
+    <lastmod>2024-06-22</lastmod>
+    <priority>0.7</priority>
   </url>
-
   <url>
-    <loc>https://www.xauat.site/Signup</loc>
-    <priority>1.00</priority>
+    <loc>https://www.xauat.site/Article/PressConference</loc>
+    <lastmod>2024-06-22</lastmod>
+    <priority>0.6</priority>
   </url>
-
+  <url>
+    <loc>https://www.xauat.site/About</loc>
+    <lastmod>2024-06-22</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.xauat.site/Articles</loc>
+    <lastmod>2024-06-22</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.xauat.site/</loc>
+    <lastmod>2024-06-22</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.xauat.site/History</loc>
+    <lastmod>2024-06-22</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.xauat.site/NewSignup</loc>
+    <lastmod>2024-06-22</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.xauat.site/Article/History-PressConference</loc>
+    <lastmod>2024-06-22</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.xauat.site/Tools</loc>
+    <lastmod>2024-06-22</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.xauat.site/Article/MobileApplication</loc>
+    <lastmod>2024-06-22</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.xauat.site/Structure</loc>
+    <lastmod>2024-06-22</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.xauat.site/Article/History-Overview</loc>
+    <lastmod>2024-06-22</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.xauat.site/OtherOrg</loc>
+    <lastmod>2024-06-22</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.xauat.site/Article/Swift</loc>
+    <lastmod>2024-06-22</lastmod>
+    <priority>0.6</priority>
+  </url>
 </urlset>

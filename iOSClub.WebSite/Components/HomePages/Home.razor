@@ -1,5 +1,6 @@
 ﻿@page "/"
 
+<!--suppress ALL -->
 <PageTitle>主页 - 西建大iOS Club</PageTitle>
 
 <div @onwheel="FirstWheel">
@@ -11,17 +12,17 @@
                     <Progress Percent="@Percent" ShowInfo="false" Style="width:75%;margin: 10px"></Progress>
                     <Space style="text-align: center">
                         <SpaceItem>
-                            <Button Type="@ButtonType.Text">
+                            <Button Type="@ButtonType.Text" OnClick="@(NextLyric)">
                                 <Icon Type="step-backward" Class="card-d" Theme="outline"/>
                             </Button>
                         </SpaceItem>
                         <SpaceItem>
-                            <Button Type="@ButtonType.Text">
-                                <Icon Type="pause" Class="card-d" Theme="outline"/>
+                            <Button Type="@ButtonType.Text" OnClick="() => IsPlaying = !IsPlaying">
+                                <Icon Type="@(IsPlaying ? "play-circle" :"pause" )" Class="card-d" Theme="outline"/>
                             </Button>
                         </SpaceItem>
                         <SpaceItem>
-                            <Button Type="@ButtonType.Text">
+                            <Button Type="@ButtonType.Text" OnClick="@(NextLyric)">
                                 <Icon Type="step-forward" Class="card-d" Theme="outline"/>
                             </Button>
                         </SpaceItem>
@@ -41,9 +42,9 @@
             <div class="desktop-laptop">
                 @for (var i = 0; i < Lyrics[LyricIndex].Length; i++)
                 {
-                <h6 class="@(Math.Abs(i * 10 + 30 - Percent + 10) < 5 ? "Lyr-Display" : "") first-button">
-                    @Lyrics[LyricIndex][i]
-                </h6>
+                    <h6 class="@(Math.Abs(i * 10 + 30 - Percent + 10) < 5 ? "Lyr-Display" : "") first-button">
+                        @Lyrics[LyricIndex][i]
+                    </h6>
                 }
             </div>
 
@@ -110,6 +111,7 @@
 
 @code {
     private double Percent { get; set; } = 30;
+
     private void OnBreakpoint(BreakpointType breakpoint)
     {
         IsMobile = (int)breakpoint <= 1200;
@@ -119,9 +121,18 @@
 
     private record CardModel(string ImageUrl, string Title, string Content, string Url = "");
 
-    private int LyricIndex { get; set; } = 0;
-    
-    private List<string[]> Lyrics =>
+    private int LyricIndex { get; set; }
+
+    private void NextLyric()
+    {
+        LyricIndex--;
+        if (LyricIndex < 0)
+        {
+            LyricIndex = Lyrics.Count - 1;
+        }
+    }
+
+    private static List<string[]> Lyrics =>
     [
         [
             "这里是",
@@ -130,9 +141,17 @@
             "跨越学科，体验编程与开发的魅力",
             "创造人生，开发非同凡响的APP"
         ],
-        []
+        [
+            "探讨学科前沿",
+            "帮助扶持创业团队",
+            "助力高校创新创业项目，搭建学生创新创业平台",
+            "培养俱乐部成员的创新创业意识及软件开发能力",
+            "丰富教学内容，深化校企合作发展"
+        ]
     ];
 
+    private bool IsPlaying { get; set; }
+    
     private static CardModel[] Cards =>
     [
         new CardModel("\ud83c\udf4e", "我们是谁?", "我们是由Apple公司资金支持，受南山书院和西安建筑科技大学大学生创新创业实践中心指导的学术型学生团体。", "/About"),

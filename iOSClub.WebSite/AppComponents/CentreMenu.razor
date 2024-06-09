@@ -1,4 +1,11 @@
-﻿<Menu Theme="MenuTheme.Light"
+﻿@using iOSClub.WebSite.Models
+@using Microsoft.AspNetCore.Components.Authorization
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider authStateProvider
+@inject MessageService MessageService
+
+
+<Menu Theme="MenuTheme.Light"
       Style="@Style"
       Mode="MenuMode.Inline">
     <MenuItem RouterLink="/Centre" RouterMatch="NavLinkMatch.All">
@@ -58,7 +65,7 @@
         <span class="nav-text">社团小工具</span>
     </MenuItem>
 
-    <MenuItem RouterLink="/Logout" Class="phone-desktop-flex" RouterMatch="NavLinkMatch.All">
+    <MenuItem OnClick="Logout" Class="phone-desktop-flex" RouterMatch="NavLinkMatch.All">
         <Icon Type="logout" Theme="outline"/>
         <span class="nav-text">退出登录</span>
     </MenuItem>
@@ -67,4 +74,13 @@
 @code {
     [Parameter] public string State { get; set; } = "Member";
     [Parameter] public string Style { get; set; } = "";
+
+    private async Task Logout()
+    {
+        var provider = (Provider)authStateProvider;
+        await MessageService.Success("您已注销");
+        await provider.Logout();
+        NavigationManager.NavigateTo("");
+    }
+
 }

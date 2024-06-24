@@ -17,7 +17,7 @@ public class SignRecord
         { "VisionPro", "iOS Club 和你一起体验最新产品" },
         { "History-Founding", "创社史" },
         { "History-Overview", "历史总述" },
-        { "History-", "2023-2024" }
+        { "History-Shao Han's Reign", "邵韩之治" }
     };
 
     #region Table

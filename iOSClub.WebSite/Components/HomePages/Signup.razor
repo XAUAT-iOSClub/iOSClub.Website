@@ -1,5 +1,4 @@
-﻿@page "/NewSignup"
-@using System.Diagnostics.CodeAnalysis
+﻿@page "/Signup"
 @using iOSClub.Data
 @using iOSClub.Data.DataModels
 @using iOSClub.WebSite.Models
@@ -212,10 +211,6 @@
         animation: fade-in 1s ease;
     }
     
-    #Mask {
-        min-height: 100vh;
-    }
-
     .item {
         padding-top: 10px;
     }
@@ -251,6 +246,7 @@
         border-bottom: 1px solid #ccc;
         border-radius: 4px;
     }
+    
     @@media screen and (max-width: 768px) {
         .login-form{
             box-shadow: none;

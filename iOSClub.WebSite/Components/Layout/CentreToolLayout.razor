@@ -8,9 +8,7 @@
         <CentreMenu State="@Member.Identity"/>
     </Sider>
     <Content Class="layout-context">
-        <CascadingValue Value="@Member">
-            @Body
-        </CascadingValue>
+        @Body
     </Content>
 </Layout>
 
@@ -40,5 +38,17 @@
         .layout-context {
             margin: 0;
         }
+    }
+
+    .ant-modal-header {
+        border-radius: 12px 12px 0 0;
+    }
+    
+    .ant-modal-body {
+        border-radius: 0 0 12px 12px;
+    }
+    
+    .ant-modal-content {
+        border-radius: 12px !important;
     }
 </style>

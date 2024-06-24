@@ -37,7 +37,7 @@
                         <Card Hoverable Style="border-radius: 10px;" BodyStyle="margin: 5px auto">
                             <Flex Vertical Align="flex-end" Justify="space-between" Style="height: 200px">
                                 <div>
-                                    <Flex Justify="space-between" Align="center">
+                                    <Flex Justify="space-between" Align="center" Gap="10">
                                         <Title Level="2">@context.Title</Title>
                                         <Tag OnClick="@(() => Nav.NavigateTo($"/Centre/Department/{context.DepartmentName}"))"
                                              Icon="apple" Color="blue-inverse">
@@ -80,7 +80,7 @@
                     <Card Hoverable Style="border-radius: 10px;" BodyStyle="margin: 5px auto">
                         <Flex Vertical Align="flex-end" Justify="space-between" Style="height: 200px">
                             <div>
-                                <Flex Justify="space-between" Align="center">
+                                <Flex Justify="space-between" Align="center" Gap="10">
                                     <Title Level="2">@context.Title</Title>
                                     <Tag OnClick="@(() => Nav.NavigateTo($"/Centre/Department/{context.DepartmentName}"))"
                                          Icon="apple" Color="blue-inverse">
@@ -153,8 +153,8 @@
         Sm = 2,
         Md = 3,
         Lg = 3,
-        Xl = 4,
-        Xxl = 4,
+        Xl = 3,
+        Xxl = 3
     };
 
     private async Task Delete(ProjectModel project)

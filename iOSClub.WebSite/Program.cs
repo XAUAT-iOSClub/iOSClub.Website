@@ -96,8 +96,6 @@ using (var scope = app.Services.CreateScope())
                 model.UserId = users[1];
         }
 
-        Console.WriteLine($"{model.Name},{model.UserId}");
-
         context.Staffs.Add(model);
     }
 

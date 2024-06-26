@@ -13,14 +13,21 @@ public class MemberController(iOSContext context, JwtHelper jwtHelper, IHttpCont
     : ControllerBase
 {
     #region Visitor
-
+    
     [TokenActionFilter]
     [Authorize]
     [HttpGet]
-    public ActionResult<MemberModel> GetData()
+    public async Task<ActionResult<MemberModel>> GetData()
     {
         var member = httpContextAccessor.HttpContext?.User.GetUser();
         if (member == null) return NotFound();
+        if (member.Identity == "Founder") return member;
+        var student = await context.Students.FirstOrDefaultAsync(x => x.UserId == member.UserId);
+        if (student == null) return NotFound();
+        var id = member.Identity;
+        member = MemberModel.AutoCopy<StudentModel, MemberModel>(student);
+        member.Identity = id;
+
         return member;
     }
 
@@ -62,16 +69,27 @@ public class MemberController(iOSContext context, JwtHelper jwtHelper, IHttpCont
         var peo = await context.Staffs.FirstOrDefaultAsync(x =>
             x.UserId == loginModel.Id && x.Name == loginModel.Name);
 
-        if (peo != null)
-            return jwtHelper.GetMemberToken(new MemberModel()
-                { UserName = peo.Name, UserId = peo.UserId, Identity = peo.Identity });
+        var id = peo?.Identity ?? "Member";
+        
         var model =
             await context.Students.FirstOrDefaultAsync(x =>
                 x.UserId == loginModel.Id && x.UserName == loginModel.Name);
 
         if (model == null)
+        {
+            if (peo != null)
+            {
+                return jwtHelper.GetMemberToken(new MemberModel()
+                    { UserName = peo.Name, UserId = peo.UserId, Identity = peo.Identity });
+            }
+
             return NotFound();
-        return jwtHelper.GetMemberToken(MemberModel.AutoCopy<StudentModel, MemberModel>(model));
+        }
+        
+        var member = MemberModel.AutoCopy<StudentModel, MemberModel>(model);
+        member.Identity = id;
+
+        return jwtHelper.GetMemberToken(member);
     }
 
     #endregion

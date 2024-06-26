@@ -41,5 +41,5 @@ public static class TokenHelper
     }
 
     private static bool IsNull(this Claim? claim)
-        => claim == null || !string.IsNullOrEmpty(claim.Value);
+        => claim == null || string.IsNullOrEmpty(claim.Value);
 }

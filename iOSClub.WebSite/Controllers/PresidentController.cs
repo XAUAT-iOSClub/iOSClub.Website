@@ -11,10 +11,9 @@ namespace iOSClub.WebSite.Controllers;
 [TokenActionFilter]
 [Route("api/[controller]/[action]")]
 [ApiController]
-public class PresidentController(iOSContext context, IHttpContextAccessor httpContextAccessor)
+public class PresidentController(iOSContext context)
     : ControllerBase
 {
-    private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
     // GET: api/Member
     [HttpDelete("{id}")]

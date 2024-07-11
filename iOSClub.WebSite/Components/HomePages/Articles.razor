@@ -39,14 +39,26 @@
     }
 </GridRow>
 
+<div style="padding: 30px">
+    <Title>更多文章</Title>
+
+    <AntList Bordered="false" DataSource="@Entries">
+        <ListItem Style="border: none">
+            <a href="@context.Link[0].Href" target="_blank" class="a-btn">@($"{context.Title}")</a>
+        </ListItem>
+    </AntList>
+</div>
+
 @code {
 
     private ArticleModel[] Models { get; set; } = [];
+    private List<Entry> Entries { get; set; } = [];
 
     protected override async Task OnInitializedAsync()
     {
         await using var context = await DbFactory.CreateDbContextAsync();
         Models = await context.Articles.ToArrayAsync();
+        Entries = await WebArticle.GetArticleAsync();
         await base.OnInitializedAsync();
     }
 
@@ -59,5 +71,23 @@
         max-width: 100%;
         background: #f3f5f7;
         border-radius: 10px;
+    }
+
+    .a-btn {
+        display: inline-block;
+        transition: .2s;
+        cursor: pointer;
+        margin: 5px 5px 0 0;
+        border-radius: 10px;
+        padding: 5px;
+        border: none;
+        font-size: 18px;
+        color: #1c1f23;
+    }
+
+    .a-btn:hover {
+        background-color: #f3f5f7;
+        color: #1c1f23;
+        transform: scale(1.02);
     }
 </style>

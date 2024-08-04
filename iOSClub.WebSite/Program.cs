@@ -99,8 +99,17 @@ using (var scope = app.Services.CreateScope())
         context.Staffs.Add(model);
     }
 
-    context.SaveChanges();
-    context.Dispose();
+    if (await context.Students.AnyAsync())
+    {
+        var students = await context.Students
+            .Where(x => string.IsNullOrEmpty(x.JoinTime))
+            .ToListAsync();
+        foreach (var student in students)
+            student.JoinTime = "2023-10-18";
+    }
+    
+    await context.SaveChangesAsync();
+    await context.DisposeAsync();
 }
 
 app.UseHttpsRedirection();

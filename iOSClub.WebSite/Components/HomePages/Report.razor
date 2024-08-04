@@ -1,0 +1,49 @@
+﻿@page "/Report"
+@using iOSClub.WebSite.YearReports
+
+<div @onwheel="FirstWheel" class="Report">
+    <Flex Vertical Justify="center" Align="center">
+        @switch (_currentReportIndex)
+        {
+            case 0:
+                <HomeReport/>
+                break;
+            case 1:
+                <MemberReport/>
+                break;
+            case 2:
+                <MemberReport/>
+                break;
+        }
+    </Flex>
+</div>
+
+
+@code {
+
+    private int _currentReportIndex;
+
+    private void FirstWheel(WheelEventArgs obj)
+    {
+        var i = _currentReportIndex;
+        i += obj.DeltaY > 0 ? 1 : -1;
+        if (i is < 0 or > 2) return;
+        _currentReportIndex = i;
+        StateHasChanged();
+        Console.WriteLine(i);
+    }
+
+}
+
+<style>
+    .Report-Animation{
+        animation: fade-in 1s ease-in-out;
+        text-align: center;
+    }
+    
+    .Report{
+        background-image: linear-gradient(to bottom right, #ff6b6b, #7171ae, #10bce7);
+        height: 75vh;
+        text-align: center;
+    }
+</style>

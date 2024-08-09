@@ -69,6 +69,8 @@ public static class DataTool
         return hashStringBuilder.ToString();
     }
 
+    public static string ToHash(this object t) => StringToHash(t.ToString()!);
+
     public static string GetProperties<T>(T t)
     {
         StringBuilder builder = new StringBuilder();

@@ -2,15 +2,16 @@
 @using iOSClub.WebSite.Models
 @inherits LayoutComponentBase
 
-<Layout Style="max-height: 100%;overflow:hidden">
-    <Sider Breakpoint="@BreakpointType.Md" Class="desktop-phone sider"
-           CollapsedWidth="64" Trigger="@null">
+<GridRow Style="overflow: hidden;background-color: #f3f5f7;">
+    <GridCol Md="4" Lg="4" Xl="4" Xxl="4" Class="desktop-phone">
         <CentreMenu State="@Member.Identity"/>
-    </Sider>
-    <Content Class="layout-context">
-        @Body
-    </Content>
-</Layout>
+    </GridCol>
+    <GridCol Class="layout-context" Xs="24" Sm="24" Md="20" Lg="20" Xl="20" Xxl="20">
+        <div style="overflow: auto;">
+            @Body
+        </div>
+    </GridCol>
+</GridRow>
 
 @code
 {
@@ -18,25 +19,19 @@
 }
 
 <style>
-    .sider {
-        background-color: #f3f5f7;
-        overflow: auto;
-        height: 100%;
-    }
 
     body {
         height: 100% !important;
     }
 
     .layout-context {
-        overflow: auto;
         background-color: #f3f5f7;
-        margin: 24px 16px 0;
+        padding: 24px 16px 0;
     }
     
     @@media screen and (max-width: 768px) {
         .layout-context {
-            margin: 0;
+            padding: 0;
         }
     }
 

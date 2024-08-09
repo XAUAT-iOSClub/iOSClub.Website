@@ -47,7 +47,7 @@
                             {
                                 <SpaceItem>
                                     <Button Type="@ButtonType.Text" OnClick="@(() => Nav.NavigateTo(item.Url))" Class="card" Style="padding: 0;height: auto;">
-                                        <Image Preview="false" Src="@item.IconUrl"/>
+                                        <Image Style="max-height: 48px;max-width: 48px" Preview="false" Src="@item.IconUrl"/>
                                         <Paragraph>@item.Name</Paragraph>
                                     </Button>
                                 </SpaceItem>

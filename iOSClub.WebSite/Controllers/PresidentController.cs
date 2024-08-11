@@ -11,13 +11,14 @@ namespace iOSClub.WebSite.Controllers;
 [TokenActionFilter]
 [Route("api/[controller]/[action]")]
 [ApiController]
-public class PresidentController(iOSContext context)
+public class PresidentController(IDbContextFactory<iOSContext> factory)
     : ControllerBase
 {
     // GET: api/Member
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(string id)
     {
+        await using var context = await factory.CreateDbContextAsync();
         if (context.Students == null!)
             return NotFound();
 
@@ -35,6 +36,7 @@ public class PresidentController(iOSContext context)
     [HttpGet]
     public async Task<ActionResult<List<MemberModel>>> GetAllData()
     {
+        await using var context = await factory.CreateDbContextAsync();
         var list = await context.Students.ToListAsync();
         var staff = await context.Staffs.ToListAsync();
 
@@ -56,6 +58,7 @@ public class PresidentController(iOSContext context)
     [HttpPost]
     public async Task<ActionResult> Update([FromBody] MemberModel model)
     {
+        await using var context = await factory.CreateDbContextAsync();
         if (context.Students == null!)
         {
             return NotFound();

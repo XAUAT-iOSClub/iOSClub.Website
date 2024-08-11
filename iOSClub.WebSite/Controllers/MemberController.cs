@@ -9,7 +9,10 @@ namespace iOSClub.WebSite.Controllers;
 
 [Route("api/[controller]/[action]")]
 [ApiController]
-public class MemberController(iOSContext context, JwtHelper jwtHelper, IHttpContextAccessor httpContextAccessor)
+public class MemberController(
+    IDbContextFactory<iOSContext> factory,
+    JwtHelper jwtHelper,
+    IHttpContextAccessor httpContextAccessor)
     : ControllerBase
 {
     #region Visitor
@@ -19,6 +22,7 @@ public class MemberController(iOSContext context, JwtHelper jwtHelper, IHttpCont
     [HttpGet]
     public async Task<ActionResult<MemberModel>> GetData()
     {
+        await using var context = await factory.CreateDbContextAsync();
         var member = httpContextAccessor.HttpContext?.User.GetUser();
         if (member == null) return NotFound();
         if (member.Identity == "Founder") return member;
@@ -37,6 +41,7 @@ public class MemberController(iOSContext context, JwtHelper jwtHelper, IHttpCont
         if (DateTime.Today.Month != 10)
             return NotFound();
 
+        await using var context = await factory.CreateDbContextAsync();
         if (context.Students == null!)
         {
             return Problem("Entity set 'MemberContext.Students'  is null.");
@@ -49,7 +54,7 @@ public class MemberController(iOSContext context, JwtHelper jwtHelper, IHttpCont
         }
         catch (DbUpdateException)
         {
-            if (await MemberModelExists(model.UserId))
+            if (await context.Students.AnyAsync(e => e.UserId == model.UserId))
                 return Conflict();
 
             throw;
@@ -63,6 +68,7 @@ public class MemberController(iOSContext context, JwtHelper jwtHelper, IHttpCont
     [HttpPost]
     public async Task<ActionResult<string>> Login(LoginModel loginModel)
     {
+        await using var context = await factory.CreateDbContextAsync();
         if (context.Students == null!)
             return NotFound();
 
@@ -107,6 +113,8 @@ public class MemberController(iOSContext context, JwtHelper jwtHelper, IHttpCont
             return BadRequest();
         }
 
+        await using var context = await factory.CreateDbContextAsync();
+
         context.Entry(memberModel).State = EntityState.Modified;
 
         try
@@ -115,7 +123,7 @@ public class MemberController(iOSContext context, JwtHelper jwtHelper, IHttpCont
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!await MemberModelExists(id))
+            if (!await context.Students.AnyAsync(e => e.UserId == id))
                 return NotFound();
 
             throw;
@@ -132,9 +140,4 @@ public class MemberController(iOSContext context, JwtHelper jwtHelper, IHttpCont
     public ActionResult<string[]> GetAcademies() => SignRecord.Academies;
 
     #endregion
-
-    private async Task<bool> MemberModelExists(string id)
-    {
-        return await context.Students.AnyAsync(e => e.UserId == id);
-    }
 }

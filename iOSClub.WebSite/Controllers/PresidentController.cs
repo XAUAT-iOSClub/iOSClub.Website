@@ -4,6 +4,7 @@ using iOSClub.WebSite.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace iOSClub.WebSite.Controllers;
 
@@ -11,13 +12,14 @@ namespace iOSClub.WebSite.Controllers;
 [TokenActionFilter]
 [Route("api/[controller]/[action]")]
 [ApiController]
-public class PresidentController(iOSContext context)
+public class PresidentController(IDbContextFactory<iOSContext> factory)
     : ControllerBase
 {
     // GET: api/Member
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(string id)
     {
+        await using var context = await factory.CreateDbContextAsync();
         if (context.Students == null!)
             return NotFound();
 
@@ -33,8 +35,9 @@ public class PresidentController(iOSContext context)
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<MemberModel>>> GetAllData()
+    public async Task<ActionResult<string>> GetAllData()
     {
+        await using var context = await factory.CreateDbContextAsync();
         var list = await context.Students.ToListAsync();
         var staff = await context.Staffs.ToListAsync();
 
@@ -50,12 +53,13 @@ public class PresidentController(iOSContext context)
             }
         }
 
-        return members;
+        return GZipServer.CompressString(JsonConvert.SerializeObject(members));
     }
 
     [HttpPost]
     public async Task<ActionResult> Update([FromBody] MemberModel model)
     {
+        await using var context = await factory.CreateDbContextAsync();
         if (context.Students == null!)
         {
             return NotFound();

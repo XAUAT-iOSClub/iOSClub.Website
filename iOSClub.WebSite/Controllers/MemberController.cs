@@ -13,7 +13,7 @@ public class MemberController(iOSContext context, JwtHelper jwtHelper, IHttpCont
     : ControllerBase
 {
     #region Visitor
-    
+
     [TokenActionFilter]
     [Authorize]
     [HttpGet]
@@ -70,7 +70,7 @@ public class MemberController(iOSContext context, JwtHelper jwtHelper, IHttpCont
             x.UserId == loginModel.Id && x.Name == loginModel.Name);
 
         var id = peo?.Identity ?? "Member";
-        
+
         var model =
             await context.Students.FirstOrDefaultAsync(x =>
                 x.UserId == loginModel.Id && x.UserName == loginModel.Name);
@@ -85,7 +85,7 @@ public class MemberController(iOSContext context, JwtHelper jwtHelper, IHttpCont
 
             return NotFound();
         }
-        
+
         var member = MemberModel.AutoCopy<StudentModel, MemberModel>(model);
         member.Identity = id;
 
@@ -123,6 +123,13 @@ public class MemberController(iOSContext context, JwtHelper jwtHelper, IHttpCont
 
         return NoContent();
     }
+
+    #endregion
+
+    #region GetInfo
+
+    [HttpGet]
+    public ActionResult<string[]> GetAcademies() => SignRecord.Academies;
 
     #endregion
 

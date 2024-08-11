@@ -14,7 +14,6 @@ namespace iOSClub.WebSite.Controllers;
 public class PresidentController(iOSContext context)
     : ControllerBase
 {
-
     // GET: api/Member
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(string id)
@@ -34,15 +33,24 @@ public class PresidentController(iOSContext context)
     }
 
     [HttpGet]
-    public async Task<List<MemberModel>> GetAllData()
+    public async Task<ActionResult<List<MemberModel>>> GetAllData()
     {
         var list = await context.Students.ToListAsync();
-        var newList = new List<MemberModel>();
+        var staff = await context.Staffs.ToListAsync();
 
-        list.ForEach(Action);
-        return newList;
+        var members = list.Select(MemberModel.AutoCopy<
+            StudentModel, MemberModel>).ToList();
 
-        async void Action(StudentModel x) => newList.Add(await FromSignToMember(x));
+        foreach (var staffModel in staff)
+        {
+            var member = members.FirstOrDefault(x => x.UserId == staffModel.UserId);
+            if (member != null)
+            {
+                member.Identity = staffModel.Identity;
+            }
+        }
+
+        return members;
     }
 
     [HttpPost]
@@ -52,7 +60,7 @@ public class PresidentController(iOSContext context)
         {
             return NotFound();
         }
-        
+
         context.Entry(model).State = EntityState.Modified;
 
         try
@@ -69,13 +77,4 @@ public class PresidentController(iOSContext context)
 
         return NoContent();
     }
-
-    private async Task<MemberModel> FromSignToMember(StudentModel model)
-    {
-        var member = MemberModel.AutoCopy<StudentModel, MemberModel>(model);
-        var m = await context.Staffs.FirstOrDefaultAsync(x => x.UserId == model.UserId && x.Name == model.UserName);
-        if (m != null) member.Identity = m.Identity;
-        return member;
-    }
-
 }

@@ -24,7 +24,6 @@ public sealed class iOSContext : DbContext
         {
             Students = Set<StudentModel>();
             Staffs = Set<StaffModel>();
-            Articles = Set<ArticleModel>();
             Tasks = Set<TaskModel>();
             Projects = Set<ProjectModel>();
             Resources = Set<ResourceModel>();
@@ -34,7 +33,6 @@ public sealed class iOSContext : DbContext
 
     public DbSet<StudentModel> Students { get; init; }
     public DbSet<StaffModel> Staffs { get; init; }
-    public DbSet<ArticleModel> Articles { get; init; }
     public DbSet<TaskModel> Tasks { get; init; }
     public DbSet<ProjectModel> Projects { get; init; }
     public DbSet<ResourceModel> Resources { get; init; }

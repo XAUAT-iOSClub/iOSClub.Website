@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace iOSClub.Data.DataModels;
+namespace iOSClub.WebSite.Models;
 
 [XmlRoot(ElementName = "entry")]
 public class Entry
@@ -8,6 +8,7 @@ public class Entry
     [XmlElement(ElementName = "title")] public string Title { get; set; } = "";
 
     [XmlElement(ElementName = "link")] public Link[] Link { get; set; } = [];
+    [XmlElement(ElementName = "updated")] public DateTime Updated { get; set; }
 }
 
 [XmlRoot(ElementName = "link")]
@@ -33,18 +34,12 @@ public static class WebArticle
 {
     public static async Task<List<Entry>> GetArticleAsync()
     {
-        const string url = "https://test.xauat.site/feeds/MP_WXS_3226711201.atom";
-        var xmlContent = await GetXmlContentAsync(url);
+        using var client = new HttpClient();
+        var xmlContent = await client.GetStringAsync("https://test.xauat.site/feeds/all.atom");
 
         var serializer = new XmlSerializer(typeof(Feed));
         using var reader = new StringReader(xmlContent);
         var feed = (Feed)serializer.Deserialize(reader)!;
         return feed.Entries;
-    }
-
-    private static async Task<string> GetXmlContentAsync(string url)
-    {
-        using var client = new HttpClient();
-        return await client.GetStringAsync(url);
     }
 }

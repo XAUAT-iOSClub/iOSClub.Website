@@ -1,8 +1,6 @@
 ﻿@page "/Articles"
-@using iOSClub.Data
 @using iOSClub.Data.DataModels
-@using Microsoft.EntityFrameworkCore
-@inject IDbContextFactory<iOSContext> DbFactory
+@using iOSClub.WebSite.Models
 
 <PageTitle>社团文章 - 西建大iOS Club</PageTitle>
 
@@ -16,22 +14,19 @@
     <Paragraph Style="font-size: 22px" Strong Type="secondary">记录每一个思维的并发点</Paragraph>
 </div>
 
-<GridRow Gutter="16" Style="padding: 10px">
-    @foreach (var context in Models)
+<GridRow Gutter="(16, 16)" Style="padding: 20px">
+    @foreach (var context in RssModels)
     {
-        <GridCol Xs="24" Sm="24" Md="24" Lg="12" Xl="12" Xxl="12">
-            <a href="@context.Link" target="_blank">
+        <GridCol Xs="24" Sm="24" Md="12" Lg="12" Xl="12" Xxl="12" Style="padding: 10px;">
+            <a href="@context.Url" target="_blank">
                 <Card Hoverable Class="div" Bordered="false">
                     <Flex Vertical Style="height: 100%" Justify="center">
                         <Title Level="3">
                             @context.Title
                         </Title>
-                        <Flex Justify="space-between" Align="center" Gap="small">
-                            <img alt=""
-                                 src="@context.Cover"
-                                 style="width:50%;" class="desktop-phone"/>
-                            <Paragraph Type="secondary">@context.Digest</Paragraph>
-                        </Flex>
+                        <img alt=""
+                             src="@context.Image"
+                             style="width:80%;text-align: center" class="desktop-phone"/>
                     </Flex>
                 </Card>
             </a>
@@ -40,24 +35,29 @@
 </GridRow>
 
 <div style="padding: 30px">
-    <Title>更多文章</Title>
+    <Title>更多订阅</Title>
 
-    <AntList Bordered="false" DataSource="@Entries">
-        <ListItem Style="border: none">
-            <a href="@context.Link[0].Href" target="_blank" class="a-btn">@($"{context.Title}")</a>
-        </ListItem>
-    </AntList>
+    <div style="padding: 30px;width: 100%">
+        @foreach (var context in Entries)
+        {
+            <a href="@context.Link[0].Href" target="_blank" class="a-btn">
+                <Flex Justify="space-between" Align="center">
+                    <Paragraph>@($"{context.Title}")</Paragraph>
+                    <Paragraph Type="secondary">@context.Updated.ToString("yyyy-MM-dd")</Paragraph>
+                </Flex>
+            </a>
+        }
+    </div>
 </div>
 
 @code {
 
-    private ArticleModel[] Models { get; set; } = [];
+    private RssModel[] RssModels { get; set; } = [];
     private List<Entry> Entries { get; set; } = [];
 
     protected override async Task OnInitializedAsync()
     {
-        await using var context = await DbFactory.CreateDbContextAsync();
-        Models = await context.Articles.ToArrayAsync();
+        RssModels = await RssArticle.GetArticleAsync();
         Entries = await WebArticle.GetArticleAsync();
         await base.OnInitializedAsync();
     }
@@ -71,13 +71,15 @@
         max-width: 100%;
         background: #f3f5f7;
         border-radius: 10px;
+        overflow: hidden;
     }
 
     .a-btn {
         display: inline-block;
         transition: .2s;
         cursor: pointer;
-        margin: 5px 5px 0 0;
+        margin: 0 0 5px 5px;
+        width: 100%;
         border-radius: 10px;
         padding: 5px;
         border: none;

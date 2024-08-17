@@ -12,23 +12,26 @@
     @Menu
 </Drawer>
 
+
 <GridRow>
-    <GridCol Class="desktop-laptop" Xl="4" Xxl="4">
-        @Menu
+    <GridCol Md="6" Lg="6" Xl="4" Xxl="4"
+             class="desktop-phone" style="overflow: auto;width:200px;">
+        <Affix>
+            @Menu
+        </Affix>
     </GridCol>
-    <GridCol Xs="24" Sm="24" Md="24" Lg="24" Xl="20" Xxl="20">
-        <div style="padding: 20px;min-height: 100%;overflow: auto">
-            <Button Type="@ButtonType.Text" Class="phone-desktop" OnClick="@(() => _drawerVisible = true)">
-                <Icon Type="menu" Theme="outline"/>
-                <span style="margin-left: 10px">导航</span>
-            </Button>
-            @Body
-            <BackTop Style="margin-bottom:60px">
-                <div class="ant-back-top-inner">
-                    <Icon Type="arrow-up" Theme="outline"/>
-                </div>
-            </BackTop>
-        </div>
+    <GridCol Xs="24" Sm="24" Md="18" Lg="18" Xl="20" Xxl="20"
+             Style="padding: 20px;min-height: 100vh;">
+        <Button Type="@ButtonType.Text" Class="phone-desktop" OnClick="@(() => _drawerVisible = true)">
+            <Icon Type="menu" Theme="outline"/>
+            <span style="margin-left: 10px">导航</span>
+        </Button>
+        @Body
+        <BackTop Style="margin-bottom:60px">
+            <div class="ant-back-top-inner">
+                <Icon Type="arrow-up" Theme="outline"/>
+            </div>
+        </BackTop>
     </GridCol>
 </GridRow>
 
@@ -36,6 +39,7 @@
 {
     private bool _drawerVisible;
     private void Close() => _drawerVisible = false;
+
     private RenderFragment Menu =>
         @<Template>
             <Menu Theme="MenuTheme.Light"
@@ -121,5 +125,15 @@
     h1, h2, h3, h4, h5, h6 {
         font-weight: bold;
         font-size: x-large;
+    }
+
+    .footer{
+        display: none;
+    }
+
+    @@media screen and (max-width: 768px) {
+        .footer {
+            display: block !important;
+        }
     }
 </style>

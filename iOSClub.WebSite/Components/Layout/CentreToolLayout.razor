@@ -2,16 +2,18 @@
 @using iOSClub.WebSite.Models
 @inherits LayoutComponentBase
 
-<GridRow Style="overflow: hidden;background-color: #f3f5f7;">
-    <GridCol Md="4" Lg="4" Xl="4" Xxl="4" Class="desktop-phone">
-        <CentreMenu State="@Member.Identity"/>
-    </GridCol>
-    <GridCol Class="layout-context" Xs="24" Sm="24" Md="20" Lg="20" Xl="20" Xxl="20">
-        <div style="overflow: auto;">
-            @Body
-        </div>
-    </GridCol>
-</GridRow>
+<CentreMenu Style="overflow: auto;height: 100vh;width:200px;position: fixed;left: 0;" State="@Member.Identity"/>
+<div class="layout-context">
+    @Body
+</div>
+@* <GridRow Style=""> *@
+@*     <GridCol Style="" Class="desktop-phone"> *@
+@*          *@
+@*     </GridCol> *@
+@*     <GridCol Class="layout-context" Xs="24" Sm="24" Md="20" Lg="20" Xl="20" Xxl="20"> *@
+@*          *@
+@*     </GridCol> *@
+@* </GridRow> *@
 
 @code
 {
@@ -26,7 +28,21 @@
 
     .layout-context {
         background-color: #f3f5f7;
-        padding: 24px 16px 0;
+        padding: 24px 16px;
+        margin-left: 200px
+    }
+    
+    .Layout-Header{
+        height: 64px;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        z-index: 3;
+    }
+    
+    .Layout-Context{
+        margin-top: 64px;
+        background-color: #f3f5f7;
     }
     
     @@media screen and (max-width: 768px) {

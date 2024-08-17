@@ -35,11 +35,18 @@ public static class WebArticle
     public static async Task<List<Entry>> GetArticleAsync()
     {
         using var client = new HttpClient();
-        var xmlContent = await client.GetStringAsync("https://test.xauat.site/feeds/all.atom");
+        try
+        {
+            var xmlContent = await client.GetStringAsync("https://test.xauat.site/feeds/all.atom");
 
-        var serializer = new XmlSerializer(typeof(Feed));
-        using var reader = new StringReader(xmlContent);
-        var feed = (Feed)serializer.Deserialize(reader)!;
-        return feed.Entries;
+            var serializer = new XmlSerializer(typeof(Feed));
+            using var reader = new StringReader(xmlContent);
+            var feed = (Feed)serializer.Deserialize(reader)!;
+            return feed.Entries;
+        }
+        catch
+        {
+            return [];
+        }
     }
 }

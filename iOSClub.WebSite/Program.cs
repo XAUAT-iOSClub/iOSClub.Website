@@ -102,12 +102,14 @@ using (var scope = app.Services.CreateScope())
     if (await context.Students.AnyAsync())
     {
         var students = await context.Students
-            .Where(x => string.IsNullOrEmpty(x.JoinTime))
+            .Where(student => student.Academy == "机电学院")
             .ToListAsync();
         foreach (var student in students)
-            student.JoinTime = "2023-10-18";
+        {
+            student.Academy = "机电工程学院";
+        }
     }
-    
+
     await context.SaveChangesAsync();
     await context.DisposeAsync();
 }

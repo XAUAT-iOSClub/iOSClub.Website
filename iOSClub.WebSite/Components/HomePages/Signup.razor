@@ -6,6 +6,7 @@
 @inject IMessageService _message
 @inject IDbContextFactory<iOSContext> DbFactory
 @inject IJSRuntime Js
+@inject NavigationManager Nav
 
 <PageTitle>创建您的iMember账号 - 西建大iOS Club</PageTitle>
 
@@ -55,6 +56,7 @@
 
             if (date.Month == 10)
             {
+                if (isWeiXin) Nav.NavigateTo("/IOSPic");
                 await Js.InvokeVoidAsync("NavigateTo", SignRecord.ios.qqApi, SignRecord.ios.https);
             }
 

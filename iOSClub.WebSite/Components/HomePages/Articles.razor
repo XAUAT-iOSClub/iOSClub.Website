@@ -1,5 +1,4 @@
 ﻿@page "/Articles"
-@using iOSClub.Data.DataModels
 @using iOSClub.WebSite.Models
 
 <PageTitle>社团文章 - 西建大iOS Club</PageTitle>
@@ -34,8 +33,20 @@
     }
 </GridRow>
 
+@if (RssModels.Length == 0)
+{
+    <Empty Image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg" Style="text-align: center;">
+        <DescriptionTemplate>
+            <span>暂无文章</span>
+        </DescriptionTemplate>
+    </Empty>
+}
+
 <div style="padding: 30px">
-    <Title>更多订阅</Title>
+    @if (Entries.Count > 0)
+    {
+        <Title>更多订阅</Title>
+    }
 
     <div style="padding: 30px;width: 100%">
         @foreach (var context in Entries)

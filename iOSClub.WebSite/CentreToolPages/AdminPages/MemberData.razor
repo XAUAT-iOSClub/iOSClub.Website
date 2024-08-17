@@ -7,6 +7,7 @@
 @using Newtonsoft.Json
 @using JsonSerializer = System.Text.Json.JsonSerializer
 @using System.IO
+@using AntDesign.Charts
 @using iOSClub.Data
 @using iOSClub.Data.DataModels
 @inject IJSRuntime JS
@@ -159,10 +160,65 @@
                 </ActionColumn>
             </Table>
         </Spin>
+
+        <Divider/>
+
+        <Tabs>
+            <TabPane Tab="历年人数">
+                <AntDesign.Charts.Line Data="_yearData" Config="_yearConfig"/>
+            </TabPane>
+            <TabPane Tab="学院分布">
+                <AntDesign.Charts.Pie Data="_collegeData" Config="_collegeConfig"/>
+            </TabPane>
+            <TabPane Tab="年级分布">
+                <AntDesign.Charts.Bar Data="_gradeData" Config="_gradeConfig"/>
+            </TabPane>
+        </Tabs>
     </Context>
 </PageView>
 
 @code {
+    readonly List<object> _yearData = [];
+
+    readonly LineConfig _yearConfig = new()
+    {
+        Padding = "auto",
+        XField = "year",
+        YField = "value",
+        Smooth = true,
+        YAxis = new ValueAxis
+        {
+            Nice = true
+        },
+        Label = new Label
+        {
+            Visible = false
+        }
+    };
+
+    readonly List<object> _collegeData = [];
+
+    readonly PieConfig _collegeConfig = new()
+    {
+        AppendPadding = 10,
+        InnerRadius = 0.6,
+        Radius = 0.8,
+        Padding = "auto",
+        AngleField = "value",
+        ColorField = "type"
+    };
+    
+    readonly List<object> _gradeData = [];
+    
+    readonly BarConfig _gradeConfig = new BarConfig
+    {
+        XField = "人数",
+        YField = "年级",
+        Label = new BarViewConfigLabel
+        {
+            Visible = true
+        }
+    };
 
     private static IEnumerable<string> SearchItems => new[] { "姓名", "学号", "学院" };
     private string SearchItem { get; set; } = "姓名";
@@ -221,11 +277,35 @@
     protected override async Task OnInitializedAsync()
     {
         await Flushed();
+        if (Models.Count < 430) return;
+        _yearData.AddRange([new { year = "2021 - 2022", value = 231 }, new { year = "2022 - 2023", value = 429 }]);
+        var year = DateTime.Today.Year;
+        for (var i = year - 2024; i >= 0; i--)
+        {
+            _yearData.Add(new
+            {
+                year = $"{year - i - 1} - {year - i - 1}", value = Models.Count(s =>
+                    DateTime.Parse(s.JoinTime) < DateTime.Parse($"{year - i}-09-01"))
+            });
+        }
+
+        var colleges = Models.GroupBy(x => x.Academy).OrderBy(x => x.Count());
+        foreach (var college in colleges)
+        {
+            _collegeData.Add(new { type = college.Key, value = college.Count() });
+        }
+        
+        var grades = Models.GroupBy(x => x.UserId[..2]);
+        
+        foreach (var grade in grades)
+        {
+            _gradeData.Add(new { 年级 = grade.Key, 人数 = grade.Count() });
+        }
     }
 
     private async Task Flushed()
     {
-        if(Models.Count != 0)return;
+        if (Models.Count != 0) return;
         await using var context = await DbFactory.CreateDbContextAsync();
         Models = await context.Students.ToListAsync();
     }
@@ -290,7 +370,7 @@
             if (await context.Students.AnyAsync(x => x.UserId == model.UserId)) continue;
             await context.Students.AddAsync(model.Standardization());
         }
-        
+
         await context.SaveChangesAsync();
 
         RunningStyle = false;

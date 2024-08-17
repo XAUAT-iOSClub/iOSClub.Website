@@ -23,6 +23,13 @@ builder.Services.AddRazorComponents()
 builder.Services.AddAntDesign();
 builder.Services.AddControllers();
 
+builder.Services.AddSignalR(options =>
+{
+    options.EnableDetailedErrors = true;
+    options.MaximumReceiveMessageSize = 1024 * 1024; // 限制消息大小
+});
+
+
 // 身份验证
 builder.Services.AddScoped<ProtectedSessionStorage>();
 builder.Services.AddScoped<AuthenticationStateProvider, Provider>();

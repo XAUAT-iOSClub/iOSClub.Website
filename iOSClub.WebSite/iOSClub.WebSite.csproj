@@ -9,19 +9,19 @@
 
     <ItemGroup>
         <PackageReference Include="AntDesign.Charts" Version="0.5.5" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.6" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.8" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="AntDesign" Version="0.19.1" />
+        <PackageReference Include="AntDesign" Version="0.20.1" />
         <PackageReference Include="Markdig" Version="0.37.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.6" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.7" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.7">
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.8" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.8">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
+        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.4" />
     </ItemGroup>
 
     <ItemGroup>

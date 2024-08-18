@@ -109,11 +109,11 @@ using (var scope = app.Services.CreateScope())
     if (await context.Students.AnyAsync())
     {
         var students = await context.Students
-            .Where(student => student.Academy == "机电学院")
+            .Where(student => student.PoliticalLandscape == "无党派人士")
             .ToListAsync();
         foreach (var student in students)
         {
-            student.Academy = "机电工程学院";
+            student.PoliticalLandscape = "群众";
         }
     }
 

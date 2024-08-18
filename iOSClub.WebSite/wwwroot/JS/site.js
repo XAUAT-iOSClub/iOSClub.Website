@@ -23,3 +23,29 @@ function jsSaveAsFile(filename, byteBase64) {
     link.click();
     document.body.removeChild(link);
 }
+
+function initializeDrag(element) {
+    let isDragging = false;
+    let offsetX, offsetY;
+
+    element.onmousedown = (event) => {
+        isDragging = true;
+        offsetX = event.clientX - element.getBoundingClientRect().left;
+        offsetY = event.clientY - element.getBoundingClientRect().top;
+        document.addEventListener('mousemove', mouseMoveHandler);
+        document.addEventListener('mouseup', mouseUpHandler);
+    };
+
+    const mouseMoveHandler = (event) => {
+        if (isDragging) {
+            element.style.left = (event.clientX - offsetX) + 'px';
+            element.style.top = (event.clientY - offsetY) + 'px';
+        }
+    };
+
+    const mouseUpHandler = () => {
+        isDragging = false;
+        document.removeEventListener('mousemove', mouseMoveHandler);
+        document.removeEventListener('mouseup', mouseUpHandler);
+    };
+}

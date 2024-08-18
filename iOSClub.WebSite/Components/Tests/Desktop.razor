@@ -1,0 +1,122 @@
+﻿@page "/Desktop"
+@inject IJSRuntime JS
+
+<ul id="nav">
+    <li>
+        <img src="iOS_Club_LOGO.png" alt="" style="height: 42px;padding: 7px 14px;"/>
+    </li>
+    <li>
+        <a>iOS Club</a>
+    </li>
+</ul>
+
+<main>
+    <div id="draggable" @ref="Ref" style="position: absolute;left: 30vw;top:30vh">
+        <PageView Style="height: 50vh; width: 48vw;">
+            <Context>
+                
+            </Context>
+        </PageView>
+    </div>
+</main>
+
+<div class="dock">
+    <div class="dock-container">
+        <div class="dock-item">
+            <img alt="" src="Centre/女生.png"/>
+        </div>
+        <div class="dock-item">
+            <img alt="" src="Centre/女生.png"/>
+        </div>
+        <div class="dock-item">
+            <img alt="" src="Centre/女生.png"/>
+        </div>
+        <div class="dock-item">
+            <img alt="" src="Centre/女生.png"/>
+        </div>
+    </div>
+</div>
+
+@code
+{
+    ElementReference Ref;
+    
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("initializeDrag", Ref);
+        }
+    }
+}
+
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background-image: linear-gradient(to bottom right, #ff6b6b, #7171ae, #10bce7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    #nav {
+        margin: 0 auto;
+        padding: 0;
+        list-style: none;
+        width: 100%;
+        background-color: #f3f5f7;
+        top: 0;
+        position: fixed;
+        z-index: 3;
+    }
+    
+    #nav li {
+        float: left;
+    }
+    
+    #nav a {
+        display: block;
+        padding: 10px 20px;
+        color: #333;
+        text-decoration: none;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-weight: bold;
+        text-shadow: 0 1px 0 rgba(255,255,255,0.8);
+    }
+    
+    #nav a:hover {
+        background: #ddd;
+        color: #000;
+    }
+    
+    .dock {
+        position: absolute;
+        bottom: 20px;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .dock-container {
+        display: flex;
+        align-items: flex-end;
+    }
+
+    .dock-item {
+        margin: 0 10px;
+        text-align: center;
+        transition: transform 0.3s;
+    }
+    
+    .dock-item:hover {
+        transform: scale(1.3);
+    }
+    
+    .dock-item img {
+        height: 48px;
+    }
+</style>

@@ -1,4 +1,4 @@
-﻿<div class="data @Class" style="@Style">
+﻿<div class="data @Class" style="@Style" id="@Id">
     <header class="header">
         <header>
             <i class="light" style="background-color: #fd6458;"></i>
@@ -26,6 +26,8 @@
     [Parameter] public string? ContextClass { get; set; }
 
     [Parameter] public string? ContextStyle { get; set; }
+    
+    [Parameter] public string? Id { get; set; }
 }
 
 <style>

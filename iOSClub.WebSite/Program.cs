@@ -106,16 +106,16 @@ using (var scope = app.Services.CreateScope())
         context.Staffs.Add(model);
     }
 
-    if (await context.Students.AnyAsync())
-    {
-        var students = await context.Students
-            .Where(student => student.PoliticalLandscape == "无党派人士")
-            .ToListAsync();
-        foreach (var student in students)
-        {
-            student.PoliticalLandscape = "群众";
-        }
-    }
+    // if (await context.Students.AnyAsync())
+    // {
+    //     var students = await context.Students
+    //         .Where(student => student.PoliticalLandscape == "无党派人士")
+    //         .ToListAsync();
+    //     foreach (var student in students)
+    //     {
+    //         student.PoliticalLandscape = "群众";
+    //     }
+    // }
 
     await context.SaveChangesAsync();
     await context.DisposeAsync();

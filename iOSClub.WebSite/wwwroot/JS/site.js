@@ -24,11 +24,14 @@ function jsSaveAsFile(filename, byteBase64) {
     document.body.removeChild(link);
 }
 
-function initializeDrag(element) {
+function initializeDrag() {
     let isDragging = false;
     let offsetX, offsetY;
 
-    element.onmousedown = (event) => {
+    let ref = document.getElementById('header');
+    let element = document.getElementById('draggable');
+
+    ref.onmousedown = (event) => {
         isDragging = true;
         offsetX = event.clientX - element.getBoundingClientRect().left;
         offsetY = event.clientY - element.getBoundingClientRect().top;
@@ -37,6 +40,7 @@ function initializeDrag(element) {
     };
 
     const mouseMoveHandler = (event) => {
+        // let a = Number.parseFloat(element.style.top.slice(0,-2))
         if (isDragging) {
             element.style.left = (event.clientX - offsetX) + 'px';
             element.style.top = (event.clientY - offsetY) + 'px';
@@ -48,4 +52,16 @@ function initializeDrag(element) {
         document.removeEventListener('mousemove', mouseMoveHandler);
         document.removeEventListener('mouseup', mouseUpHandler);
     };
+
+
+}
+
+function playVideo() {
+    const video = document.getElementById("videoPlayer");
+    video.play();
+}
+
+function pauseVideo() {
+    const video = document.getElementById("videoPlayer");
+    video.pause();
 }

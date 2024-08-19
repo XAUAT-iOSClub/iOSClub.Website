@@ -1,7 +1,12 @@
 ﻿@page "/"
+@inject IJSRuntime JS
 
 <!--suppress ALL -->
 <PageTitle>主页 - 西建大iOS Club</PageTitle>
+
+<video id="videoPlayer" style="display: none" @onended="OnVideoEnded">
+    <source src="other/纳新录音.m4a" type="video/mp4" />
+</video>
 
 <div @onwheel="FirstWheel">
     <GridRow Class="block" Align="center" Type="flex">
@@ -17,7 +22,7 @@
                             </Button>
                         </SpaceItem>
                         <SpaceItem>
-                            <Button Type="@ButtonType.Text" OnClick="() => IsPlaying = !IsPlaying">
+                            <Button Type="@ButtonType.Text" OnClick="() => Play()">
                                 <Icon Type="@(IsPlaying ? "play-circle" :"pause" )" Class="card-d" Theme="outline"/>
                             </Button>
                         </SpaceItem>
@@ -168,6 +173,24 @@
         Percent += obj.DeltaY * 0.1;
         if (Percent - 30 < 0.01) Percent = 30;
         if (Percent - 100 > 0.01) Percent = 100;
+    }
+
+    private async Task Play()
+    {
+        IsPlaying = !IsPlaying;
+        if (IsPlaying)
+        {
+            await JS.InvokeVoidAsync("playVideo");
+        }
+        else
+        {
+            await JS.InvokeVoidAsync("pauseVideo");
+        }
+    }
+    
+    private async Task OnVideoEnded()
+    {
+        await JS.InvokeVoidAsync("playVideo"); // 视频结束后自动重播
     }
 
 }

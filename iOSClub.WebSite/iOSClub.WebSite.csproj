@@ -28,5 +28,18 @@
       <ProjectReference Include="..\iOSClub.Data\iOSClub.Data.csproj" />
       <ProjectReference Include="..\iOSClub.WebSite.Client\iOSClub.WebSite.Client.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="wwwroot\Learn\image\JetBrain学生版订阅教程来啦！\1723428063517.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Learn\image\JetBrain学生版订阅教程来啦！\1723428594981.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Learn\image\JetBrain学生版订阅教程来啦！\1723428801043.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Learn\image\JetBrain学生版订阅教程来啦！\1723429381919.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Learn\image\JetBrain学生版订阅教程来啦！\1723429739794.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Learn\image\JetBrain学生版订阅教程来啦！\1723429952617.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Learn\image\JetBrain学生版订阅教程来啦！\1723430462954.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Learn\image\JetBrain学生版订阅教程来啦！\1723430690689.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Learn\image\JetBrain学生版订阅教程来啦！\1723430764687.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Learn\image\JetBrain学生版订阅教程来啦！\1723430886291.png" />
+    </ItemGroup>
     
 </Project>

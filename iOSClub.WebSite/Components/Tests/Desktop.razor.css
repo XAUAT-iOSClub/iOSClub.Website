@@ -85,7 +85,12 @@ header {
 
 .context {
     margin: 20px;
+    height: 100%;
     overflow: auto;
+}
+
+.data ::-webkit-scrollbar {
+    display: block;
 }
 
 @media screen and (max-width: 768px) {

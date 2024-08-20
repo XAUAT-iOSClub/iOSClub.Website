@@ -1,0 +1,39 @@
+﻿@page "/Learn"
+<PageTitle>社团活动 - 西建大iOS Club</PageTitle>
+
+<div style="text-align: center;">
+    <Image Preview="false" Style="width: 40%;" Src="/Centre/Learn.jpg"/>
+    <Flex Align="center" Justify="center">
+        <div class="gradient-text">iOS Learn</div>
+    </Flex>
+    <Paragraph Style="font-size: 22px" Strong Type="secondary">I think the most important thing is to stay curious.</Paragraph>
+</div>
+
+<Flex Justify="center" Align="center">
+    <GridRow Class="block" Gutter="(20, 24)">
+        @foreach (var item in Cards)
+        {
+            <GridCol Xs="24" Sm="24" Md="12" Lg="12" Xl="12" Xxl="12">
+                <a href="@item.Url" target="_blank">
+                    <Card Hoverable Class="card" Bordered="false">
+                        <h1 style="margin-top: 10px;margin-bottom: 10px;">@item.Title</h1>
+                        <Paragraph Type="secondary">@item.Content</Paragraph>
+                    </Card>
+                </a>
+            </GridCol>
+        }
+    </GridRow>
+</Flex>
+
+@code
+{
+    private record CardModel(string Title, string Content, string Url);
+
+    private static CardModel[] Cards =>
+    [
+        new CardModel("和iOS Club一些学习C#", "C#是一门面对对象的语言，我们一起来学习吧",
+            "/Article/History-Overview"),
+        new CardModel("创社时代", "社团的开始总是有着一段传奇故事",
+            "/Article/History-Founding")
+    ];
+}

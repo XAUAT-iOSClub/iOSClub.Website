@@ -1,0 +1,54 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Projects\\RiderProjects\\iOSClub.WebSite\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{738AF583-7116-46E6-8663-FF3C695B89FF}|iOSClub.WebSite\\iOSClub.WebSite.csproj|c:\\projects\\riderprojects\\iosclub.website\\iosclub.website\\components\\homepages\\series.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{738AF583-7116-46E6-8663-FF3C695B89FF}|iOSClub.WebSite\\iOSClub.WebSite.csproj|solutionrelative:iosclub.website\\components\\homepages\\series.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{738AF583-7116-46E6-8663-FF3C695B89FF}|iOSClub.WebSite\\iOSClub.WebSite.csproj|c:\\projects\\riderprojects\\iosclub.website\\iosclub.website\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{738AF583-7116-46E6-8663-FF3C695B89FF}|iOSClub.WebSite\\iOSClub.WebSite.csproj|solutionrelative:iosclub.website\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Series.razor",
+              "DocumentMoniker": "C:\\Projects\\RiderProjects\\iOSClub.WebSite\\iOSClub.WebSite\\Components\\HomePages\\Series.razor",
+              "RelativeDocumentMoniker": "iOSClub.WebSite\\Components\\HomePages\\Series.razor",
+              "ToolTip": "C:\\Projects\\RiderProjects\\iOSClub.WebSite\\iOSClub.WebSite\\Components\\HomePages\\Series.razor",
+              "RelativeToolTip": "iOSClub.WebSite\\Components\\HomePages\\Series.razor",
+              "ViewState": "AQIAAE4AAAAAAAAAAAAAAFYAAAAxAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-08-20T11:09:45.534Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "launchSettings.json",
+              "DocumentMoniker": "C:\\Projects\\RiderProjects\\iOSClub.WebSite\\iOSClub.WebSite\\Properties\\launchSettings.json",
+              "RelativeDocumentMoniker": "iOSClub.WebSite\\Properties\\launchSettings.json",
+              "ToolTip": "C:\\Projects\\RiderProjects\\iOSClub.WebSite\\iOSClub.WebSite\\Properties\\launchSettings.json",
+              "RelativeToolTip": "iOSClub.WebSite\\Properties\\launchSettings.json",
+              "ViewState": "AQIAAAkAAAAAAAAAAAAAAAkAAAAGAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-08-20T11:07:43.715Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,9 +1,11 @@
-﻿@page "/Series/{Se}/{Name}"
+﻿@page "/Series/{Se}/{Name?}"
 @using iOSClub.WebSite.Models
 @using Markdig.Syntax
 @using Markdig.Syntax.Inlines
 
 @using Markdig
+
+<PageTitle>@(string.IsNullOrEmpty(Name) ? "序列" : Name.Replace("-", " ")) - iOS Club和你一起学 @Se</PageTitle>
 
 <Drawer Placement="top" Closable="false"
         Visible="@_drawerVisible"
@@ -28,21 +30,41 @@
             <Icon Type="menu" Theme="outline"/>
             <span style="margin-left: 10px">导航</span>
         </Button>
-        <GridRow>
-            <GridCol Xs="24" Sm="24" Md="20" Lg="20" Xl="20" Xxl="20">
-                @((MarkupString)Content)
-            </GridCol>
-            <GridCol Md="4" Lg="4" Xl="4" Xxl="4" Class="desktop-phone">
-                <Affix>
-                    <Anchor>
-                        @foreach (var s in Anchors)
-                        {
-                            <AnchorLink Href="@s.Link" Title="@s.Name"/>
-                        }
-                    </Anchor>
-                </Affix>
-            </GridCol>
-        </GridRow>
+        @if (!string.IsNullOrEmpty(Name))
+        {
+            <GridRow>
+                <GridCol Xs="24" Sm="24" Md="20" Lg="20" Xl="20" Xxl="20">
+                    @((MarkupString)Content)
+                </GridCol>
+                <GridCol Md="4" Lg="4" Xl="4" Xxl="4" Class="desktop-phone">
+                    <Affix>
+                        <Anchor>
+                            @foreach (var s in Anchors)
+                            {
+                                <AnchorLink Href="@s.Link" Title="@s.Name"/>
+                            }
+                        </Anchor>
+                    </Affix>
+                </GridCol>
+            </GridRow>
+        }
+        else
+        {
+            <Title Level="2">iOS Club和你一起学 @Se</Title>
+            <GridRow Class="block" Gutter="(20, 24)">
+                @for (var i = 1;i <= List.Length ;i++)
+                {
+                    var i1 = i;
+                    <GridCol Xs="24" Sm="24" Md="12" Lg="12" Xl="12" Xxl="12">
+                        <a href="@($"/Series/{Se}/{i1 + "-" + List[i1 - 1]}")">
+                            <Card Hoverable Class="card" Bordered="false">
+                                <h1 style="margin-top: 10px;margin-bottom: 10px;">@List[i1-1]</h1>
+                            </Card>
+                        </a>
+                    </GridCol>
+                }
+            </GridRow>
+        }
         <BackTop Style="margin-bottom:60px">
             <div class="ant-back-top-inner">
                 <Icon Type="arrow-up" Theme="outline"/>
@@ -59,7 +81,6 @@
     [Parameter] public string? Se { get; set; }
     private string Content { get; set; } = "";
     private List<MarkAnchorModel> Anchors { get; } = [];
-    private string Title { get; set; } = "";
 
     private RenderFragment Menu =>
         @<Template>
@@ -72,10 +93,16 @@
                         </div>
                     </TitleTemplate>
                     <ChildContent>
-                        @for (var i = 0; i < List.Length; i++)
+                        <MenuItem RouterLink="@($"/Series/{Se}")"
+                                  RouterMatch="NavLinkMatch.All" OnClick="@Close">
+                            开始
+                        </MenuItem>
+                        @for (var i = 1; i <= List.Length; i++)
                         {
                             var i1 = i;
-                            <MenuItem RouterLink="@($"/Series/{Se}/{i+1}")" RouterMatch="NavLinkMatch.All" OnClick="@Close">@List[i1]</MenuItem>
+                            <MenuItem RouterLink="@($"/Series/{Se}/{i + "-" + List[i - 1]}")" RouterMatch="NavLinkMatch.All" OnClick="@Close">
+                                @List[i1 - 1]
+                            </MenuItem>
                         }
                     </ChildContent>
                 </MenuItemGroup>
@@ -87,17 +114,17 @@
 {
 
     private string[] List { get; set; } = [];
-    
+
     protected override async Task OnParametersSetAsync()
     {
-        if (string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(Se)) return;
-        Title = Name.Replace("-", "/");
-        if (SignRecord.MarkdownData.TryGetValue(Name, out var value)) Title = value;
+        if (string.IsNullOrEmpty(Se)) return;
 
-        var a = Directory.GetFiles("wwwroot/Learn/");
-        List = a.Where(x => x.Contains($"iOS Club和你一起学{Se}")).ToArray();
-        
-        var info = new FileInfo($"wwwroot/Learn/iOS Club和你一起学{Se}（{Name}）.md");
+        List = Directory.GetFiles("wwwroot/Learn/")
+            .Where(x => x.Contains(Se))
+            .Select(x => x.Split("-")[^1].Replace(".md", ""))
+            .ToArray();
+        if (string.IsNullOrEmpty(Name)) return;
+        var info = new FileInfo($"wwwroot/Learn/{Se}-{Name}.md");
         if (!info.Exists) return;
         var pipeline = new MarkdownPipelineBuilder()
             .UseAdvancedExtensions()
@@ -140,6 +167,7 @@
                     linkInline.Url = $"Learn/{linkInline.Url}";
             }
         }
+
         Content = document.ToHtml();
     }
 }

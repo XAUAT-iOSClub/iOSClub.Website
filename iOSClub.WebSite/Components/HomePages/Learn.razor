@@ -1,8 +1,8 @@
 ﻿@page "/Learn"
-<PageTitle>社团活动 - 西建大iOS Club</PageTitle>
+<PageTitle>iOS Learn - 西建大iOS Club</PageTitle>
 
 <div style="text-align: center;">
-    <Image Preview="false" Style="width: 40%;" Src="/Centre/Learn.jpg"/>
+    <Image Preview="false" Style="width: 40%;" Src="/Centre/Learn.png"/>
     <Flex Align="center" Justify="center">
         <div class="gradient-text">iOS Learn</div>
     </Flex>
@@ -31,9 +31,24 @@
 
     private static CardModel[] Cards =>
     [
-        new CardModel("和iOS Club一些学习C#", "C#是一门面对对象的语言，我们一起来学习吧",
-            "/Article/History-Overview"),
-        new CardModel("创社时代", "社团的开始总是有着一段传奇故事",
-            "/Article/History-Founding")
+        new CardModel("iOS Club和你一起学C#", "C#是一门面对对象的语言，我们一起来学习吧",
+            "/Series/CSharp"),
+        new CardModel("iOS Club和你一起学Vue", "现在，我们可以一起学习Vue了。Vue是一个前端框架，我们可以使用Vue来进行Web开发",
+            "/Series/Vue")
     ];
 }
+
+<style>
+    .block{
+        width: 80%;
+        margin-top: 45px;
+        margin-bottom: 45px;
+    }
+    .card {
+        margin: 10px;
+        height: 200px;
+        max-width: 100%;
+        border-radius: 10px;
+        background: #ffffff;
+    }
+</style>

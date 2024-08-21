@@ -1,0 +1,17 @@
+﻿@inject IJSRuntime JSRuntime
+
+<div @ref="markdownContainer"></div>
+
+@code {
+    private ElementReference markdownContainer;
+
+    [Parameter] public string html { get; set; } = "";
+
+    protected override void OnParametersSet()
+    {
+        if (string.IsNullOrEmpty(html)) return;
+        // 使用 JSInterop 将 HTML 插入到容器中
+        JSRuntime.InvokeVoidAsync("insertHtml", markdownContainer, html);
+    }
+    
+}

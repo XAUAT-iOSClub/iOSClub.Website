@@ -41,5 +41,9 @@
       <_ContentIncludedByDefault Remove="wwwroot\Learn\image\JetBrain学生版订阅教程来啦！\1723430764687.png" />
       <_ContentIncludedByDefault Remove="wwwroot\Learn\image\JetBrain学生版订阅教程来啦！\1723430886291.png" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="wwwroot\bootstrap\" />
+    </ItemGroup>
     
 </Project>

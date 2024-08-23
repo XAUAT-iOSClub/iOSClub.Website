@@ -17,7 +17,7 @@
 
 <GridRow>
     <GridCol Xs="24" Sm="24" Md="20" Lg="20" Xl="20" Xxl="20">
-        @((MarkupString)Content)
+        <MarkdownRenderer html="@Content" />
     </GridCol>
     <GridCol Md="4" Lg="4" Xl="4" Xxl="4" Class="desktop-phone">
         <Affix>
@@ -90,3 +90,14 @@
     }
 
 }
+
+<style>
+    .blockquote{
+        border-left: 5px solid #e8e8e8;
+        padding-left: 10px;
+    }
+
+    .blockquote p{
+        font-size: 14px;
+    }
+</style>

@@ -40,10 +40,8 @@
       <_ContentIncludedByDefault Remove="wwwroot\Learn\image\JetBrain学生版订阅教程来啦！\1723430690689.png" />
       <_ContentIncludedByDefault Remove="wwwroot\Learn\image\JetBrain学生版订阅教程来啦！\1723430764687.png" />
       <_ContentIncludedByDefault Remove="wwwroot\Learn\image\JetBrain学生版订阅教程来啦！\1723430886291.png" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="wwwroot\bootstrap\" />
+      <_ContentIncludedByDefault Remove="YearReports\HomeReport.razor" />
+      <_ContentIncludedByDefault Remove="YearReports\MemberReport.razor" />
     </ItemGroup>
     
 </Project>

@@ -1,6 +1,6 @@
 ﻿@inject IJSRuntime JSRuntime
 
-<div @ref="markdownContainer"></div>
+<div style="width: 90%" @ref="markdownContainer"></div>
 
 @code {
     private ElementReference markdownContainer;
@@ -15,3 +15,9 @@
     }
     
 }
+
+<style>
+    .img-fluid{
+        max-width: 80%;
+    }
+</style>

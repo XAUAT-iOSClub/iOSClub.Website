@@ -1,5 +1,4 @@
 ﻿@page "/Series/{Se}/{Name?}"
-@using iOSClub.WebSite.Models
 @using Markdig.Syntax
 @using Markdig.Syntax.Inlines
 
@@ -20,11 +19,11 @@
 
 
 <GridRow>
-    <GridCol Md="6" Lg="6" Xl="4" Xxl="4"
+    <GridCol Md="6" Lg="6" Xl="5" Xxl="5"
              class="desktop-phone" style="overflow: auto;width:200px;">
         @Menu
     </GridCol>
-    <GridCol Xs="24" Sm="24" Md="18" Lg="18" Xl="20" Xxl="20"
+    <GridCol Xs="24" Sm="24" Md="18" Lg="18" Xl="19" Xxl="19"
              Style="padding: 20px;min-height: 100vh;">
         <Button Type="@ButtonType.Text" Class="phone-desktop" OnClick="@(() => _drawerVisible = true)">
             <Icon Type="menu" Theme="outline"/>
@@ -32,21 +31,7 @@
         </Button>
         @if (!string.IsNullOrEmpty(Name))
         {
-            <GridRow>
-                <GridCol Xs="24" Sm="24" Md="20" Lg="20" Xl="20" Xxl="20">
-                    <MarkdownRenderer html="@Content" />
-                </GridCol>
-                <GridCol Md="4" Lg="4" Xl="4" Xxl="4" Class="desktop-phone">
-                    <Affix>
-                        <Anchor>
-                            @foreach (var s in Anchors)
-                            {
-                                <AnchorLink Href="@s.Link" Title="@s.Name"/>
-                            }
-                        </Anchor>
-                    </Affix>
-                </GridCol>
-            </GridRow>
+            <MarkdownRenderer html="@Content" />
         }
         else
         {
@@ -80,7 +65,6 @@
     [Parameter] public string? Name { get; set; }
     [Parameter] public string? Se { get; set; }
     private string Content { get; set; } = "";
-    private List<MarkAnchorModel> Anchors { get; } = [];
 
     private RenderFragment Menu =>
         @<Template>
@@ -137,31 +121,8 @@
         var content = await File.ReadAllTextAsync(info.FullName);
        
         var document = Markdown.Parse(content, pipeline);
-        var count = 1;
-        Anchors.Clear();
         foreach (var node in document)
         {
-            if (node is HeadingBlock { Inline: not null } headingBlock)
-            {
-                if (Anchors.Count == 0)
-                {
-                    Anchors.Add(new MarkAnchorModel()
-                    {
-                        Name = headingBlock.Inline.FirstChild!.ToString()!,
-                        Link = $"/Article/{Name}#section"
-                    });
-                    continue;
-                }
-
-                Anchors.Add(new MarkAnchorModel()
-                {
-                    Name = headingBlock.Inline.FirstChild!.ToString()!,
-                    Link = $"/Series/{Se}/{Name}#section-{count}"
-                });
-
-                count++;
-            }
-
             if (node is not ParagraphBlock { Inline: not null } paragraphBlock) continue;
             foreach (var inline in paragraphBlock.Inline)
             {
@@ -224,10 +185,6 @@
     
     .blockquote p{
         font-size: 14px;
-    }
-
-    img{
-        max-width: 80%;
     }
 </style>
 

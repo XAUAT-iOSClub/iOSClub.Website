@@ -3,6 +3,7 @@ using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using iOSClub.Data;
 using iOSClub.Data.DataModels;
+using iOSClub.WebSite.Client;
 using iOSClub.WebSite.Components;
 using iOSClub.WebSite.Controllers;
 using iOSClub.WebSite.Models;
@@ -133,6 +134,6 @@ app.MapControllers();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
     .AddInteractiveWebAssemblyRenderMode()
-    .AddAdditionalAssemblies(typeof(iOSClub.WebSite.Client._Imports).Assembly);
+    .AddAdditionalAssemblies(typeof(_Imports).Assembly);
 
 app.Run();

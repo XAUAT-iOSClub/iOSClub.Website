@@ -9,7 +9,6 @@ using iOSClub.WebSite.Controllers;
 using iOSClub.WebSite.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.WebEncoders;
 using Microsoft.IdentityModel.Tokens;
@@ -24,17 +23,9 @@ builder.Services.AddRazorComponents()
 builder.Services.AddAntDesign();
 builder.Services.AddControllers();
 
-builder.Services.AddSignalR(options =>
-{
-    options.EnableDetailedErrors = true;
-    options.MaximumReceiveMessageSize = 1024 * 1024; // 限制消息大小
-});
-
 
 // 身份验证
-builder.Services.AddScoped<ProtectedSessionStorage>();
-builder.Services.AddScoped<AuthenticationStateProvider, Provider>();
-builder.Services.AddOptions();
+builder.Services.AddScoped<AuthenticationStateProvider, JwtProvider>();
 builder.Services.AddAuthorizationCore();
 builder.Services.AddAuthentication(options => { options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme; })
     .AddJwtBearer(options =>
@@ -44,6 +35,7 @@ builder.Services.AddAuthentication(options => { options.DefaultScheme = JwtBeare
             ValidateIssuer = false, //是否验证Issuer
             ValidateAudience = false, //是否验证Audience
             ValidateIssuerSigningKey = true, //是否验证SecurityKey
+            
             IssuerSigningKey =
                 new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecretKey"]!)), //SecurityKey
             ValidateLifetime = true, //是否验证失效时间
@@ -52,7 +44,6 @@ builder.Services.AddAuthentication(options => { options.DefaultScheme = JwtBeare
         };
     });
 
-builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddSingleton(new JwtHelper(builder.Configuration));
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<TokenActionFilter>();
@@ -79,7 +70,7 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseDeveloperExceptionPage();
+    app.UseWebAssemblyDebugging();
 }
 else
 {
@@ -91,6 +82,16 @@ using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<iOSContext>();
+    
+    try
+    {
+        context.Database.Migrate();
+    }
+    catch (Exception e)
+    {
+        Console.WriteLine(e.Message);
+    }
+    
     if (!context.Staffs.Any())
     {
         var user = Environment.GetEnvironmentVariable("USER", EnvironmentVariableTarget.Process);
@@ -106,18 +107,7 @@ using (var scope = app.Services.CreateScope())
 
         context.Staffs.Add(model);
     }
-
-    // if (await context.Students.AnyAsync())
-    // {
-    //     var students = await context.Students
-    //         .Where(student => student.PoliticalLandscape == "无党派人士")
-    //         .ToListAsync();
-    //     foreach (var student in students)
-    //     {
-    //         student.PoliticalLandscape = "群众";
-    //     }
-    // }
-
+    
     await context.SaveChangesAsync();
     await context.DisposeAsync();
 }

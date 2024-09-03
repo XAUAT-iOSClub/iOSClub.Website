@@ -7,30 +7,8 @@ using Microsoft.EntityFrameworkCore.Design;
 
 namespace iOSClub.Data;
 
-public sealed class iOSContext : DbContext
+public sealed class iOSContext(DbContextOptions<iOSContext> options) : DbContext(options)
 {
-    public iOSContext(DbContextOptions<iOSContext> options)
-        : base(options)
-    {
-        try
-        {
-            Database.Migrate();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e.Message);
-        }
-        finally
-        {
-            Students = Set<StudentModel>();
-            Staffs = Set<StaffModel>();
-            Tasks = Set<TaskModel>();
-            Projects = Set<ProjectModel>();
-            Resources = Set<ResourceModel>();
-            Tools = Set<ToolModel>();
-        }
-    }
-
     public DbSet<StudentModel> Students { get; init; }
     public DbSet<StaffModel> Staffs { get; init; }
     public DbSet<TaskModel> Tasks { get; init; }

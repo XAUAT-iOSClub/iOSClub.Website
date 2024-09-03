@@ -1,5 +1,4 @@
-﻿@layout MainLayout
-@inherits LayoutComponentBase
+﻿@inherits LayoutComponentBase
 @using System.Security.Claims
 @using iOSClub.Data
 @using iOSClub.Data.DataModels
@@ -9,6 +8,8 @@
 @inject IDbContextFactory<iOSContext> DbFactory
 @inject AuthenticationStateProvider authStateProvider
 @inject NavigationManager Nav
+@inject MessageService MessageService
+@inject NavigationManager NavigationManager
 
 
 <Drawer Placement="top" Closable="false"
@@ -59,7 +60,7 @@
                         <Paragraph Type="secondary">
                             当前身份:@MemberModel.IdentityDictionary[Member.Identity]
                         </Paragraph>
-                        <Button Type="@ButtonType.Text" Danger OnClick="@(() => Nav.NavigateTo("/Logout"))">
+                        <Button Type="@ButtonType.Text" Danger OnClick="Logout">
                             退出登录
                         </Button>
                     </ContentTemplate>
@@ -86,7 +87,7 @@
 @code
 {
 
-    private MemberModel Member { get; set; } = new() { UserName = "游客"};
+    private MemberModel Member { get; set; } = new() { UserName = "游客" };
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -99,6 +100,9 @@
             var name = user.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value;
             var identity = user.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value;
             var id = user.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+
+            Console.WriteLine("User: " + name + " Identity: " + identity + " Id: " + id);
+
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(identity) || string.IsNullOrEmpty(id)) return;
             await using var context = await DbFactory.CreateDbContextAsync();
             var model = await context.Students.FirstOrDefaultAsync(x => x.UserId == id && x.UserName == name);
@@ -124,6 +128,15 @@
     }
 
     private bool _drawerVisible;
+
+    private async Task Logout()
+    {
+        var provider = (AbsProvider)authStateProvider;
+        await MessageService.Success("您已注销");
+        await provider.Logout();
+        NavigationManager.NavigateTo("");
+    }
+
 }
 
 <style>

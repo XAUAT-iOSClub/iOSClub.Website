@@ -2,6 +2,7 @@
 
 <div style="width: 90%" @ref="markdownContainer"></div>
 
+
 @code {
     private ElementReference markdownContainer;
 
@@ -10,11 +11,18 @@
     protected override void OnParametersSet()
     {
         if (string.IsNullOrEmpty(html)) return;
-        // 使用 JSInterop 将 HTML 插入到容器中
         JSRuntime.InvokeVoidAsync("insertHtml", markdownContainer, html);
     }
     
 }
+
+<script>
+    window.insertHtml = function (element, html) {
+        element.innerHTML = html;
+        Prism.highlightAll(); // 如果使用 Prism.js
+    }
+</script>
+
 
 <style>
     .img-fluid{

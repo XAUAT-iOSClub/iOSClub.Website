@@ -75,7 +75,7 @@
 
     private async Task Logout()
     {
-        var provider = (Provider)authStateProvider;
+        var provider = (AbsProvider)authStateProvider;
         await MessageService.Success("您已注销");
         await provider.Logout();
         NavigationManager.NavigateTo("");

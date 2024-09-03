@@ -74,7 +74,7 @@
             }
         }
 
-        var provider = (Provider)authStateProvider;
+        var provider = (AbsProvider)authStateProvider;
         await provider.UpdateAuthState(new StaffModel() { Identity = identity, UserId = Model.Id, Name = Model.Name });
 
         await _message.Info("登陆成功!");
@@ -93,6 +93,13 @@
             var authState = await authStateProvider.GetAuthenticationStateAsync() ;
             var user = authState.User;
 
+            foreach (var claim in user.Claims)
+            {
+                Console.WriteLine($"{claim.Type} : {claim.Value}");
+            }
+            
+            Console.WriteLine($"{user.Identity?.IsAuthenticated} {user.Identity?.Name}");
+            
             if (user.Identity is not null && user.Identity.IsAuthenticated)
             {
                 navigation.NavigateTo("/Centre");

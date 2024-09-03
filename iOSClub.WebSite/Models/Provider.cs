@@ -5,10 +5,8 @@ using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 
 namespace iOSClub.WebSite.Models;
 
-public class Provider(ProtectedSessionStorage sessionStorage) : AuthenticationStateProvider
+public class Provider(ProtectedSessionStorage sessionStorage) : AbsProvider
 {
-    private readonly ClaimsPrincipal _anonymous = new(new ClaimsIdentity());
-
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
         var storageResult = await sessionStorage.GetAsync<StaffModel>("Permission");
@@ -28,7 +26,7 @@ public class Provider(ProtectedSessionStorage sessionStorage) : AuthenticationSt
         return await Task.FromResult(new AuthenticationState(claimsPrincipal));
     }
 
-    public async Task UpdateAuthState(StaffModel? permission)
+    public override async Task UpdateAuthState(StaffModel? permission)
     {
         ClaimsPrincipal claimsPrincipal;
         if (permission is not null)
@@ -48,14 +46,5 @@ public class Provider(ProtectedSessionStorage sessionStorage) : AuthenticationSt
         }
 
         NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(claimsPrincipal)));
-    }
-    
-}
-
-public static class ProviderExtensions
-{
-    public static async Task Logout(this Provider provider)
-    {
-        await provider.UpdateAuthState(null);
     }
 }

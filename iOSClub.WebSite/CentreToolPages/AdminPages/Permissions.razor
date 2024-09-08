@@ -1,5 +1,6 @@
 ﻿@page "/Admin/Permissions"
 @using iOSClub.Data.DataModels
+@using iOSClub.WebSite.Models
 
 <PageTitle>权限管理 - iAdmin</PageTitle>
 
@@ -74,6 +75,21 @@
                     </SpaceItem>
                 }
             </Space>
+            <Divider/>
+            <header class="header">
+                <h3>成员</h3>
+                <Button Type="@ButtonType.Primary" OnClick="@CsvDownload">下载部员信息</Button>
+            </header>
+            <Table TItem="MemberModel" DataSource="@Models" Responsive>
+                <PropertyColumn Title="姓名" Property="c => c.UserName"/>
+                <PropertyColumn Title="学号" Property="c => c.UserId"/>
+                <PropertyColumn Title="学院" Property="c => c.Academy"/>
+                <PropertyColumn Title="政治面貌" Property="c => c.PoliticalLandscape"/>
+                <PropertyColumn Title="性别" Property="c => c.Gender"/>
+                <PropertyColumn Title="专业班级" Property="c => c.ClassName"/>
+                <PropertyColumn Title="手机号码" Property="c => c.PhoneNum"/>
+                <PropertyColumn Title="身份" Property="c => c.Identity"/>
+            </Table>
         </TabPane>
         <TabPane Tab="科技部">
             <header class="header">

@@ -3,7 +3,7 @@ using iOSClub.Data.DataModels;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 
-namespace iOSClub.WebSite.Models;
+namespace iOSClub.WebSite.IdentityModels;
 
 public class Provider(ProtectedSessionStorage sessionStorage) : AbsProvider
 {

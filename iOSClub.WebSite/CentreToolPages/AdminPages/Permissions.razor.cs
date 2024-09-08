@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Text.Unicode;
 using iOSClub.Data;
 using iOSClub.Data.DataModels;
+using iOSClub.WebSite.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.EntityFrameworkCore;
@@ -115,6 +116,7 @@ public partial class Permissions
         _operaVisible = string.IsNullOrEmpty(department);
     }
 
+    private List<MemberModel> Models { get; set; } = [];
     private List<StaffModel> President { get; set; } = [];
     private List<StaffModel> TechnologyMinister { get; set; } = [];
     private List<StaffModel> PracticalMinister { get; set; } = [];
@@ -149,8 +151,72 @@ public partial class Permissions
         await base.OnInitializedAsync();
         await using var context = await DbFactory.CreateDbContextAsync();
         await Update(context);
+        foreach (var model in President)
+        {
+            var stu = await context.Students.Where(x => x.UserId == model.UserId).FirstOrDefaultAsync();
+            if (stu == null) continue;
+            var mem = MemberModel.CopyFrom(stu);
+            mem.Identity = model.Identity;
+            Models.Add(mem);
+        }
+        foreach (var model in TechnologyMinister)
+        {
+            var stu = await context.Students.Where(x => x.UserId == model.UserId).FirstOrDefaultAsync();
+            if (stu == null) continue;
+            var mem = MemberModel.CopyFrom(stu);
+            mem.Identity = model.Identity;
+            Models.Add(mem);
+        }
+        foreach (var model in TechnologyMember)
+        {
+            var stu = await context.Students.Where(x => x.UserId == model.UserId).FirstOrDefaultAsync();
+            if (stu == null) continue;
+            var mem = MemberModel.CopyFrom(stu);
+            mem.Identity = model.Identity;
+            Models.Add(mem);
+        }
+        foreach (var model in PracticalMinister)
+        {
+            var stu = await context.Students.Where(x => x.UserId == model.UserId).FirstOrDefaultAsync();
+            if (stu == null) continue;
+            var mem = MemberModel.CopyFrom(stu);
+            mem.Identity = model.Identity;
+            Models.Add(mem);
+        }
+        foreach (var model in PracticalMember)
+        {
+            var stu = await context.Students.Where(x => x.UserId == model.UserId).FirstOrDefaultAsync();
+            if (stu == null) continue;
+            var mem = MemberModel.CopyFrom(stu);
+            mem.Identity = model.Identity;
+            Models.Add(mem);
+        }
+        foreach (var model in NewMediaMinister)
+        {
+            var stu = await context.Students.Where(x => x.UserId == model.UserId).FirstOrDefaultAsync();
+            if (stu == null) continue;
+            var mem = MemberModel.CopyFrom(stu);
+            mem.Identity = model.Identity;
+            Models.Add(mem);
+        }
+        foreach (var model in NewMediaMember)
+        {
+            var stu = await context.Students.Where(x => x.UserId == model.UserId).FirstOrDefaultAsync();
+            if (stu == null) continue;
+            var mem = MemberModel.CopyFrom(stu);
+            mem.Identity = model.Identity;
+            Models.Add(mem);
+        }
+        
     }
 
+    private async Task CsvDownload()
+    {
+        var jsonString = MemberModel.GetCsv(Models);
+        var data = Encoding.UTF8.GetBytes(jsonString);
+        await Download("data.csv", data);
+    }
+    
     private async Task Update(iOSContext context)
     {
         President = await context.Staffs.Where(x => x.Identity == "President").ToListAsync();

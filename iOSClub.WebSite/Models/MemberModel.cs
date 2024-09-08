@@ -1,4 +1,5 @@
-﻿using iOSClub.Data.DataModels;
+﻿using System.Text;
+using iOSClub.Data.DataModels;
 
 namespace iOSClub.WebSite.Models;
 
@@ -46,5 +47,24 @@ public class MemberModel : StudentModel
         }
 
         return child;
+    }
+
+    public static MemberModel CopyFrom(StudentModel model)
+    {
+        return AutoCopy<StudentModel,MemberModel>(model);
+    }
+    
+    public new static string GetCsv(List<MemberModel> models)
+    {
+        var builder = new StringBuilder("姓名,学号,性别,学院,政治面貌,专业班级,电话号码,身份");
+        foreach (var model in models)
+            builder.Append("\n" + model);
+
+        return builder.ToString();
+    }
+    
+    public override string ToString()
+    {
+        return $"{UserName},{UserId},{Gender},{Academy},{PoliticalLandscape},{ClassName},{PhoneNum},{Identity}";
     }
 }

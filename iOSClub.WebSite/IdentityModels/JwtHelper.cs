@@ -4,7 +4,7 @@ using System.Text;
 using iOSClub.WebSite.Models;
 using Microsoft.IdentityModel.Tokens;
 
-namespace iOSClub.WebSite.Controllers;
+namespace iOSClub.WebSite.IdentityModels;
 
 public class JwtHelper(IConfiguration configuration)
 {

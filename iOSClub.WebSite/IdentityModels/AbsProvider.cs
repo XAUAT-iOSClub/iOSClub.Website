@@ -2,7 +2,7 @@
 using iOSClub.Data.DataModels;
 using Microsoft.AspNetCore.Components.Authorization;
 
-namespace iOSClub.WebSite.Models;
+namespace iOSClub.WebSite.IdentityModels;
 
 public abstract class AbsProvider: AuthenticationStateProvider
 {

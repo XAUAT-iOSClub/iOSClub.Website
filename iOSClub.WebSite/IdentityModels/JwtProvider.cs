@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.JSInterop;
 
-namespace iOSClub.WebSite.Models;
+namespace iOSClub.WebSite.IdentityModels;
 
 public class JwtProvider(IJSRuntime js, IConfiguration configuration) : AbsProvider
 {

@@ -1,4 +1,5 @@
-﻿@using iOSClub.WebSite.Models
+﻿@using iOSClub.WebSite.IdentityModels
+@using iOSClub.WebSite.Models
 @using Microsoft.AspNetCore.Components.Authorization
 @inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider authStateProvider
@@ -9,36 +10,54 @@
       Class="@Class"
       Style="@Style"
       Mode="MenuMode.Inline">
-    <MenuItem RouterLink="/Centre" RouterMatch="NavLinkMatch.All">
-        <Icon Type="home" Theme="outline"/>
-        <span class="nav-text">主页</span>
-    </MenuItem>
 
-    @if (State != "Founder")
+    <MenuItemGroup Class="group-block">
+        <TitleTemplate>
+            <div class="group-title">
+                个人中心
+            </div>
+        </TitleTemplate>
+        <ChildContent>
+            <MenuItem RouterLink="/Centre" RouterMatch="NavLinkMatch.All">
+                <Icon Type="home" Theme="outline"/>
+                <span class="nav-text">主页</span>
+            </MenuItem>
+            <MenuItem RouterLink="/Centre/PersonalData" RouterMatch="NavLinkMatch.All">
+                <Icon Type="user" Theme="outline"/>
+                <span class="nav-text">成员信息</span>
+            </MenuItem>
+        </ChildContent>
+    </MenuItemGroup>
+
+    @if (State != "Member" && State != "Founder")
     {
-        <MenuItem RouterLink="/Centre/PersonalData" RouterMatch="NavLinkMatch.All">
-            <Icon Type="user" Theme="outline"/>
-            <span class="nav-text">成员信息</span>
-        </MenuItem>
-        @if (State != "Member")
-        {
-            <MenuItem RouterLink="/Centre/Department" RouterMatch="NavLinkMatch.All">
-                <Icon Type="project" Theme="outline"/>
-                <span class="nav-text">社团项目</span>
-            </MenuItem>
-            <MenuItem RouterLink="/Centre/Resource" RouterMatch="NavLinkMatch.All">
-                <Icon Type="file-text" Theme="outline"/>
-                <span class="nav-text">社团资源</span>
-            </MenuItem>
-        }
+        <MenuItemGroup Class="group-block">
+            <TitleTemplate>
+                <div class="group-title">
+                    项目和资源
+                </div>
+            </TitleTemplate>
+            <ChildContent>
+                <MenuItem RouterLink="/Centre/Department" RouterMatch="NavLinkMatch.All">
+                    <Icon Type="project" Theme="outline"/>
+                    <span class="nav-text">社团项目</span>
+                </MenuItem>
+                <MenuItem RouterLink="/Centre/Resource" RouterMatch="NavLinkMatch.All">
+                    <Icon Type="file-text" Theme="outline"/>
+                    <span class="nav-text">社团资源</span>
+                </MenuItem>
+            </ChildContent>
+        </MenuItemGroup>
+       
     }
 
     @if (State.Contains("Minister") || State == "President" || State == "Founder")
     {
-        <SubMenu>
+        <MenuItemGroup Class="group-block">
             <TitleTemplate>
-                <Icon Type="upload" Theme="outline"/>
-                <span class="nav-text">管理</span>
+                <div class="group-title">
+                    管理
+                </div>
             </TitleTemplate>
             <ChildContent>
                 <MenuItem RouterLink="/Admin/MemberData" RouterMatch="NavLinkMatch.All">
@@ -54,18 +73,26 @@
                     <span class="nav-text">权限管理</span>
                 </MenuItem>
             </ChildContent>
-        </SubMenu>
+        </MenuItemGroup>
     }
 
-    <MenuItem RouterLink="/Centre/Tool" RouterMatch="NavLinkMatch.All">
-        <Icon Type="tool" Theme="outline"/>
-        <span class="nav-text">社团小工具</span>
-    </MenuItem>
-
-    <MenuItem OnClick="Logout" Class="phone-desktop-flex" RouterMatch="NavLinkMatch.All">
-        <Icon Type="logout" Theme="outline"/>
-        <span class="nav-text">退出登录</span>
-    </MenuItem>
+    <MenuItemGroup Class="group-block">
+        <TitleTemplate>
+            <div class="group-title">
+                其他
+            </div>
+        </TitleTemplate>
+        <ChildContent>
+            <MenuItem RouterLink="/Centre/Tool" RouterMatch="NavLinkMatch.All">
+                <Icon Type="tool" Theme="outline"/>
+                <span class="nav-text">社团小工具</span>
+            </MenuItem>
+            <MenuItem OnClick="Logout" RouterMatch="NavLinkMatch.All">
+                <Icon Type="logout" Theme="outline"/>
+                <span class="nav-text">退出登录</span>
+            </MenuItem>
+        </ChildContent>
+    </MenuItemGroup>
 </Menu>
 
 @code {
@@ -82,3 +109,14 @@
     }
 
 }
+
+<style>
+    .group-block{
+        padding: 10px;
+    }
+
+    .group-title {
+        padding-bottom: 10px;
+        border-bottom: 1px solid #ededed;
+    }
+</style>

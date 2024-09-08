@@ -3,7 +3,7 @@ using System.Security.Claims;
 using iOSClub.WebSite.Models;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace iOSClub.WebSite.Controllers;
+namespace iOSClub.WebSite.IdentityModels;
 
 public class TokenActionFilter : ActionFilterAttribute
 {

@@ -2,12 +2,12 @@
 @using System.Security.Claims
 @using iOSClub.Data
 @using iOSClub.Data.DataModels
+@using iOSClub.WebSite.IdentityModels
 @using iOSClub.WebSite.Models
 @using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.EntityFrameworkCore
 @inject IDbContextFactory<iOSContext> DbFactory
 @inject AuthenticationStateProvider authStateProvider
-@inject NavigationManager Nav
 @inject MessageService MessageService
 @inject NavigationManager NavigationManager
 
@@ -33,44 +33,42 @@
                     <div class="Layout-Title">iMember</div>
                 </Flex>
             </a>
-            <Flex class="desktop-phone-flex">
-                <Popover Class="Layout-Popover" Trigger="@(new[] { Trigger.Click })">
-                    <TitleTemplate>
-                        <Space Size="@("middle")">
-                            <SpaceItem>
-                                @if (Member.Identity != "Founder")
-                                {
-                                    <Image Style="height: 60px;width: 60px" Preview="false"
-                                           Src="@(Member.Gender == "男" ? "Centre/男生.png" : "Centre/女生.png")"/>
-                                }
-                                else
-                                {
-                                    <Image Style="height: 60px;width: 60px" Preview="false" Src="iOS_Club_LOGO.png"/>
-                                }
-                            </SpaceItem>
-                            <SpaceItem>
-                                <div>
-                                    <span style="font-size: 22px;font-weight: bold">@Member.UserName</span>
-                                    <Paragraph Type="secondary">@Member.UserId</Paragraph>
-                                </div>
-                            </SpaceItem>
-                        </Space>
-                    </TitleTemplate>
-                    <ContentTemplate>
-                        <Paragraph Type="secondary">
-                            当前身份:@MemberModel.IdentityDictionary[Member.Identity]
-                        </Paragraph>
-                        <Button Type="@ButtonType.Text" Danger OnClick="Logout">
-                            退出登录
-                        </Button>
-                    </ContentTemplate>
-                    <ChildContent>
-                        <Button Type="@ButtonType.Text">
-                            <Icon Type="user" Theme="outline" Class="Layout-Title"/>
-                        </Button>
-                    </ChildContent>
-                </Popover>
-            </Flex>
+            <Popover Class="Layout-Popover desktop-phone-flex" Trigger="@(new[] { Trigger.Click })">
+                <TitleTemplate>
+                    <Space Size="@("middle")">
+                        <SpaceItem>
+                            @if (Member.Identity != "Founder")
+                            {
+                                <Image Style="height: 60px;width: 60px" Preview="false"
+                                       Src="@(Member.Gender == "男" ? "Centre/男生.png" : "Centre/女生.png")"/>
+                            }
+                            else
+                            {
+                                <Image Style="height: 60px;width: 60px" Preview="false" Src="iOS_Club_LOGO.png"/>
+                            }
+                        </SpaceItem>
+                        <SpaceItem>
+                            <div>
+                                <span style="font-size: 22px;font-weight: bold">@Member.UserName</span>
+                                <Paragraph Type="secondary">@Member.UserId</Paragraph>
+                            </div>
+                        </SpaceItem>
+                    </Space>
+                </TitleTemplate>
+                <ContentTemplate>
+                    <Paragraph Type="secondary">
+                        当前身份:@MemberModel.IdentityDictionary[Member.Identity]
+                    </Paragraph>
+                    <Button Type="@ButtonType.Text" Danger OnClick="Logout">
+                        退出登录
+                    </Button>
+                </ContentTemplate>
+                <ChildContent>
+                    <Button Type="@ButtonType.Text">
+                        <Icon Type="user" Theme="outline" Class="Layout-Title"/>
+                    </Button>
+                </ChildContent>
+            </Popover>
             <Button Size="@AntSizeLDSType.Large" class="phone-desktop-flex" Type="@ButtonType.Text"
                     OnClick="@(() => _drawerVisible = !_drawerVisible)">
                 <Icon Type="menu" Theme="outline" Class="Layout-Title"/>

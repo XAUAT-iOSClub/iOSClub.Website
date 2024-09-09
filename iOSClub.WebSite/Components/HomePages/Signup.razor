@@ -1,11 +1,14 @@
 ﻿@page "/Signup"
 @using iOSClub.Data
 @using iOSClub.Data.DataModels
+@using iOSClub.WebSite.IdentityModels
 @using iOSClub.WebSite.Models
+@using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.EntityFrameworkCore
 @inject IMessageService _message
 @inject IDbContextFactory<iOSContext> DbFactory
 @inject IJSRuntime Js
+@inject AuthenticationStateProvider authStateProvider
 @inject NavigationManager Nav
 
 <PageTitle>创建您的iMember账号 - 西建大iOS Club</PageTitle>
@@ -38,6 +41,7 @@
         {
             await using var context = await DbFactory.CreateDbContextAsync();
             var f = await context.Students.FirstOrDefaultAsync(x => x.UserId == Model.UserId);
+            Console.WriteLine(Model);
             if (f == null)
                 context.Students.Add(Model);
             else
@@ -52,14 +56,17 @@
 
             await context.SaveChangesAsync();
 
-            var date = DateTime.Today;
-
-            if (date.Month == 10)
+            // var date = DateTime.Today;
+            // if (date.Month != 10) return;
+            
+            await _message.Info("注册成功!");
+            
+            if (isWeiXin)
             {
-                if (isWeiXin) Nav.NavigateTo("/IOSPic");
-                await Js.InvokeVoidAsync("NavigateTo", SignRecord.ios.qqApi, SignRecord.ios.https);
+                Nav.NavigateTo("/IOSPic");
+                return;
             }
-
+            await Js.InvokeVoidAsync("NavigateTo", SignRecord.ios.qqApi, SignRecord.ios.https);
             return;
         }
 

@@ -200,14 +200,19 @@ public partial class MemberData
         var a = Models.ToFrozenSet();
         if (context.Students.Count() < 430) return;
         _yearData.AddRange([new { year = "2021 - 2022", value = 231 }, new { year = "2022 - 2023", value = 429 }]);
-        var year = DateTime.Today.Year;
+        var (year, month, _) = DateTime.Today;
         for (var i = year - 2024; i >= 0; i--)
         {
             _yearData.Add(new
             {
-                year = $"{year - i - 1} - {year - i - 1}", value = a.Count(s =>
+                year = $"{year - i - 1} - {year - i}", value = a.Count(s =>
                     DateTime.Parse(s.JoinTime) < DateTime.Parse($"{year - i}-09-01"))
             });
+        }
+
+        if (month >= 9)
+        {
+            _yearData.Add(new { year = $"{year} - {year+1}", value = a.Count });
         }
 
         a.GroupBy(x => x.Academy)

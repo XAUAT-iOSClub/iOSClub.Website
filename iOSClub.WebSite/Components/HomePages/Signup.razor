@@ -1,14 +1,11 @@
 ﻿@page "/Signup"
 @using iOSClub.Data
 @using iOSClub.Data.DataModels
-@using iOSClub.WebSite.IdentityModels
 @using iOSClub.WebSite.Models
-@using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.EntityFrameworkCore
 @inject IMessageService _message
 @inject IDbContextFactory<iOSContext> DbFactory
 @inject IJSRuntime Js
-@inject AuthenticationStateProvider authStateProvider
 @inject NavigationManager Nav
 
 <PageTitle>创建您的iMember账号 - 西建大iOS Club</PageTitle>

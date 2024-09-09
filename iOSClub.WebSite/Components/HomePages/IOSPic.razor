@@ -7,7 +7,7 @@
         <Card Class="login-form" Bordered="false">
             <Flex Gap="middle">
                 <Image Src="iOS_Club_LOGO.png" Preview="false" Style="width:70px; height:70px"/>
-                <div style="padding: 5px">
+                <div style="padding: 5px;max-width: calc(100% - 70px)">
                     <div class="title-btn" @onclick="Click">iOS Club of XAUAT 2025</div>
                     <Paragraph>群号: <Text Strong Copyable>952954710</Text></Paragraph>
                 </div>
@@ -41,7 +41,11 @@
     
     @@media screen and (max-width: 768px) {
         .login-form{
+            margin-top: 20px;
             box-shadow: none;
+        }
+        .title-btn:hover {
+            transform: scale(1);
         }
     }
 
@@ -49,6 +53,9 @@
         display: inline-block;
         transition: .2s;
         cursor: pointer;
+        overflow: hidden; /* 超出部分隐藏 */
+        white-space: nowrap; /* 禁止换行 */
+        text-overflow: ellipsis; /* 超出部分显示省略号 */
         width: 100%;
         border: none;
         font-size: 21px;

@@ -3,15 +3,20 @@
     return !!/MicroMessenger/i.test(ua)
 }
 
+function isQQ() {
+    let ua = navigator.userAgent.toLowerCase();
+    return ua.indexOf('qq/') !== -1;
+}
+
 function NavigateTo(url, webUrl) {
     const u = navigator.userAgent;
     const isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
     const isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
     let result = isAndroid || isiOS;
-    if (result) {
-        window.open(url)
-    } else {
+    if(isQQ() || !result){
         window.open(webUrl)
+    }else{
+        window.open(url)
     }
 }
 

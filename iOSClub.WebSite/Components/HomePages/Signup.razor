@@ -38,18 +38,7 @@
         {
             await using var context = await DbFactory.CreateDbContextAsync();
             var f = await context.Students.FirstOrDefaultAsync(x => x.UserId == Model.UserId);
-            Console.WriteLine(Model);
-            if (f == null)
-                context.Students.Add(Model);
-            else
-            {
-                f.UserName = Model.UserName;
-                f.Academy = Model.Academy;
-                f.ClassName = Model.ClassName;
-                f.PhoneNum = Model.PhoneNum;
-                f.Gender = Model.Gender;
-                f.PoliticalLandscape = Model.PoliticalLandscape;
-            }
+            if (f == null) context.Students.Add(Model);
 
             await context.SaveChangesAsync();
 
@@ -64,6 +53,7 @@
                 return;
             }
             await Js.InvokeVoidAsync("NavigateTo", SignRecord.ios.qqApi, SignRecord.ios.https);
+            
             return;
         }
 

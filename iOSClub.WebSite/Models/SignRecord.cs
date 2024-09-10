@@ -59,40 +59,39 @@ public class SignRecord
 
     public static FormValidationRule[] UserNameRules =>
     [
-        new FormValidationRule
+        new()
             // ReSharper disable once StringLiteralTypo
             { Pattern = @"^[\u4E00-\u9FA5A-Za-z\s]+(·[\u4E00-\u9FA5A-Za-z]+)*$", Message = "姓名出错!", Required = true }
     ];
 
     public static FormValidationRule[] IdRules =>
     [
-        new FormValidationRule
-            { Len = 10, Message = "学号出错!", Pattern = "(19|20|21|22|23|24)([0-9]{8})", Required = true }
+        new() { Len = 10, Message = "学号出错!", Pattern = "(19|20|21|22|23|24)([0-9]{8})", Required = true }
     ];
 
     public static FormValidationRule[] PhoneNumRules =>
     [
-        new FormValidationRule { Len = 11, Pattern = "^1\\d{10}$", Message = "手机号不正确!", Required = true }
+        new() { Len = 11, Pattern = "^1\\d{10}$", Message = "手机号不正确!", Required = true }
     ];
 
     public static FormValidationRule[] ClassNameRules =>
     [
-        new FormValidationRule { Pattern = @"[\u4e00-\u9fa5]+[0-9]{4}(.*)", Message = "班级姓名出错!", Required = true }
+        new() { Pattern = @"[\u4e00-\u9fa5|(|)|（|）]+[0-9]{4}(.*)", Message = "班级姓名出错!", Required = true }
     ];
 
     public static FormValidationRule[] GenderRules =>
     [
-        new FormValidationRule { Required = true, Message = "性别没填!" }
+        new() { Required = true, Message = "性别没填!" }
     ];
 
     public static FormValidationRule[] AcademyRules =>
     [
-        new FormValidationRule { Required = true, Message = "学院没填!" }
+        new() { Required = true, Message = "学院没填!" }
     ];
 
     public static FormValidationRule[] PoliticalLandscapeRules =>
     [
-        new FormValidationRule { Required = true, Message = "政治面貌没填!" }
+        new() { Required = true, Message = "政治面貌没填!" }
     ];
 
     #endregion
@@ -101,14 +100,12 @@ public class SignRecord
 
     public static FormValidationRule[] ProjectNameRules =>
     [
-        new FormValidationRule
-            { Len = 20, Message = "项目名称太长了", Required = true }
+        new() { Len = 20, Message = "项目名称太长了", Required = true }
     ];
 
     public static FormValidationRule[] ProjectDescriptionRules =>
     [
-        new FormValidationRule
-            { Len = 512, Message = "项目描述太长了", Required = true }
+        new() { Len = 512, Message = "项目描述太长了", Required = true }
     ];
 
     public static Dictionary<string, string> DepartmentDictionary => new()
@@ -127,14 +124,12 @@ public class SignRecord
 
     public static FormValidationRule[] ResourceNameRules =>
     [
-        new FormValidationRule
-            { Len = 20, Message = "项目名称太长了", Required = true }
+        new() { Len = 20, Message = "项目名称太长了", Required = true }
     ];
 
     public static FormValidationRule[] ResourceDescriptionRules =>
     [
-        new FormValidationRule
-            { Len = 512, Message = "项目描述太长了", Required = true }
+        new() { Len = 512, Message = "项目描述太长了", Required = true }
     ];
 
     #endregion
@@ -143,14 +138,12 @@ public class SignRecord
 
     public static FormValidationRule[] TaskTitleRules =>
     [
-        new FormValidationRule
-            { Len = 20, Message = "项目名称太长了", Required = true }
+        new() { Len = 20, Message = "项目名称太长了", Required = true }
     ];
 
     public static FormValidationRule[] TaskDescriptionRules =>
     [
-        new FormValidationRule
-            { Len = 200, Message = "项目描述太长了", Required = true }
+        new() { Len = 200, Message = "项目描述太长了", Required = true }
     ];
 
     #endregion

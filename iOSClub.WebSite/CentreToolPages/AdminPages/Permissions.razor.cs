@@ -156,7 +156,7 @@ public partial class Permissions
             var stu = await context.Students.Where(x => x.UserId == model.UserId).FirstOrDefaultAsync();
             if (stu == null) continue;
             var mem = MemberModel.CopyFrom(stu);
-            mem.Identity = model.Identity;
+            mem.Identity = MemberModel.IdentityDictionary[model.Identity];
             Models.Add(mem);
         }
         foreach (var model in TechnologyMinister)
@@ -164,7 +164,7 @@ public partial class Permissions
             var stu = await context.Students.Where(x => x.UserId == model.UserId).FirstOrDefaultAsync();
             if (stu == null) continue;
             var mem = MemberModel.CopyFrom(stu);
-            mem.Identity = model.Identity;
+            mem.Identity = MemberModel.IdentityDictionary[model.Identity];
             Models.Add(mem);
         }
         foreach (var model in TechnologyMember)
@@ -172,7 +172,7 @@ public partial class Permissions
             var stu = await context.Students.Where(x => x.UserId == model.UserId).FirstOrDefaultAsync();
             if (stu == null) continue;
             var mem = MemberModel.CopyFrom(stu);
-            mem.Identity = model.Identity;
+            mem.Identity = MemberModel.IdentityDictionary[model.Identity];
             Models.Add(mem);
         }
         foreach (var model in PracticalMinister)
@@ -180,7 +180,7 @@ public partial class Permissions
             var stu = await context.Students.Where(x => x.UserId == model.UserId).FirstOrDefaultAsync();
             if (stu == null) continue;
             var mem = MemberModel.CopyFrom(stu);
-            mem.Identity = model.Identity;
+            mem.Identity = MemberModel.IdentityDictionary[model.Identity];
             Models.Add(mem);
         }
         foreach (var model in PracticalMember)
@@ -188,7 +188,7 @@ public partial class Permissions
             var stu = await context.Students.Where(x => x.UserId == model.UserId).FirstOrDefaultAsync();
             if (stu == null) continue;
             var mem = MemberModel.CopyFrom(stu);
-            mem.Identity = model.Identity;
+            mem.Identity = MemberModel.IdentityDictionary[model.Identity];
             Models.Add(mem);
         }
         foreach (var model in NewMediaMinister)
@@ -196,7 +196,7 @@ public partial class Permissions
             var stu = await context.Students.Where(x => x.UserId == model.UserId).FirstOrDefaultAsync();
             if (stu == null) continue;
             var mem = MemberModel.CopyFrom(stu);
-            mem.Identity = model.Identity;
+            mem.Identity = MemberModel.IdentityDictionary[model.Identity];
             Models.Add(mem);
         }
         foreach (var model in NewMediaMember)
@@ -204,7 +204,7 @@ public partial class Permissions
             var stu = await context.Students.Where(x => x.UserId == model.UserId).FirstOrDefaultAsync();
             if (stu == null) continue;
             var mem = MemberModel.CopyFrom(stu);
-            mem.Identity = model.Identity;
+            mem.Identity = MemberModel.IdentityDictionary[model.Identity];
             Models.Add(mem);
         }
         

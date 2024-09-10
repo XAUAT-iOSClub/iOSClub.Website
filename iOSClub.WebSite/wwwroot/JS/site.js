@@ -87,3 +87,13 @@ window.localStorageHelper = {
         localStorage.clear();
     }
 };
+
+async function copyText(content) {
+    try {
+        await navigator.clipboard.writeText(content);
+        return true;
+    } catch (err) {
+        console.error('复制失败: ', err);
+        return false;
+    }
+}

@@ -1,6 +1,7 @@
 ﻿@page "/iOSPic"
 @using iOSClub.WebSite.Models
 @inject IJSRuntime Js
+@inject IMessageService _message
 
 <GridRow Type="flex" Justify="center">
     <GridCol Xs="24" Sm="24" Md="10" Lg="9" Xl="8" Xxl="8">
@@ -9,11 +10,14 @@
                 <Image Src="iOS_Club_LOGO.png" Preview="false" Style="width:70px; height:70px"/>
                 <div style="padding: 5px;max-width: calc(100% - 70px)">
                     <div class="title-btn" @onclick="Click">iOS Club of XAUAT 2025</div>
-                    <Paragraph>群号: <Text Strong Copyable>952954710</Text></Paragraph>
+                    <Paragraph>群号: 952954710 <Icon Type="copy" @onclick="Callback" Theme="twotone"/></Paragraph>
                 </div>
             </Flex>
             <Divider/>
-            <Image Src="/other/二维码.jpg" style="width: 100%"/>
+            <img alt="" Src="/other/二维码.jpg" style="width: 100%"/>
+            <div class="phone-desktop" style="text-align: center;margin-top: 18px">
+                <p>扫一扫二维码，加入群聊</p>
+            </div>
         </Card>
     </GridCol>
 </GridRow>
@@ -24,12 +28,25 @@
     {
         await Js.InvokeVoidAsync("NavigateTo", SignRecord.ios.qqApi, SignRecord.ios.https);
     }
+
+    private async Task Callback()
+    {
+        var result = await Js.InvokeAsync<bool>("copyText", "952954710");
+        await _message.Info("复制" + (result ? "成功" : "失败"));
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await _message.Info("如果微信提示无法跳转，请复制群号");
+        }
+    }
 }
 
 <style>
     .login-form {
         border-radius: 10px;
-        background: rgba(255, 255, 255, 0.3);
         -webkit-backdrop-filter: blur(20px);
         backdrop-filter: blur(20px);
         box-shadow: 0 0 10px #c8c8c8;
@@ -46,6 +63,19 @@
         }
         .title-btn:hover {
             transform: scale(1);
+        }
+        
+        .ant-layout-header, .footer{
+            visibility: hidden;
+        }
+        
+        .ant-layout-header{
+            height: 2px;
+        }
+        
+        .layout{
+            background: #ffffff;
+            max-height: 100vh;
         }
     }
 

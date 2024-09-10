@@ -1,7 +1,7 @@
 ﻿using System.IO.Compression;
 using System.Text;
 
-namespace iOSClub.WebSite.Models;
+namespace iOSClub.WebSite.Controllers;
 
 public static class GZipServer
 {

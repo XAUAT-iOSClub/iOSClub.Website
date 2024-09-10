@@ -21,7 +21,7 @@ public class MemberModel : StudentModel
     public static readonly Dictionary<string, string> IdentityDictionary = new()
     {
         { "Founder", "创始人" },
-        { "President", "社长,副社长,秘书长" },
+        { "President", "社长/副社长/秘书长" },
         { "TechnologyMinister", "科技部部长/副部长" },
         { "PracticalMinister", "实践交流部部长/副部长" },
         { "PracticalMember", "实践交流部成员" },
@@ -54,7 +54,7 @@ public class MemberModel : StudentModel
         return AutoCopy<StudentModel,MemberModel>(model);
     }
     
-    public new static string GetCsv(List<MemberModel> models)
+    public static string GetCsv(List<MemberModel> models)
     {
         var builder = new StringBuilder("姓名,学号,性别,学院,政治面貌,专业班级,电话号码,身份");
         foreach (var model in models)

@@ -41,11 +41,6 @@
             if (f == null) context.Students.Add(Model);
 
             await context.SaveChangesAsync();
-
-            // var date = DateTime.Today;
-            // if (date.Month != 10) return;
-            
-            await _message.Info("注册成功!");
             
             if (isWeiXin)
             {

@@ -34,7 +34,7 @@ builder.Services.AddAuthentication(options => { options.DefaultScheme = JwtBeare
             ValidateIssuer = false, //是否验证Issuer
             ValidateAudience = false, //是否验证Audience
             ValidateIssuerSigningKey = true, //是否验证SecurityKey
-            
+
             IssuerSigningKey =
                 new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecretKey"]!)), //SecurityKey
             ValidateLifetime = true, //是否验证失效时间
@@ -42,6 +42,12 @@ builder.Services.AddAuthentication(options => { options.DefaultScheme = JwtBeare
             RequireExpirationTime = true,
         };
     });
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        policy => { policy.AllowAnyOrigin(); });
+});
 
 builder.Services.AddSingleton(new JwtHelper(builder.Configuration));
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -81,7 +87,7 @@ using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<iOSContext>();
-    
+
     try
     {
         context.Database.Migrate();
@@ -90,7 +96,7 @@ using (var scope = app.Services.CreateScope())
     {
         Console.WriteLine(e.Message);
     }
-    
+
     if (!context.Staffs.Any())
     {
         var user = Environment.GetEnvironmentVariable("USER", EnvironmentVariableTarget.Process);
@@ -106,7 +112,7 @@ using (var scope = app.Services.CreateScope())
 
         context.Staffs.Add(model);
     }
-    
+
     await context.SaveChangesAsync();
     await context.DisposeAsync();
 }
@@ -115,6 +121,8 @@ app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 app.UseAntiforgery();
+
+app.UseCors();
 
 app.UseAuthentication();
 app.UseAuthorization();

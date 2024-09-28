@@ -24,7 +24,7 @@ public static class TokenHelper
 {
     public static MemberModel? GetUser(this ClaimsPrincipal? claimsPrincipal)
     {
-        var claimId = claimsPrincipal?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.PrimarySid);
+        var claimId = claimsPrincipal?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
         var claimName = claimsPrincipal?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name);
         var claimRole = claimsPrincipal?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role);
         if (claimId.IsNull() || claimName.IsNull() || claimRole.IsNull())

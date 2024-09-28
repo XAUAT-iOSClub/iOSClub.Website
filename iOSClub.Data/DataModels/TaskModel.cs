@@ -1,10 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace iOSClub.Data.DataModels;
 
 public class TaskModel : DataModel
 {
+    [JsonIgnore]
     public ProjectModel Project { get; set; } = new();
     [Column(TypeName = "varchar(20)")] public string Title { get; set; } = "";
     [Column(TypeName = "varchar(200)")] public string Description { get; set; } = "";
@@ -15,6 +17,7 @@ public class TaskModel : DataModel
 
     [Key][Column(TypeName = "varchar(33)")] public string Id { get; set; } = "";
 
+    [JsonIgnore]
     public List<StaffModel> Users { get; init; } = [];
 
     public void Update(TaskModel model)

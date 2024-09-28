@@ -14,7 +14,7 @@ public class JwtHelper(IConfiguration configuration)
         {
             new Claim(ClaimTypes.Name, model.UserName),
             new Claim(ClaimTypes.Role, model.Identity),
-            new Claim(ClaimTypes.PrimarySid,model.UserId)
+            new Claim(ClaimTypes.NameIdentifier,model.UserId)
         };
 
         var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:SecretKey"]!));

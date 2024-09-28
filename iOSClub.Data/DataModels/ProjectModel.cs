@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace iOSClub.Data.DataModels;
 
@@ -22,6 +23,9 @@ public class ProjectModel : DataModel
         if (!string.IsNullOrEmpty(model.EndTime)) EndTime = model.EndTime;
     }
 
+    [JsonIgnore]
     public List<StaffModel> Staffs { get; init; } = [];
+    
+    [JsonIgnore]
     public List<TaskModel> Tasks { get; init; } = [];
 }

@@ -22,7 +22,6 @@ builder.Services.AddRazorComponents()
 builder.Services.AddAntDesign();
 builder.Services.AddControllers();
 
-
 // 身份验证
 builder.Services.AddScoped<AuthenticationStateProvider, JwtProvider>();
 builder.Services.AddAuthorizationCore();
@@ -45,8 +44,12 @@ builder.Services.AddAuthentication(options => { options.DefaultScheme = JwtBeare
 
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(
-        policy => { policy.AllowAnyOrigin(); });
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin() //允许任何来源的主机访问
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
 });
 
 builder.Services.AddSingleton(new JwtHelper(builder.Configuration));

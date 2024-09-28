@@ -18,22 +18,11 @@ public class MemberController(
 {
     #region Visitor
 
-    [TokenActionFilter]
-    [Authorize]
     [HttpGet]
-    public async Task<ActionResult<MemberModel>> GetData()
+    public async Task<List<ToolModel>> GetAllTools()
     {
         await using var context = await factory.CreateDbContextAsync();
-        var member = httpContextAccessor.HttpContext?.User.GetUser();
-        if (member == null) return NotFound();
-        if (member.Identity == "Founder") return member;
-        var student = await context.Students.FirstOrDefaultAsync(x => x.UserId == member.UserId);
-        if (student == null) return NotFound();
-        var id = member.Identity;
-        member = MemberModel.AutoCopy<StudentModel, MemberModel>(student);
-        member.Identity = id;
-
-        return member;
+        return await context.Tools.ToListAsync();
     }
 
     [HttpPost]
@@ -103,32 +92,105 @@ public class MemberController(
 
     #region Ordinary Members
 
+    [TokenActionFilter]
+    [Authorize]
+    [HttpGet]
+    public async Task<ActionResult<MemberModel>> GetData()
+    {
+        await using var context = await factory.CreateDbContextAsync();
+        var member = httpContextAccessor.HttpContext?.User.GetUser();
+        if (member == null) return NotFound();
+        if (member.Identity == "Founder") return member;
+        var student = await context.Students.FirstOrDefaultAsync(x => x.UserId == member.UserId);
+        if (student == null) return NotFound();
+        var id = member.Identity;
+        member = MemberModel.AutoCopy<StudentModel, MemberModel>(student);
+        member.Identity = id;
+
+        return member;
+    }
+
+    [TokenActionFilter]
+    [Authorize]
+    [HttpGet]
+    public async Task<ActionResult<List<TodoModel>>> GetTodos()
+    {
+        await using var context = await factory.CreateDbContextAsync();
+        var member = httpContextAccessor.HttpContext?.User.GetUser();
+        if (member == null) return NotFound();
+        var student = await context.Students.FirstOrDefaultAsync(x => x.UserId == member.UserId);
+        if (student == null) return NotFound();
+        return await context.Todos.Where(x => x.StudentId == student.UserId).ToListAsync();
+    }
+
+    [TokenActionFilter]
+    [Authorize]
+    [HttpPost]
+    public async Task<ActionResult<TodoModel>> AddTodo(TodoModel todoModel)
+    {
+        await using var context = await factory.CreateDbContextAsync();
+        var member = httpContextAccessor.HttpContext?.User.GetUser();
+        if (member == null) return NotFound();
+        var student = await context.Students.FirstOrDefaultAsync(x => x.UserId == member.UserId);
+        if (student == null) return NotFound();
+        todoModel.Student = student;
+        todoModel.Id = todoModel.ToHash();
+        await context.Todos.AddAsync(todoModel);
+        await context.SaveChangesAsync();
+
+        return todoModel;
+    }
+
+    [TokenActionFilter]
+    [Authorize]
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(string id)
+    {
+        await using var context = await factory.CreateDbContextAsync();
+        var member = httpContextAccessor.HttpContext?.User.GetUser();
+        if (member == null) return NotFound();
+        var student = await context.Students.FirstOrDefaultAsync(x => x.UserId == member.UserId);
+        if (student == null) return NotFound();
+
+        var todo = await context.Todos.FirstOrDefaultAsync(x => x.Id == id);
+        if (todo == null || todo.StudentId != member.UserId) return NotFound();
+
+        context.Todos.Remove(todo);
+        await context.SaveChangesAsync();
+
+        return Ok();
+    }
+
+    [TokenActionFilter]
+    [Authorize]
+    [HttpPost]
+    public async Task<IActionResult> Update(TodoModel todoModel)
+    {
+        await using var context = await factory.CreateDbContextAsync();
+        var member = httpContextAccessor.HttpContext?.User.GetUser();
+        if (member == null) return NotFound();
+        var student = await context.Students.FirstOrDefaultAsync(x => x.UserId == member.UserId);
+        if (student == null) return NotFound();
+
+        var todo = await context.Todos.FirstOrDefaultAsync(x => x.Id == todoModel.Id);
+        if (todo == null) return NotFound();
+
+        todo.Update(todoModel);
+        
+        await context.SaveChangesAsync();
+        return Ok();
+    }
+
     // PUT: api/Member/5
     [TokenActionFilter]
     [Authorize]
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Update(string id, MemberModel memberModel)
+    [HttpPost]
+    public async Task<IActionResult> Update(MemberModel memberModel)
     {
-        if (id != memberModel.UserId)
-        {
-            return BadRequest();
-        }
-
         await using var context = await factory.CreateDbContextAsync();
 
         context.Entry(memberModel).State = EntityState.Modified;
-
-        try
-        {
-            await context.SaveChangesAsync();
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            if (!await context.Students.AnyAsync(e => e.UserId == id))
-                return NotFound();
-
-            throw;
-        }
+        await context.SaveChangesAsync();
 
         return NoContent();
     }

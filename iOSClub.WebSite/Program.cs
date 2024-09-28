@@ -97,6 +97,7 @@ using (var scope = app.Services.CreateScope())
     }
     catch (Exception e)
     {
+        context.Database.EnsureCreated();
         Console.WriteLine(e.Message);
     }
 

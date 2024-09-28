@@ -12,14 +12,25 @@ public sealed class iOSContext(DbContextOptions<iOSContext> options) : DbContext
     public DbSet<StudentModel> Students { get; init; }
     public DbSet<StaffModel> Staffs { get; init; }
     public DbSet<TaskModel> Tasks { get; init; }
+    public DbSet<TodoModel> Todos { get; init; }
     public DbSet<ProjectModel> Projects { get; init; }
     public DbSet<ResourceModel> Resources { get; init; }
     public DbSet<ToolModel> Tools { get; init; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<StaffModel>().HasMany(x => x.Tasks).WithMany(x => x.Users);
-        modelBuilder.Entity<StaffModel>().HasMany(x => x.Projects).WithMany(x => x.Staffs);
+        modelBuilder.Entity<TodoModel>()
+            .HasOne(x => x.Student).WithMany()
+            .HasForeignKey(e => e.StudentId)
+            .IsRequired();
+        
+        modelBuilder.Entity<StaffModel>()
+            .HasMany(x => x.Tasks)
+            .WithMany(x => x.Users);
+        
+        modelBuilder.Entity<StaffModel>()
+            .HasMany(x => x.Projects)
+            .WithMany(x => x.Staffs);
     }
 }
 

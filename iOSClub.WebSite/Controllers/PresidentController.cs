@@ -58,6 +58,23 @@ public class PresidentController(IDbContextFactory<iOSContext> factory)
     }
 
     [HttpPost]
+    public async Task<ActionResult<List<StudentModel>>> UpdateMany(List<StudentModel> list)
+    {
+        await using var context = await factory.CreateDbContextAsync();
+
+        foreach (var model in list)
+        {
+            if (await context.Students.AnyAsync(x => x.UserId == model.UserId)) continue;
+            await context.Students.AddAsync(model.Standardization());
+        }
+
+        await context.SaveChangesAsync();
+
+        return await context.Students.ToListAsync();
+    }
+
+
+    [HttpPost]
     public async Task<ActionResult> Update([FromBody] MemberModel model)
     {
         await using var context = await factory.CreateDbContextAsync();

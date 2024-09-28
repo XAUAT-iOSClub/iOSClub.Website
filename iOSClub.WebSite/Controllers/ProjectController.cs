@@ -51,6 +51,16 @@ public class ProjectController(iOSContext context, IHttpContextAccessor httpCont
         return staff.Tasks;
     }
 
+    [HttpGet]
+    public async Task<ActionResult<List<ResourceModel>>> GetResources()
+    {
+        var member = httpContextAccessor.HttpContext?.User.GetUser();
+        if (member == null) return NotFound();
+        if (member.Identity is "Founder" or "Member") return new List<ResourceModel>();
+
+        return await context.Resources.ToListAsync();
+    }
+
     #endregion
 
     #region Project

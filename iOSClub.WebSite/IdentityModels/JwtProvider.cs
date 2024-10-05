@@ -20,11 +20,6 @@ public class JwtProvider(IJSRuntime js, IConfiguration configuration) : AbsProvi
 
         var handler = new JwtSecurityTokenHandler();
         var jwtToken = handler.ReadJwtToken(token);
-
-        foreach (var claim in jwtToken.Claims)
-        {
-            Console.WriteLine($"{claim.Type} : {claim.Value}");
-        }
         
         var claimsIdentity = new ClaimsIdentity(jwtToken.Claims, "Jwt");
         var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
@@ -56,13 +51,6 @@ public class JwtProvider(IJSRuntime js, IConfiguration configuration) : AbsProvi
             var token = new JwtSecurityTokenHandler().WriteToken(securityToken);
 
             Console.WriteLine(token);
-
-            var tokenObj = new JwtSecurityToken(token);
-
-            foreach (var claim in tokenObj.Claims)
-            {
-                Console.WriteLine($"{claim.Type} : {claim.Value}");
-            }
 
             await js.InvokeVoidAsync("localStorageHelper.setItem", "jwt", token);
 

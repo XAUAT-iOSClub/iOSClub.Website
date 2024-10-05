@@ -10,164 +10,162 @@
 <PageTitle>您的iMember中心 - 西建大iOS Club</PageTitle>
 <!--suppress ALL -->
 
-<Flex Justify="center" Align="center">
-    <GridRow Class="block" Gutter="(20, 24)">
-        <GridCol Xs="24" Sm="24" Md="12" Lg="12" Xl="8" Xxl="8">
-            <a href="/Centre/PersonalData">
-                <Card Hoverable Class="card" Bordered="false">
-                    @if (Member.Identity != "Founder")
+<GridRow Class="block" Justify="center" Gutter="(20, 24)">
+    <GridCol Xs="24" Sm="24" Md="12" Lg="12" Xl="8" Xxl="8">
+        <a href="/Centre/PersonalData">
+            <Card Hoverable Class="card" Bordered="false">
+                @if (Member.Identity != "Founder")
+                {
+                <Image Style="height: 100px;width: 100px" Preview="false" Src="@(Member.Gender == "男" ? "Centre/男生.png" : "Centre/女生.png")"/>
+                }
+                else
+                {
+                <Image Style="height: 100px;width: 100px" Preview="false" Src="iOS_Club_LOGO.png"/>
+                }
+                <Title style="font-size: 36px;">@Member.UserName</Title>
+                <Paragraph Type="secondary">ID :@Member.UserId</Paragraph>
+                <Paragraph Style="font-size: 16px" Strong>@MemberModel.IdentityDictionary[Member.Identity]</Paragraph>
+            </Card>
+        </a>
+    </GridCol>
+    <GridCol Xs="24" Sm="24" Md="12" Lg="12" Xl="16" Xxl="16">
+        <AppleCard>
+            <TitleTemplate>
+                <Title Level="2">iTool</Title>
+                <Paragraph Type="secondary">iOS Club出品的小工具</Paragraph>
+            </TitleTemplate>
+            <ContextTemplate>
+                @if (Tools.Length == 0)
+                {
+                <Empty Image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg" Style="padding: 20px" Description="@("社团还没加入iOS App")"/>
+                }
+                else
+                {
+                <Space Size=@(("16", "16")) Wrap>
+                    @foreach (var item in Tools)
                     {
-                        <Image Style="height: 100px;width: 100px" Preview="false" Src="@(Member.Gender == "男" ? "Centre/男生.png" : "Centre/女生.png")"/>
+                    <SpaceItem>
+                        <Button Type="@ButtonType.Text" OnClick="@(() => Nav.NavigateTo(item.Url))" Class="card" Style="padding: 0;height: auto;">
+                            <Image Style="max-height: 48px;max-width: 48px" Preview="false" Src="@item.IconUrl"/>
+                            <Paragraph>@item.Name</Paragraph>
+                        </Button>
+                    </SpaceItem>
                     }
-                    else
-                    {
-                        <Image Style="height: 100px;width: 100px" Preview="false" Src="iOS_Club_LOGO.png"/>
-                    }
-                    <Title style="font-size: 36px;">@Member.UserName</Title>
-                    <Paragraph Type="secondary">ID :@Member.UserId</Paragraph>
-                    <Paragraph Style="font-size: 16px" Strong>@MemberModel.IdentityDictionary[Member.Identity]</Paragraph>
-                </Card>
-            </a>
-        </GridCol>
-        <GridCol Xs="24" Sm="24" Md="12" Lg="12" Xl="16" Xxl="16">
+                </Space>
+                }
+            </ContextTemplate>
+        </AppleCard>
+    </GridCol>
+    @if (Member.Identity != "Member" && Member.Identity != "Founder")
+    {
+    <GridCol Xs="24" Sm="24" Md="12" Lg="12" Xl="16" Xxl="16">
+        <AppleCard>
+            <TitleTemplate>
+                <Title Level="2">我的任务</Title>
+                <Paragraph Type="secondary">iStaff 的任务</Paragraph>
+            </TitleTemplate>
+            <ContextTemplate>
+                @if (Staff == null || Staff.Tasks.Count == 0)
+                {
+                <Empty Image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg" Style="padding: 20px" Description="@("您的任务都已经完成了")"/>
+                }
+                else
+                {
+                <AntList DataSource="@Staff.Tasks">
+                    <ListItem>
+                        <ListItemMeta>
+                            <TitleTemplate>
+                                <Space Align="center" Size="@("large")">
+                                    <SpaceItem>
+                                        <h1>@context.Title</h1>
+                                    </SpaceItem>
+                                    <SpaceItem>
+                                        <Icon Type="team"/>
+                                        @context.Users.Count.ToString()
+                                    </SpaceItem>
+                                </Space>
+                            </TitleTemplate>
+                            <DescriptionTemplate>
+                                <Text Type="secondary">@($"{context.StartTime} - {context.EndTime}")</Text>
+                                <Tag Color="@TaskColor(context)">@TaskString(context)</Tag>
+                            </DescriptionTemplate>
+                        </ListItemMeta>
+                    </ListItem>
+                </AntList>
+                }
+            </ContextTemplate>
+        </AppleCard>
+    </GridCol>
+    <GridCol Xs="24" Sm="24" Md="12" Lg="12" Xl="8" Xxl="8">
+        <AppleCard>
+            <TitleTemplate>
+                <Title Level="2">社团资源</Title>
+                <Paragraph Type="secondary">iOS Club资源全览</Paragraph>
+            </TitleTemplate>
+            <ContextTemplate>
+                @if (Resources.Length == 0)
+                {
+                <Empty Image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg" Style="padding: 20px" Description="@("社团现在还没有资源")"/>
+                }
+                else
+                {
+                <AntList DataSource="@Resources" Style="overflow: auto">
+                    <ListItem>
+                        <ListItemMeta Title="@context.Name">
+                            <DescriptionTemplate>
+                                <Text Type="secondary">@context.Description</Text>
+                                @foreach (var s in context.Tag?.Split(",")!)
+                                {
+                                <Tag>@s</Tag>
+                                }
+                            </DescriptionTemplate>
+                        </ListItemMeta>
+                    </ListItem>
+                </AntList>
+                }
+            </ContextTemplate>
+        </AppleCard>
+    </GridCol>
+    }
+    @if (Member.Identity.Contains("Minister") || Member.Identity == "President" || Member.Identity == "Founder")
+    {
+    <GridCol Xs="24" Sm="24" Md="12" Lg="12"
+             Xl="@(Member.Identity != "Founder" ? 8 : 16)"
+             Xxl="@(Member.Identity != "Founder" ? 8 : 16)">
+        <a href="/Admin/MemberData">
             <AppleCard>
                 <TitleTemplate>
-                    <Title Level="2">iTool</Title>
-                    <Paragraph Type="secondary">iOS Club出品的小工具</Paragraph>
+                    <Title Level="2">数据中心</Title>
+                    <Paragraph Type="secondary">展示社团数据</Paragraph>
                 </TitleTemplate>
                 <ContextTemplate>
-                    @if (Tools.Length == 0)
-                    {
-                        <Empty Image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg" Style="padding: 20px" Description="@("社团还没加入iOS App")"/>
-                    }
-                    else
-                    {
-                        <Space Size=@(("16", "16")) Wrap>
-                            @foreach (var item in Tools)
-                            {
-                                <SpaceItem>
-                                    <Button Type="@ButtonType.Text" OnClick="@(() => Nav.NavigateTo(item.Url))" Class="card" Style="padding: 0;height: auto;">
-                                        <Image Style="max-height: 48px;max-width: 48px" Preview="false" Src="@item.IconUrl"/>
-                                        <Paragraph>@item.Name</Paragraph>
-                                    </Button>
-                                </SpaceItem>
-                            }
-                        </Space>
-                    }
+                    <Statistic GroupSeparator=" " Title="当前成员" Value="@Total" TValue="int">
+                        <PrefixTemplate>
+                            <Icon Type="team" Theme="outline"/>
+                        </PrefixTemplate>
+                    </Statistic>
                 </ContextTemplate>
             </AppleCard>
-        </GridCol>
-        @if (Member.Identity != "Member" && Member.Identity != "Founder")
-        {
-            <GridCol Xs="24" Sm="24" Md="12" Lg="12" Xl="16" Xxl="16">
-                <AppleCard>
-                    <TitleTemplate>
-                        <Title Level="2">我的任务</Title>
-                        <Paragraph Type="secondary">iStaff 的任务</Paragraph>
-                    </TitleTemplate>
-                    <ContextTemplate>
-                        @if (Staff == null || Staff.Tasks.Count == 0)
-                        {
-                            <Empty Image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg" Style="padding: 20px" Description="@("您的任务都已经完成了")"/>
-                        }
-                        else
-                        {
-                            <AntList DataSource="@Staff.Tasks">
-                                <ListItem>
-                                    <ListItemMeta>
-                                        <TitleTemplate>
-                                            <Space Align="center" Size="@("large")">
-                                                <SpaceItem>
-                                                    <h1>@context.Title</h1>
-                                                </SpaceItem>
-                                                <SpaceItem>
-                                                    <Icon Type="team"/>
-                                                    @context.Users.Count.ToString()
-                                                </SpaceItem>
-                                            </Space>
-                                        </TitleTemplate>
-                                        <DescriptionTemplate>
-                                            <Text Type="secondary">@($"{context.StartTime} - {context.EndTime}")</Text>
-                                            <Tag Color="@TaskColor(context)">@TaskString(context)</Tag>
-                                        </DescriptionTemplate>
-                                    </ListItemMeta>
-                                </ListItem>
-                            </AntList>
-                        }
-                    </ContextTemplate>
-                </AppleCard>
-            </GridCol>
-            <GridCol Xs="24" Sm="24" Md="12" Lg="12" Xl="8" Xxl="8">
-                <AppleCard>
-                    <TitleTemplate>
-                        <Title Level="2">社团资源</Title>
-                        <Paragraph Type="secondary">iOS Club资源全览</Paragraph>
-                    </TitleTemplate>
-                    <ContextTemplate>
-                        @if (Resources.Length == 0)
-                        {
-                            <Empty Image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg" Style="padding: 20px" Description="@("社团现在还没有资源")"/>
-                        }
-                        else
-                        {
-                            <AntList DataSource="@Resources" Style="overflow: auto">
-                                <ListItem>
-                                    <ListItemMeta Title="@context.Name">
-                                        <DescriptionTemplate>
-                                            <Text Type="secondary">@context.Description</Text>
-                                            @foreach (var s in context.Tag?.Split(",")!)
-                                            {
-                                                <Tag>@s</Tag>
-                                            }
-                                        </DescriptionTemplate>
-                                    </ListItemMeta>
-                                </ListItem>
-                            </AntList>
-                        }
-                    </ContextTemplate>
-                </AppleCard>
-            </GridCol>
-        }
-        @if (Member.Identity.Contains("Minister") || Member.Identity == "President" || Member.Identity == "Founder")
-        {
-            <GridCol Xs="24" Sm="24" Md="12" Lg="12"
-                     Xl="@(Member.Identity != "Founder" ? 8 : 16)"
-                     Xxl="@(Member.Identity != "Founder" ? 8 : 16)">
-                <a href="/Admin/MemberData">
-                    <AppleCard>
-                        <TitleTemplate>
-                            <Title Level="2">数据中心</Title>
-                            <Paragraph Type="secondary">展示社团数据</Paragraph>
-                        </TitleTemplate>
-                        <ContextTemplate>
-                            <Statistic GroupSeparator=" " Title="当前成员" Value="@Total" TValue="int">
-                                <PrefixTemplate>
-                                    <Icon Type="team" Theme="outline"/>
-                                </PrefixTemplate>
-                            </Statistic>
-                        </ContextTemplate>
-                    </AppleCard>
-                </a>
-            </GridCol>
-            <GridCol Xs="24" Sm="24" Md="12" Lg="12"
-                     Xl="@(Member.Identity != "Founder" ? 16 : 8)"
-                     Xxl="@(Member.Identity != "Founder" ? 16 : 8)">
-                <a href="/Admin/Env">
-                    <AppleCard>
-                        <TitleTemplate>
-                            <Title Level="2">服务器环境</Title>
-                            <Paragraph Type="secondary">显示当前服务器环境</Paragraph>
-                        </TitleTemplate>
-                        <ContextTemplate>
-                            <Paragraph Type="secondary">当前储存路径: @HostEnvironment.WebRootPath</Paragraph>
-                            <Paragraph Type="secondary">服务器时间: @DateTime.Today.ToString("yyyy-MM-dd")</Paragraph>
-                        </ContextTemplate>
-                    </AppleCard>
-                </a>
-            </GridCol>
-        }
-    </GridRow>
-</Flex>
+        </a>
+    </GridCol>
+    <GridCol Xs="24" Sm="24" Md="12" Lg="12"
+             Xl="@(Member.Identity != "Founder" ? 16 : 8)"
+             Xxl="@(Member.Identity != "Founder" ? 16 : 8)">
+        <a href="/Admin/Env">
+            <AppleCard>
+                <TitleTemplate>
+                    <Title Level="2">服务器环境</Title>
+                    <Paragraph Type="secondary">显示当前服务器环境</Paragraph>
+                </TitleTemplate>
+                <ContextTemplate>
+                    <Paragraph Type="secondary">当前储存路径: @HostEnvironment.WebRootPath</Paragraph>
+                    <Paragraph Type="secondary">服务器时间: @DateTime.Today.ToString("yyyy-MM-dd")</Paragraph>
+                </ContextTemplate>
+            </AppleCard>
+        </a>
+    </GridCol>
+    }
+</GridRow>
 
 @code
 {
@@ -249,9 +247,12 @@
     }
     
     .block{
-        width: 80%;
+        padding-left: 10vw;
+        padding-right: 10vw;
         margin-top: 45px;
-        margin-bottom: 45px;
+        padding-bottom: 45px;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
     }
     
 </style>

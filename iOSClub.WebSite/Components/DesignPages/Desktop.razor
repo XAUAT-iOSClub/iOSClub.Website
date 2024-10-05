@@ -92,8 +92,8 @@
 
     private DesktopModel[] Models { get; } =
     [
-        new DesktopModel { Title = "测试软件1", ContentType = "这是个测试", Image = "Centre/男生.png" },
-        new DesktopModel { Title = "测试软件2", ContentType = "text", Image = "Centre/女生.png" }
+        new() { Title = "测试软件1", ContentType = "这是个测试", Image = "Centre/男生.png", Links = ["https://www.baidu.com", "https://www.bing.com"]},
+        new() { Title = "测试软件2", ContentType = "text", Image = "Centre/女生.png" }
     ];
 
 }

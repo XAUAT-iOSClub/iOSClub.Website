@@ -1,0 +1,93 @@
+﻿@page "/Design/CardHolder"
+
+<br class="desktop-phone"/>
+
+<GridRow Justify="end">
+    <GridCol Xs="24" Sm="24" Md="10" Lg="10" Xl="10" Xxl="10">
+        <div class="CardHolder">
+            <Flex Style="margin-top: 20px;margin-bottom: 30px;">
+                <i class="light" style="background-color: #fd6458;"></i>
+                <i class="light" style="background-color: #ffbf2b; margin-left: 8px;"></i>
+                <i class="light" style="background-color: #24cc3d; margin-left: 8px;"></i>
+            </Flex>
+
+            <p class="order" style="height: 12px;"></p>
+
+            <p class="order">Steve@@Jobs-Macintosh ~ % sudo run --1984</p>
+            <p class="order">Stay hungry , Stay foolish</p>
+            <p class="order">Steve@@Jobs-Macintosh ~ % sudo Create_your_First_iOS_App</p>
+
+            <Flex Align="center" Justify="center">
+                <div class="gradient-text" style="margin-top: 100px;">
+                    <p>Hello!</p>
+                    <P>iOS Club</P>
+                </div>
+            </Flex>
+
+            <div class="footer">
+                Created by <span class="gradient-text">iOS Club of XAUAT</span>
+            </div>
+        </div>
+    </GridCol>
+    <GridCol Xs="24" Sm="24" Md="10" Lg="10" Xl="10" Xxl="10">
+        <div class="CardHolder">
+            <Flex Style="margin-top: 20px;margin-bottom: 30px;">
+                <i class="light" style="background-color: #fd6458;"></i>
+                <i class="light" style="background-color: #ffbf2b; margin-left: 8px;"></i>
+                <i class="light" style="background-color: #24cc3d; margin-left: 8px;"></i>
+            </Flex>
+        </div>
+    </GridCol>
+</GridRow>
+
+
+<style>
+    .gradient-text {
+        background: -webkit-linear-gradient(-64deg, #f9bf65, #ffab6b, #ff9977, #fc8986, #ef7e95, #e47da6, #d37fb5, #bf83c1, #ab8dcf, #9597d8, #7fa0dc, #6ca7da);
+        -webkit-background-clip: text; /*将设置的背景颜色限制在文字中*/
+        -webkit-text-fill-color: transparent; /*给文字设置成透明*/
+    }
+    
+    .order{
+        font-size: 8px;
+        margin-block: 1px;
+        text-align: center;
+        font-family: "Consolas", monospace;
+    }
+    
+    .gradient-text p {
+        font-size: 42px;
+        font-weight: 700;
+        margin-block: 1px;
+        text-align: center;
+        font-family: "Jetbrains Mono", monospace;
+    }
+    
+    .light {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+    }
+    
+    .footer{
+        position: absolute;
+        bottom: 0;
+        font-size: 8px;
+        font-family: "Consolas", monospace;
+        margin: 10px;
+    }
+    
+    .CardHolder{
+        height: 550px;width: 350px;
+        padding: 16px 42px 20px;
+        background-color: #f3f5f7;
+        border-radius: 20px;
+    }
+
+    @@media screen and (max-width: 768px){
+        .CardHolder{
+            border-radius: 0;
+        }    
+    }
+</style>

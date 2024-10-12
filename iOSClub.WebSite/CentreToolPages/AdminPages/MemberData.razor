@@ -63,7 +63,7 @@
     </Extra>
     <Context>
         <Tabs Centered>
-            <TabPane Tab="成员数据">
+            <TabPane Tab="成员数据" Key="1">
                 <Flex Justify="center" Gap="large">
                     <Space>
                         <SpaceItem>
@@ -108,20 +108,20 @@
                     </Table>
                 </Spin>
             </TabPane>
-            <TabPane Tab="历年人数">
+            <TabPane Tab="历年人数" Key="2">
                 <AntDesign.Charts.Line Data="_yearData" Config="_yearConfig"/>
             </TabPane>
-            <TabPane Tab="学院分布">
+            <TabPane Tab="学院分布" Key="3">
                 <AntDesign.Charts.Pie Data="_collegeData" Config="_collegeConfig"/>
             </TabPane>
-            <TabPane Tab="年级分布">
+            <TabPane Tab="年级分布" Key="4">
                 <AntDesign.Charts.Bar Data="_gradeData" Config="_gradeConfig"/>
             </TabPane>
-            <TabPane Tab="男女比例">
+            <TabPane Tab="男女比例" Key="5">
                 <AntDesign.Charts.Pie Data="_genderData" Config="_collegeConfig"/>
                 <Text>@GenderWord</Text>
             </TabPane>
-            <TabPane Tab="政治面貌">
+            <TabPane Tab="政治面貌" Key="6">
                 <AntDesign.Charts.Column Data="_landscapeData" Config="_landscapeConfig"/>
             </TabPane>
         </Tabs>

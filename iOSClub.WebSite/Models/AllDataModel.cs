@@ -10,5 +10,4 @@ public class AllDataModel
     public List<TaskModel> Tasks { get; init; } = [];
     public List<ProjectModel> Projects { get; init; } = [];
     public List<ResourceModel> Resources { get; init; } = [];
-    public List<ToolModel> Tools { get; init; } = [];
 }

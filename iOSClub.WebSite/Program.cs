@@ -55,6 +55,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddSingleton(new JwtHelper(builder.Configuration));
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<TokenActionFilter>();
+builder.Services.AddHttpClient();
 
 // 数据库
 var sql = Environment.GetEnvironmentVariable("SQL", EnvironmentVariableTarget.Process);

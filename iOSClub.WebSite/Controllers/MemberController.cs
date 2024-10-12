@@ -18,13 +18,6 @@ public class MemberController(
 {
     #region Visitor
 
-    [HttpGet]
-    public async Task<List<ToolModel>> GetAllTools()
-    {
-        await using var context = await factory.CreateDbContextAsync();
-        return await context.Tools.ToListAsync();
-    }
-
     [HttpPost]
     public async Task<ActionResult<string>> SignUp(StudentModel model)
     {

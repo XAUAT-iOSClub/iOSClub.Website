@@ -7,7 +7,7 @@
         OnClose="@(() => _drawerVisible = false)">
     <Flex Gap="large" Justify="space-between">
         <Image Src="iOS_Club_LOGO.png" Preview="false" Style="width:40px; height:40px"/>
-        <div style="font-size: 24px;font-weight: bold;color: #1c1f23">XAUAT iOS Club</div>
+        <div style="font-size: 24px;font-weight: bold;color: #1c1f23">iOS Club of XAUAT</div>
     </Flex>
     <Menu Style="margin-top: 10px;"
           Accordion Mode="@MenuMode.Inline">
@@ -36,7 +36,7 @@
             <a href="/">
                 <Flex Gap="large">
                     <Image Src="iOS_Club_LOGO.png" Preview="false" Style="width:40px; height:40px"/>
-                    <div style="font-size: 24px;font-weight: bold;color: #1c1f23" Class="desktop-phone-flex">XAUAT iOS Club</div>
+                    <div class="desktop-phone-flex Layout-Header">iOS Club of XAUAT</div>
                 </Flex>
             </a>
             <Space Size="@("large")" Class="desktop-phone-flex">
@@ -83,7 +83,7 @@
             </Button>
         </Flex>
     </Header>
-    <Content Style="background: #ffffff">
+    <Content>
         @Body
     </Content>
     <Footer Class="footer">
@@ -171,5 +171,15 @@
             font-size: 36px;
             text-align: center !important;
         }
+    }
+
+    .ant-layout-content{
+        background: #ffffff;
+    }
+    
+    .Layout-Header{
+        font-size: 24px;
+        font-weight: bold;
+        color: #1c1f23;
     }
 </style>

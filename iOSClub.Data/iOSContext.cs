@@ -15,7 +15,6 @@ public sealed class iOSContext(DbContextOptions<iOSContext> options) : DbContext
     public DbSet<TodoModel> Todos { get; init; }
     public DbSet<ProjectModel> Projects { get; init; }
     public DbSet<ResourceModel> Resources { get; init; }
-    public DbSet<ToolModel> Tools { get; init; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

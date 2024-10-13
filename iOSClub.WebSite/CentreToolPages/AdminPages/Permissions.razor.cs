@@ -116,7 +116,7 @@ public partial class Permissions
         _operaVisible = string.IsNullOrEmpty(department);
     }
 
-    private List<MemberModel> Models { get; set; } = [];
+    private List<MemberModel> Models { get; } = [];
     private List<StaffModel> President { get; set; } = [];
     private List<StaffModel> TechnologyMinister { get; set; } = [];
     private List<StaffModel> PracticalMinister { get; set; } = [];

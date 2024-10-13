@@ -15,9 +15,7 @@
     <GridCol Xs="24" Sm="24" Md="20" Lg="20" Xl="20" Xxl="20">
         <div id="other">
             <h2>其他组织</h2>
-            <p>
-                iOS Club是一个包容性非常强的社团，我们欢迎所有对数码技术和编写程序感兴趣的成员加入
-            </p>
+            <p>iOS Club除了iOS Club，还许多分社团和挂靠组织。同时也和校内外许多社团和组织有许多交流。</p>
         </div>
 
         <div id="xiaomi">
@@ -30,7 +28,8 @@
                     <p>加入我们，一起在科技的道路上，启航新征程！我们期待着你的加入，一起创造属于我们的未来。立即联系我们，开启你的米粉之旅吧</p>
                 </GridCol>
                 <GridCol Xs="24" Sm="24" Md="24" Lg="8" Xl="8" Xxl="8">
-                    <Image Width="200px" Src="/other/xiaomi.jpg"/>
+                    <Image Width="200px" PreviewVisible="false"
+                           OnClick="@(() => { visible = true; })" Src="/other/xiaomi.jpg"/>
                 </GridCol>
             </GridRow>
         </div>
@@ -44,7 +43,8 @@
                     <p>加入我们，一起在科技的道路上，启航新征程！我们期待着你的加入，一起创造属于我们的未来。立即联系我们，开启你的花粉之旅吧</p>
                 </GridCol>
                 <GridCol Xs="24" Sm="24" Md="24" Lg="8" Xl="8" Xxl="8">
-                    <Image Width="200px" Src="/other/huawei.jpg"/>
+                    <Image Width="200px" PreviewVisible="false"
+                           OnClick="@(() => { visible = true; })" Src="/other/huawei.jpg"/>
                 </GridCol>
             </GridRow>
         </div>
@@ -55,7 +55,28 @@
                     <h2>航模社</h2>
                 </GridCol>
                 <GridCol Xs="24" Sm="24" Md="24" Lg="8" Xl="8" Xxl="8">
-                    <Image Width="200px" Src="/other/aircraft.jpg"/>
+                    <Image Width="200px" PreviewVisible="false"
+                           OnClick="@(() => { visible = true; })" Src="/other/aircraft.jpg"/>
+                </GridCol>
+            </GridRow>
+        </div>
+        <Divider/>
+        <div id="SpecialEffects">
+            <GridRow Gutter="24">
+                <GridCol Xs="24" Sm="24" Md="24" Lg="16" Xl="16" Xxl="16">
+                    <h2>仙建特摄同好群</h2>
+                    <p>🌟 特摄爱好者的集结号！</p>
+                    <p>我们是一个专注于特摄艺术的校园社团，隶属于iOS摄影部。特摄，即特殊摄影，是一种结合了模型、特效、动作捕捉等技术的电影拍摄手法，创造出令人惊叹的视觉效果。有名的特摄作品有假面骑士、超级战队、奥特曼以及各类型的特效变身类作品</p>
+                    <p>📱 iOS Club 附属社团 📱</p>
+                    <p>作为iOS摄影部的附属社团，我们不仅追求摄影的纯粹艺术，更致力于探索特摄的无限可能。在这里，你可以学习到如何将现实与想象完美结合，创造出属于自己的奇幻世界。</p>
+                    <p>🎥 特摄的魅力 🎥</p>
+                    <p>特摄不仅仅是电影制作的一部分，它是一种文化，一种艺术形式，更是一种对生活的热爱和对梦想的追求。我们相信，每个人都能通过特摄表达自己独特的视角和创意。</p>
+                    <p>🔗 加入我们 🔗</p>
+                    <p>无论你是特摄的狂热粉丝，还是对特效摄影充满好奇的新手，这里都是你展示才华、交流心得、共同进步的平台。加入我们，一起探索特摄的奥秘，用你充满童心的热情和真挚的热爱来推动社团的发展。</p>
+                </GridCol>
+                <GridCol Xs="24" Sm="24" Md="24" Lg="8" Xl="8" Xxl="8">
+                    <Image Width="200px" PreviewVisible="false"
+                           OnClick="@(() => { visible = true; })" Src="/other/teshe.jpg"/>
                 </GridCol>
             </GridRow>
         </div>
@@ -64,10 +85,10 @@
             <h4>校外兄弟组织</h4>
             <ul style="font-size: 16px;">
                 <li style="margin-bottom: 10px">
-                    <a href="https://xiyoulinux.com/">西安邮电大学Linux兴趣小组</a>
+                    <AppleLink Url="https://xiyoulinux.com/">西安邮电大学Linux兴趣小组</AppleLink>
                 </li>
                 <li>
-                    <a href="https://jluios.club/">吉林大学iOS Club</a>
+                    <AppleLink Url="https://jluios.club/">吉林大学iOS Club</AppleLink>
                 </li>
             </ul>
         </div>
@@ -80,12 +101,22 @@
                 <AnchorLink Href="/OtherOrg#xiaomi" Title="米粉俱乐部"/>
                 <AnchorLink Href="/OtherOrg#huawei" Title="花粉俱乐部"/>
                 <AnchorLink Href="/OtherOrg#aircraft" Title="航模社"/>
+                <AnchorLink Href="/OtherOrg#SpecialEffects" Title="仙建特摄同好群"/>
                 <AnchorLink Href="/OtherOrg#off-campus" Title="校外组织"/>
             </Anchor>
         </Affix>
     </GridCol>
 </GridRow>
 
+<div style="display:none;">
+    <ImagePreviewGroup @bind-PreviewVisible="visible">
+        <Image Src="/other/xiaomi.jpg"/>
+        <Image Src="/other/huawei.jpg"/>
+        <Image Src="/other/aircraft.jpg"/>
+        <Image Src="/other/teshe.jpg"/>
+    </ImagePreviewGroup>
+</div>
+
 @code {
-    
+    bool visible;
 }

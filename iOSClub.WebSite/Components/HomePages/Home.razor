@@ -218,6 +218,7 @@
         border-radius: 10px;
         font-size: 22px;
         font-weight: 400;
+        transition: .2s;
     }
     
     .home-title{
@@ -245,19 +246,14 @@
     }
 
     .first-button:hover {
-        animation: LyrButtonHover 0.2s ease;
         transform: scale(1.02);
         background: #f6f6f7;
         font-weight: bold;
         padding-left: 10px;
     }
 
-    .first-button:not(:hover) {
-        animation: LyrButtonNotHover 0.2s ease;
-    }
-
     .Lyr-Display{
-        animation: LyrButtonMove 0.2s ease;
+        transition: .2s;
         transform: scale(1.02);
         background: #f6f6f7;
         font-weight: bold;
@@ -266,40 +262,5 @@
     
     .card-d{
         font-size: 22px;
-    }
-
-    @@keyframes LyrButtonHover {
-        0% {
-            padding-left: 0;
-            transform: scale(1)
-        }
-
-        100% {
-            padding-left: 10px;
-            transform: scale(1.02)
-        }
-    }
-
-    @@keyframes LyrButtonNotHover {
-        0% {
-            padding-left: 10px;
-            transform: scale(1.02)
-        }
-        100% {
-            padding-left: 0;
-            transform: scale(1)
-        }
-    }
-
-    @@keyframes LyrButtonMove {
-        0% {
-            padding: 0;
-            transform: scale(1)
-        }
-
-        100% {
-            padding: 10px;
-            transform: scale(1.02)
-        }
     }
 </style>

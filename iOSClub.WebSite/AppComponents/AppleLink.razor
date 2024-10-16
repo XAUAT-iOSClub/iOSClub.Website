@@ -1,4 +1,4 @@
-﻿@if (OnClick == null)
+﻿@if (!string.IsNullOrEmpty(Url))
 {
     <a class="a" href="@Url" target="_blank">
         @ChildContent
@@ -15,7 +15,7 @@ else
 
 @code {
     [Parameter] public RenderFragment? ChildContent { get; set; }
-    [Parameter] public Action? OnClick { get; set; }
+    [Parameter] public EventCallback<MouseEventArgs> OnClick { get; set; }
     [Parameter] public string? Url { get; set; }
 }
 

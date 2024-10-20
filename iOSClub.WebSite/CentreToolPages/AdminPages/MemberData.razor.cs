@@ -21,6 +21,9 @@ public partial class MemberData
 {
     [Inject] [NotNull] public IJSRuntime? JS { get; set; }
     [Inject] [NotNull] public IDbContextFactory<iOSContext>? DbFactory { get; set; }
+    [Inject]
+    [NotNull]
+    public NavigationManager? Nav { get; set; }
 
     private bool _runningStyle;
 
@@ -241,10 +244,9 @@ public partial class MemberData
         GenderWord = $"社团现有男生{man}人，女生{woman}人，比例为{(double)man / woman:P}，男生占总人数{(double)man / (man + woman):P}";
     }
 
-    private async Task Flushed()
+    private void Flushed()
     {
-        await using var context = await DbFactory.CreateDbContextAsync();
-        Models = await context.Students.ToListAsync();
+        Nav.Refresh(true);
     }
 
     private async Task Delete(StudentModel model)
@@ -301,10 +303,11 @@ public partial class MemberData
         foreach (var model in list)
         {
             if (await context.Students.AnyAsync(x => x.UserId == model.UserId)) continue;
-            await context.Students.AddAsync(model.Standardization());
+            var m = model.Standardization();
+            await context.Students.AddAsync(m);
+            await context.SaveChangesAsync();
+            Models.Add(m);
         }
-
-        await context.SaveChangesAsync();
 
         RunningStyle = false;
         Models = await context.Students.ToListAsync();

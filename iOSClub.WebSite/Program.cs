@@ -117,34 +117,7 @@ using (var scope = app.Services.CreateScope())
 
         context.Staffs.Add(model);
     }
-
-    if (!context.Departments.Any())
-    {
-        var software = new DepartmentModel() { Name = "软件部" };
-        var hardware = new DepartmentModel() { Name = "硬件部" };
-        var practice = new DepartmentModel() { Name = "交流实践部" };
-        var newMedia = new DepartmentModel() { Name = "新媒体部" };
-        context.Departments.AddRange(software, hardware, practice, newMedia);
-        var staffs = await context.Staffs.ToListAsync();
-        foreach (var staff in staffs)
-        {
-            if (staff.Identity.Contains("Technology"))
-            {
-                staff.Department = software;
-                staff.Identity = staff.Identity.Contains("Minister") ? "Minister" : "Department";
-            }else if (staff.Identity.Contains("Practical"))
-            {
-                staff.Department = practice;
-                staff.Identity = staff.Identity.Contains("Minister") ? "Minister" : "Department";
-            }else if (staff.Identity.Contains("NewMedia"))
-            {
-                staff.Department = newMedia;
-                staff.Identity = staff.Identity.Contains("Minister") ? "Minister" : "Department";
-            }
-            await context.SaveChangesAsync();
-        }
-    }
-
+    
     await context.SaveChangesAsync();
     await context.DisposeAsync();
 }

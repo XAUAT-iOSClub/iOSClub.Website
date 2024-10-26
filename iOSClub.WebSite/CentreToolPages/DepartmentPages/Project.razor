@@ -271,9 +271,12 @@
 
         await using var context = await DbFactory.CreateDbContextAsync();
 
-        var a = await context.Projects.Include(x => x.Staffs)
-            .Include(x => x.Tasks).ThenInclude(x => x.Users)
-            .FirstOrDefaultAsync(x => x.Id.ToString() == Id);
+        var a = await context.Projects
+            .Include(x => x.Department)
+            .Include(x => x.Staffs)
+            .Include(x => x.Tasks)
+            .ThenInclude(x => x.Users)
+            .FirstOrDefaultAsync(x => x.Id == Id);
         if (a == null)
         {
             await MessageService.Error("项目不存在");

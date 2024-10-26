@@ -1,12 +1,13 @@
 ﻿@page "/Centre/EditProject/{Id?}"
 @using iOSClub.Data
+@using iOSClub.Data.DataModels
 @using iOSClub.WebSite.Models
 @using Microsoft.EntityFrameworkCore
 @inject IDbContextFactory<iOSContext> DbFactory
 @inject NavigationManager Nav
 @inject MessageService MessageService
 
-<PageTitle>@(string.IsNullOrEmpty(Id)?"编辑":"更改")项目 -iStaff</PageTitle>
+<PageTitle>@(string.IsNullOrEmpty(Id) ? "编辑" : "更改")项目 -iStaff</PageTitle>
 
 <PageView>
     <Context>
@@ -18,11 +19,11 @@
             <FormItem Class="item" Label="项目名称">
                 <Input @bind-Value="@context.Title"/>
             </FormItem>
-            <FormItem Class="item" Label="项目名称" Rules="@SignRecord.ProjectNameRules">
+            <FormItem Class="item" Label="项目名称">
                 <RadioGroup @bind-Value="@context.Department">
-                    @foreach (var item in DepartmentNames)
+                    @foreach (var item in Departments)
                     {
-                        <Radio RadioButton Value="@item">@SignRecord.DepartmentDictionary[item]</Radio>
+                        <Radio RadioButton Value="@item">@item.Name</Radio>
                     }
                 </RadioGroup>
             </FormItem>
@@ -48,6 +49,7 @@
                 </Button>
             </FormItem>
         </Form>
+        <br/>
     </Context>
 </PageView>
 
@@ -55,19 +57,30 @@
     [Parameter] public string? Id { get; set; }
     private ProjectEditModel Project { get; set; } = new();
     [CascadingParameter] private MemberModel Member { get; set; } = new();
-    private readonly List<string> DepartmentNames = ["All"];
+    private List<DepartmentModel> Departments { get; set; } = [];
 
     protected override async Task OnInitializedAsync()
     {
-        var identity = Member.Identity.Replace("Minister", "").Replace("Member", "");
-        if (identity == "President")
-            DepartmentNames.AddRange(new[] { "Technology", "NewMedia", "Practical" });
-        else
-            DepartmentNames.Add(identity);
+        await using var context = await DbFactory.CreateDbContextAsync();
+        var staff = await context.Staffs
+            .Include(staffModel => staffModel.Department)
+            .FirstOrDefaultAsync(x => x.UserId == Member.UserId);
+        if (staff == null)
+        {
+            return;
+        }
+
+        if (Member.Identity == "President")
+        {
+            Departments = await context.Departments.ToListAsync();
+        }
+        else if (Member.Identity == "Minister")
+        {
+            Departments.Add(staff.Department!);
+        }
 
         if (!string.IsNullOrEmpty(Id))
         {
-            await using var context = await DbFactory.CreateDbContextAsync();
             var a = await context.Projects.FirstOrDefaultAsync(x => x.Id.ToString() == Id);
             if (a == null)
             {
@@ -94,6 +107,13 @@
                 await MessageService.Error("用户不存在");
                 return;
             }
+
+            if (Project.Department != null)
+            {
+                var department = await context.Departments.FirstOrDefaultAsync(x => x.Name == Project.Department!.Name);
+                p.Department = department;
+            }
+
             p.Staffs.Add(staff);
             p.Id = DataTool.StringToHash(p.ToString());
             await context.Projects.AddAsync(p);
@@ -125,4 +145,5 @@
     {
         await MessageService.Error("出问题了");
     }
+
 }

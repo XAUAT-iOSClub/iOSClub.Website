@@ -7,10 +7,10 @@
 @using Newtonsoft.Json
 @inject IDbContextFactory<iOSContext> DbFactory
 @inject IJSRuntime JS
-@inject NavigationManager Nav
 @inject MessageService MessageService
+@inject NavigationManager Nav
 
-<PageTitle>社团部门 @Key - iStaff</PageTitle>
+<PageTitle>社团部门-@Key - iStaff</PageTitle>
 
 <InputFile id="fileInput" OnChange="@UploadFiles" hidden multiple/>
 
@@ -57,25 +57,17 @@
             <TabPane Tab="总览" Key="总览">
                 <Flex Justify="space-between">
                     <h3>社长/团支书/秘书长</h3>
-                    <div>
-                        <div class="phone-desktop-flex">
-                            <Button Type="@ButtonType.Primary">操作</Button>
-                        </div>
-                        @if (Member.Identity == "President" || Member.Identity == "Minister")
-                        {
-                            <div class="desktop-phone-flex">
-                                <Space>
-                                    <SpaceItem>
-                                        <Button OnClick="() => OpenAddMember()">添加成员</Button>
-                                    </SpaceItem>
-                                    <SpaceItem>
-                                        <Button Danger OnClick="() => DeleteAll(Staffs.Ministers)">全部删除</Button>
-                                    </SpaceItem>
-                                </Space>
-                            </div>
-                        }
-
-                    </div>
+                    @if (Member.Identity == "President" || Member.Identity == "Minister")
+                    {
+                        <Space>
+                            <SpaceItem>
+                                <Button OnClick="() => OpenAddMember()">添加成员</Button>
+                            </SpaceItem>
+                            <SpaceItem>
+                                <Button Danger OnClick="() => DeleteAll(Staffs.Ministers)">全部删除</Button>
+                            </SpaceItem>
+                        </Space>
+                    }
                 </Flex>
                 <br/>
                 <Space>
@@ -110,30 +102,61 @@
                         <Button Danger OnClick="@(async () => await Delete(context))">删除</Button>
                     </ActionColumn>
                 </Table>
+                <Divider/>
+                <Flex Justify="space-between">
+                    <Title Level="2">项目</Title>
+                    <Button OnClick="() => AddProj()" Type="@ButtonType.Primary">添加</Button>
+                </Flex>
+                <AntList Grid="grid" DataSource="@Staffs.Projects">
+                    <ListItem>
+                        <AppleCard>
+                            <TitleTemplate>
+                                <Title Level="2">@context.Title</Title>
+                                <div style="margin-top: 10px">
+                                    <Tag Icon="apple" Color="blue-inverse">@context.Department?.Name</Tag>
+                                </div>
+                            </TitleTemplate>
+                            <ContextTemplate>
+                                <Flex Vertical Justify="space-between">
+                                    <Paragraph Type="secondary">@context.Description</Paragraph>
+                                    <Space>
+                                        <SpaceItem>
+                                            <a href="@($"/Centre/Project/{context.Id}")" class="ant-btn">去看看</a>
+                                        </SpaceItem>
+                                        <SpaceItem>
+                                            <Button OnClick="() => AddProj(context.Id)">更改项目</Button>
+                                        </SpaceItem>
+                                        <SpaceItem>
+                                            <Button Danger OnClick="() => DeleteProj(context, Staffs.Projects)">删除</Button>
+                                        </SpaceItem>
+                                    </Space>
+                                </Flex>
+                            </ContextTemplate>
+                        </AppleCard>
+                    </ListItem>
+                </AntList>
+                @if (Staffs.Projects.Count == 0)
+                {
+                    <Empty Image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+                           Style="padding: 20px" Description="@("没有项目")"/>
+                }
             </TabPane>
             @foreach (var department in Departments)
             {
                 <TabPane Tab="@department.Name" Key="@department.Name">
                     <Flex Justify="space-between">
                         <h3>部长/副部长</h3>
-                        <div>
-                            <div class="phone-desktop-flex">
-                                <Button Type="@ButtonType.Primary">操作</Button>
-                            </div>
-                            @if (Member.Identity == "President" || Member.Identity == "Minister")
-                            {
-                                <div class="desktop-phone-flex">
-                                    <Space>
-                                        <SpaceItem>
-                                            <Button OnClick="() => OpenAddMember(department)">添加成员</Button>
-                                        </SpaceItem>
-                                        <SpaceItem>
-                                            <Button Danger OnClick="() => DeleteAll(department.Ministers)">全部删除</Button>
-                                        </SpaceItem>
-                                    </Space>
-                                </div>
-                            }
-                        </div>
+                        @if (Member.Identity == "President" || Member.Identity == "Minister")
+                        {
+                            <Space>
+                                <SpaceItem>
+                                    <Button OnClick="() => OpenAddMember(department)">添加成员</Button>
+                                </SpaceItem>
+                                <SpaceItem>
+                                    <Button Danger OnClick="() => DeleteAll(department.Ministers)">全部删除</Button>
+                                </SpaceItem>
+                            </Space>
+                        }
                     </Flex>
                     <br/>
                     <Space>
@@ -151,24 +174,17 @@
                     <Divider/>
                     <Flex Justify="space-between">
                         <h3>成员</h3>
-                        <div>
-                            <div class="phone-desktop-flex">
-                                <Button Type="@ButtonType.Primary">操作</Button>
-                            </div>
-                            @if (Member.Identity == "President" || Member.Identity == "Minister")
-                            {
-                                <div class="desktop-phone-flex">
-                                    <Space>
-                                        <SpaceItem>
-                                            <Button OnClick="@(() => OpenAddMember(department, "Member"))">添加成员</Button>
-                                        </SpaceItem>
-                                        <SpaceItem>
-                                            <Button Danger OnClick="() => DeleteAll(department.Ministers)">全部删除</Button>
-                                        </SpaceItem>
-                                    </Space>
-                                </div>
-                            }
-                        </div>
+                        @if (Member.Identity == "President" || Member.Identity == "Minister")
+                        {
+                            <Space>
+                                <SpaceItem>
+                                    <Button OnClick="@(() => OpenAddMember(department, "Member"))">添加成员</Button>
+                                </SpaceItem>
+                                <SpaceItem>
+                                    <Button Danger OnClick="() => DeleteAll(department.Ministers)">全部删除</Button>
+                                </SpaceItem>
+                            </Space>
+                        }
                     </Flex>
                     <br/>
                     <Table TItem="StaffModel" DataSource="@department.Member">
@@ -182,14 +198,64 @@
                             </Space>
                         </ActionColumn>
                     </Table>
+                    <Divider/>
+                    <Flex Justify="space-between">
+                        <Title Level="2">项目</Title>
+                        <Button OnClick="() => AddProj()" Type="@ButtonType.Primary">添加</Button>
+                    </Flex>
+                    <AntList Grid="grid" DataSource="@department.Projects">
+                        <ListItem>
+                            <AppleCard>
+                                <TitleTemplate>
+                                    <Title Level="2">@context.Title</Title>
+                                    <div style="margin-top: 10px">
+                                        <Tag Icon="apple" Color="blue-inverse">@context.Department?.Name</Tag>
+                                    </div>
+                                </TitleTemplate>
+                                <ContextTemplate>
+                                    <Flex Vertical Justify="space-between">
+                                        <Paragraph Type="secondary">@context.Description</Paragraph>
+                                        <Space>
+                                            <SpaceItem>
+                                                <a href="@($"/Centre/Project/{context.Id}")" class="ant-btn">去看看</a>
+                                            </SpaceItem>
+                                            <SpaceItem>
+                                                <Button OnClick="() => AddProj(context.Id)">更改项目</Button>
+                                            </SpaceItem>
+                                            <SpaceItem>
+                                                <Button Danger OnClick="() => DeleteProj(context, department.Projects)">删除</Button>
+                                            </SpaceItem>
+                                        </Space>
+                                    </Flex>
+                                </ContextTemplate>
+                            </AppleCard>
+                        </ListItem>
+                    </AntList>
+                    @if (department.Projects.Count == 0)
+                    {
+                        <Empty Image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+                               Style="padding: 20px" Description="@("没有项目")"/>
+                    }
                 </TabPane>
             }
         </Tabs>
     </Context>
 </PageView>
 
+
 @code
 {
+    private readonly ListGridType grid = new()
+    {
+        Gutter = 16,
+        Xs = 1,
+        Sm = 2,
+        Md = 4,
+        Lg = 4,
+        Xl = 6,
+        Xxl = 3,
+    };
+
     [Parameter] public string? Key { get; set; }
     [CascadingParameter] private MemberModel Member { get; set; } = new();
     private List<DepartmentList> Departments { get; set; } = [];
@@ -203,6 +269,7 @@
 
         Departments = await db.Departments
             .Include(x => x.Projects)
+            .ThenInclude(x => x.Department)
             .Include(x => x.Staffs)
             .Select(x => new DepartmentList()
             {
@@ -211,8 +278,26 @@
             })
             .ToListAsync();
 
-        var departmentMember = await db.Staffs.Include(x => x.Department).OrderBy(x => x.Identity).Where(x => x.Identity != "Founder").ToListAsync();
+
         Staffs.Ministers = await db.Staffs.Where(x => x.Identity == "President").ToListAsync();
+        var departmentMember = new List<StaffModel>();
+
+        departmentMember.AddRange(Staffs.Ministers);
+        foreach (var item in Departments)
+        {
+            foreach (var minister in item.Ministers)
+            {
+                minister.Department = new DepartmentModel() { Name = item.Name };
+                departmentMember.Add(minister);
+            }
+
+            foreach (var model in item.Member)
+            {
+                model.Department = new DepartmentModel() { Name = item.Name };
+                departmentMember.Add(model);
+            }
+        }
+
         foreach (var model in departmentMember)
         {
             var student = await db.Students.FirstOrDefaultAsync(x => x.UserId == model.UserId);
@@ -222,7 +307,7 @@
             Staffs.Member.Add(member);
         }
 
-        Staffs.Projects = await db.Projects.ToListAsync();
+        Staffs.Projects = await db.Projects.Include(x => x.Department).ToListAsync();
     }
 
     private async Task UploadFiles(InputFileChangeEventArgs e)
@@ -357,7 +442,7 @@
         public string Name { get; init; } = "";
         public List<StaffModel> Ministers { get; init; } = [];
         public List<StaffModel> Member { get; init; } = [];
-        public List<ProjectModel> Projects { get; set; } = [];
+        public List<ProjectModel> Projects { get; init; } = [];
     }
 
     public class MemberList
@@ -381,6 +466,20 @@
         await dbContext.SaveChangesAsync();
 
         c.Clear();
+        StateHasChanged();
+    }
+
+    private void AddProj(string id = "")
+    {
+        Nav.NavigateTo($"/Centre/EditProject/{id}");
+    }
+
+    private async Task DeleteProj(ProjectModel item, List<ProjectModel> list)
+    {
+        await using var dbContext = await DbFactory.CreateDbContextAsync();
+        dbContext.Projects.Remove(item);
+        await dbContext.SaveChangesAsync();
+        list.Remove(item);
         StateHasChanged();
     }
 }

@@ -268,15 +268,3 @@
     </Tabs>
 </Context>
 </PageView>
-
-<Modal Title="@("操作")"
-       Visible="@_operaVisible"
-       OnCancel="@(() => OpenOrClose())"
-       Footer="null">
-    <Space>
-        <SpaceItem>
-            <Button OnClick="@(() => OpenTable(_department))">添加成员</Button>
-            <Button Danger OnClick="@(async () => await DeleteAll(_department))">全部删除</Button>
-        </SpaceItem>
-    </Space>
-</Modal>

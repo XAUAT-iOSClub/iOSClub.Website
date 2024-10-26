@@ -93,13 +93,6 @@
         {
             var authState = await authStateProvider.GetAuthenticationStateAsync() ;
             var user = authState.User;
-
-            foreach (var claim in user.Claims)
-            {
-                Console.WriteLine($"{claim.Type} : {claim.Value}");
-            }
-            
-            Console.WriteLine($"{user.Identity?.IsAuthenticated} {user.Identity?.Name}");
             
             if (user.Identity is not null && user.Identity.IsAuthenticated)
             {

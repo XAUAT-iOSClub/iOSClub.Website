@@ -21,34 +21,33 @@
                 <Input @bind-Value="@context.UserName"/>
             </FormItem>
             <FormItem Class="item" Label="性别" Rules="SignRecord.GenderRules">
-                <select class="form-control" @bind="@context.Gender">
-                    <option value="" selected disabled hidden></option>
+                <RadioGroup @bind-Value="@context.Gender" ButtonStyle="@RadioButtonStyle.Solid">
                     @foreach (var item in SignRecord.Genders)
                     {
-                        <option value="@item">@item</option>
+                        <Radio RadioButton Value="@item">@item</Radio>
                     }
-                </select>
+                </RadioGroup>
             </FormItem>
             <FormItem Class="item" Label="学号" Rules="SignRecord.IdRules">
                 <Input @bind-Value="@context.UserId">
             </FormItem>
             <FormItem Class="item" Label="学院" Rules="SignRecord.AcademyRules">
-                <select class="form-control" @bind="@context.Academy">
-                    <option value="" selected disabled hidden></option>
-                    @foreach (var item in SignRecord.Academies)
-                    {
-                        <option value="@item">@item</option>
-                    }
-                </select>
+                <SimpleSelect @bind-Value="@context.Academy">
+                    <SelectOptions>
+                        @foreach (var item in SignRecord.Academies)
+                        {
+                            <SimpleSelectOption Value="@item" Label="@item"></SimpleSelectOption>
+                        }
+                    </SelectOptions>
+                </SimpleSelect>
             </FormItem>
             <FormItem Class="item" Label="政治面貌" Rules="SignRecord.PoliticalLandscapeRules">
-                <select class="form-control" @bind="@context.PoliticalLandscape">
-                    <option value="" selected disabled hidden></option>
+                <RadioGroup @bind-Value="@context.PoliticalLandscape" ButtonStyle="@RadioButtonStyle.Solid">
                     @foreach (var item in SignRecord.PoliticalLandscapes)
                     {
-                        <option value="@item">@item</option>
+                        <Radio RadioButton Value="@item">@item</Radio>
                     }
-                </select>
+                </RadioGroup>
             </FormItem>
 
             <FormItem Class="item" Label="专业班级" Rules="SignRecord.ClassNameRules">
@@ -63,6 +62,7 @@
                 <Button Type="@ButtonType.Primary" HtmlType="submit">更改</Button>
             </FormItem>
         </Form>
+        <br/>
     </Context>
 </PageView>
 

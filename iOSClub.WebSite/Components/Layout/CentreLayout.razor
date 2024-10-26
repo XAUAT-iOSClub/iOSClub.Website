@@ -99,8 +99,6 @@
             var identity = user.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value;
             var id = user.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
 
-            Console.WriteLine("User: " + name + " Identity: " + identity + " Id: " + id);
-
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(identity) || string.IsNullOrEmpty(id)) return;
             await using var context = await DbFactory.CreateDbContextAsync();
             var model = await context.Students.FirstOrDefaultAsync(x => x.UserId == id && x.UserName == name);

@@ -50,8 +50,6 @@ public class JwtProvider(IJSRuntime js, IConfiguration configuration) : AbsProvi
             );
             var token = new JwtSecurityTokenHandler().WriteToken(securityToken);
 
-            Console.WriteLine(token);
-
             await js.InvokeVoidAsync("localStorageHelper.setItem", "jwt", token);
 
             claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(claims, "Jwt"));

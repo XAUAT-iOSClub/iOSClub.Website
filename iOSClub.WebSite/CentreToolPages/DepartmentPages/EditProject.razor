@@ -19,7 +19,7 @@
                 <Input @bind-Value="@context.Title"/>
             </FormItem>
             <FormItem Class="item" Label="项目名称" Rules="@SignRecord.ProjectNameRules">
-                <RadioGroup @bind-Value="@context.DepartmentName">
+                <RadioGroup @bind-Value="@context.Department">
                     @foreach (var item in DepartmentNames)
                     {
                         <Radio RadioButton Value="@item">@SignRecord.DepartmentDictionary[item]</Radio>

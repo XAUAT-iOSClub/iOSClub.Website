@@ -13,17 +13,15 @@ public class StaffModel
 
     /// <summary>
     /// Founder : 创始人
-    /// President : 社长,副社长,秘书长
-    /// TechnologyMinister : 科技部部长/副部长
-    /// PracticalMinister : 实践交流部部长/副部长
-    /// NewMediaMinister : 新媒体部部长/副部长
-    /// TechnologyMember : 科技部成员
-    /// PracticalMember : 实践交流部成员
-    /// NewMediaMember : 新媒体部成员
+    /// President : 社长,团支书,秘书长
+    /// Minister : 部长
+    /// Department : 部员成员
     /// Member : 普通成员
     /// </summary>
     [Column(TypeName = "varchar(20)")]
-    public string Identity { get; init; } = "Member";
+    public string Identity { get; set; } = "Member";
+
+    public DepartmentModel? Department { get; set; } = new();
 
     public List<ProjectModel> Projects { get; init; } = [];
     public List<TaskModel> Tasks { get; init; } = [];

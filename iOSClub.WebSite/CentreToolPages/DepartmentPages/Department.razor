@@ -1,181 +1,386 @@
-﻿@page "/Centre/Department/{DepartmentName?}"
+﻿@page "/Centre/Department/{Key?}"
+@using System.Text
 @using iOSClub.Data
 @using iOSClub.Data.DataModels
 @using iOSClub.WebSite.Models
 @using Microsoft.EntityFrameworkCore
+@using Newtonsoft.Json
 @inject IDbContextFactory<iOSContext> DbFactory
+@inject IJSRuntime JS
 @inject NavigationManager Nav
 @inject MessageService MessageService
 
-<PageTitle>@(string.IsNullOrEmpty(DepartmentName) ? "社团" : SignRecord.DepartmentDictionary[DepartmentName]))项目 -iStaff</PageTitle>
+<PageTitle>社团部门 @Key - iStaff</PageTitle>
 
-<PageView Style="min-height: 100%" ContextStyle="margin: 20px">
+<InputFile id="fileInput" OnChange="@UploadFiles" hidden multiple/>
+
+<Modal Title="@("添加")"
+       Visible="@_visible"
+       OnCancel="@HandleCancel"
+       Footer="null">
+    <GridRow>
+        <GridCol Span="6"/>
+        <GridCol Span="12">
+            <Space>
+                <SpaceItem>
+                    <Search EnterButton="@("搜索")" OnSearch="@(async s => await Search(s))" Size="large"/>
+                </SpaceItem>
+            </Space>
+        </GridCol>
+        <GridCol Span="6"/>
+    </GridRow>
+    <Table TItem="StudentModel" PageSize="3" DataSource="@SearchResult">
+        <PropertyColumn Title="姓名" Property="c => c.UserName"/>
+        <PropertyColumn Title="学号" Property="c => c.UserId"/>
+        <PropertyColumn Title="学院" Property="c => c.Academy"/>
+        <ActionColumn Title="操作">
+            <Button OnClick="@(() => Add(context))">添加</Button>
+        </ActionColumn>
+    </Table>
+</Modal>
+
+<PageView Style="min-height: 100%" ContextStyle="padding:10px;">
     <Extra>
-        @if (IsAdmin)
-        {
-            <Button Type="@ButtonType.Primary" OnClick="@(() => Nav.NavigateTo($"/Centre/EditProject"))">
-                添加项目
-            </Button>
-        }
+        <Space>
+            <SpaceItem>
+                <Button Type="@ButtonType.Primary">下载文件</Button>
+            </SpaceItem>
+            <SpaceItem>
+                <Upload Name="files">
+                    <label class="ant-btn" for="fileInput">上传Json数据</label>
+                </Upload>
+            </SpaceItem>
+        </Space>
     </Extra>
     <Context>
-        @if (string.IsNullOrEmpty(DepartmentName))
-        {
-            <Title Level="2">我的项目</Title>
-            @if (MyProjects.Count == 0)
-            {
-                <Empty Image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg" Style="padding: 20px">
-                    <DescriptionTemplate>
-                        <span>您还未加入任何项目</span>
-                    </DescriptionTemplate>
-                </Empty>
-            }
-            else
-            {
-                <AntList Grid="grid" DataSource="@MyProjects">
-                    <ListItem >
-                        <Card Hoverable Style="border-radius: 10px;" BodyStyle="margin: 5px auto">
-                            <Flex Vertical Align="flex-end" Justify="space-between" Style="height: 200px">
-                                <div>
-                                    <Flex Justify="space-between" Align="center" Gap="10">
-                                        <Title Level="2">@context.Title</Title>
-                                        <Tag OnClick="@(() => Nav.NavigateTo($"/Centre/Department/{context.DepartmentName}"))"
-                                             Icon="apple" Color="blue-inverse">
-                                            @SignRecord.DepartmentDictionary[context.DepartmentName]
-                                        </Tag>
-                                    </Flex>
-                                    <Text Type="secondary">@($"{context.StartTime} - {context.EndTime}")</Text>
-                                </div>
+        <Tabs Centered @bind-ActiveKey="@Key">
+            <TabPane Tab="总览" Key="总览">
+                <Flex Justify="space-between">
+                    <h3>社长/团支书/秘书长</h3>
+                    <div>
+                        <div class="phone-desktop-flex">
+                            <Button Type="@ButtonType.Primary">操作</Button>
+                        </div>
+                        @if (Member.Identity == "President" || Member.Identity == "Minister")
+                        {
+                            <div class="desktop-phone-flex">
                                 <Space>
                                     <SpaceItem>
-                                        <Button Danger OnClick="@(() => Quit(context))">退出项目</Button>
+                                        <Button OnClick="() => OpenAddMember()">添加成员</Button>
                                     </SpaceItem>
                                     <SpaceItem>
-                                        <Button Type="@ButtonType.Primary" OnClick="@(() => Nav.NavigateTo($"/Centre/Project/{context.Id}"))">
-                                            去看看
-                                        </Button>
+                                        <Button Danger OnClick="() => DeleteAll(Staffs.Ministers)">全部删除</Button>
                                     </SpaceItem>
                                 </Space>
-                            </Flex>
-                        </Card>
-                    </ListItem>
-                </AntList>
-            }
-
-            <Divider/>
-        }
-        <Title Level="2">@(string.IsNullOrEmpty(DepartmentName) ? "所有" : SignRecord.DepartmentDictionary[DepartmentName])项目</Title>
-        @if (AllProjects.Count == 0)
-        {
-            <Empty Image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg" Style="padding: 20px">
-                <DescriptionTemplate>
-                    <span>社团目前还没有项目</span>
-                </DescriptionTemplate>
-            </Empty>
-        }
-        else
-        {
-            <AntList Grid="grid" DataSource="@AllProjects">
-                <ListItem >
-                    <Card Hoverable Style="border-radius: 10px;" BodyStyle="margin: 5px auto">
-                        <Flex Vertical Align="flex-end" Justify="space-between" Style="height: 200px">
-                            <div>
-                                <Flex Justify="space-between" Align="center" Gap="10">
-                                    <Title Level="2">@context.Title</Title>
-                                    <Tag OnClick="@(() => Nav.NavigateTo($"/Centre/Department/{context.DepartmentName}"))"
-                                         Icon="apple" Color="blue-inverse">
-                                        @SignRecord.DepartmentDictionary[context.DepartmentName]
-                                    </Tag>
-                                </Flex>
-                                <Text Type="secondary">@($"{context.StartTime} - {context.EndTime}")</Text>
                             </div>
+                        }
 
+                    </div>
+                </Flex>
+                <br/>
+                <Space>
+                    @foreach (var item in Staffs.Ministers)
+                    {
+                        <SpaceItem>
+                            <Popconfirm Title="确定删除这条数据?"
+                                        Placement="Placement.TopLeft"
+                                        OnConfirm="@(async () => await Delete(item, Staffs.Ministers))">
+                                <Button Type="@ButtonType.Primary">@item.Name</Button>
+                            </Popconfirm>
+                        </SpaceItem>
+                    }
+                </Space>
+
+                <Divider/>
+                <Flex Justify="space-between">
+                    <h3>成员</h3>
+                    <Button Type="@ButtonType.Primary" OnClick="@CsvDownload">下载部员信息</Button>
+                </Flex>
+                <br/>
+                <Table TItem="MemberModel" DataSource="@Staffs.Member">
+                    <PropertyColumn Title="姓名" Property="c => c.UserName"/>
+                    <PropertyColumn Title="学号" Property="c => c.UserId"/>
+                    <PropertyColumn Title="学院" Property="c => c.Academy"/>
+                    <PropertyColumn Title="政治面貌" Property="c => c.PoliticalLandscape"/>
+                    <PropertyColumn Title="性别" Property="c => c.Gender"/>
+                    <PropertyColumn Title="专业班级" Property="c => c.ClassName"/>
+                    <PropertyColumn Title="手机号码" Property="c => c.PhoneNum"/>
+                    <PropertyColumn Title="身份" Property="c => c.Identity"/>
+                    <ActionColumn Title="操作">
+                        <Button Danger OnClick="@(async () => await Delete(context))">删除</Button>
+                    </ActionColumn>
+                </Table>
+            </TabPane>
+            @foreach (var department in Departments)
+            {
+                <TabPane Tab="@department.Name" Key="@department.Name">
+                    <Flex Justify="space-between">
+                        <h3>部长/副部长</h3>
+                        <div>
+                            <div class="phone-desktop-flex">
+                                <Button Type="@ButtonType.Primary">操作</Button>
+                            </div>
+                            @if (Member.Identity == "President" || Member.Identity == "Minister")
+                            {
+                                <div class="desktop-phone-flex">
+                                    <Space>
+                                        <SpaceItem>
+                                            <Button OnClick="() => OpenAddMember(department)">添加成员</Button>
+                                        </SpaceItem>
+                                        <SpaceItem>
+                                            <Button Danger OnClick="() => DeleteAll(department.Ministers)">全部删除</Button>
+                                        </SpaceItem>
+                                    </Space>
+                                </div>
+                            }
+                        </div>
+                    </Flex>
+                    <br/>
+                    <Space>
+                        @foreach (var item in department.Ministers)
+                        {
+                            <SpaceItem>
+                                <Popconfirm Title="确定删除这条数据?"
+                                            Placement="Placement.TopLeft"
+                                            OnConfirm="@(async () => await Delete(item, department.Ministers))">
+                                    <Button Type="@ButtonType.Primary">@item.Name</Button>
+                                </Popconfirm>
+                            </SpaceItem>
+                        }
+                    </Space>
+                    <Divider/>
+                    <Flex Justify="space-between">
+                        <h3>成员</h3>
+                        <div>
+                            <div class="phone-desktop-flex">
+                                <Button Type="@ButtonType.Primary">操作</Button>
+                            </div>
+                            @if (Member.Identity == "President" || Member.Identity == "Minister")
+                            {
+                                <div class="desktop-phone-flex">
+                                    <Space>
+                                        <SpaceItem>
+                                            <Button OnClick="@(() => OpenAddMember(department, "Member"))">添加成员</Button>
+                                        </SpaceItem>
+                                        <SpaceItem>
+                                            <Button Danger OnClick="() => DeleteAll(department.Ministers)">全部删除</Button>
+                                        </SpaceItem>
+                                    </Space>
+                                </div>
+                            }
+                        </div>
+                    </Flex>
+                    <br/>
+                    <Table TItem="StaffModel" DataSource="@department.Member">
+                        <PropertyColumn Title="姓名" Property="c => c.Name"/>
+                        <PropertyColumn Title="学号" Property="c => c.UserId"/>
+                        <ActionColumn Title="操作">
                             <Space>
-                                @if (IsAdmin)
-                                {
-                                    <SpaceItem>
-                                        <Button Danger OnClick="@(() => Delete(context))">删除项目</Button>
-                                    </SpaceItem>
-                                }
                                 <SpaceItem>
-                                    <Button Type="@ButtonType.Primary" OnClick="@(() => Nav.NavigateTo($"/Centre/Project/{context.Id}"))">
-                                        去看看
-                                    </Button>
+                                    <Button Danger OnClick="@(async () => await Delete(context, department.Member))">删除</Button>
                                 </SpaceItem>
                             </Space>
-                        </Flex>
-                    </Card>
-                </ListItem>
-            </AntList>
-        }
+                        </ActionColumn>
+                    </Table>
+                </TabPane>
+            }
+        </Tabs>
     </Context>
 </PageView>
 
-@code {
-    [Parameter] public string? DepartmentName { get; set; }
-    private bool IsAdmin { get; set; }
-    private List<ProjectModel> MyProjects { get; set; } = [];
-    private List<ProjectModel> AllProjects { get; set; } = [];
+@code
+{
+    [Parameter] public string? Key { get; set; }
     [CascadingParameter] private MemberModel Member { get; set; } = new();
+    private List<DepartmentList> Departments { get; set; } = [];
+    private MemberList Staffs { get; } = new();
 
     protected override async Task OnInitializedAsync()
     {
-        if (Member.Identity == "Member")
+        await base.OnInitializedAsync();
+        Key ??= "总览";
+        await using var db = await DbFactory.CreateDbContextAsync();
+
+        Departments = await db.Departments
+            .Include(x => x.Projects)
+            .Include(x => x.Staffs)
+            .Select(x => new DepartmentList()
+            {
+                Name = x.Name, Projects = x.Projects, Ministers = x.Staffs.Where(y => y.Identity == "Minister").ToList(),
+                Member = x.Staffs.Where(y => y.Identity == "Department").ToList()
+            })
+            .ToListAsync();
+
+        var departmentMember = await db.Staffs.Include(x => x.Department).OrderBy(x => x.Identity).Where(x => x.Identity != "Founder").ToListAsync();
+        Staffs.Ministers = await db.Staffs.Where(x => x.Identity == "President").ToListAsync();
+        foreach (var model in departmentMember)
         {
-            Nav.NavigateTo("/Centre");
-            return;
+            var student = await db.Students.FirstOrDefaultAsync(x => x.UserId == model.UserId);
+            if (student == null) continue;
+            var member = MemberModel.CopyFrom(student);
+            member.Identity = $"{model.Department?.Name}{MemberModel.IdentityDictionary[model.Identity]}";
+            Staffs.Member.Add(member);
         }
 
-        IsAdmin = Member.Identity.Contains("President") || Member.Identity.Contains("Minister");
-        await using var context = await DbFactory.CreateDbContextAsync();
-        if (string.IsNullOrEmpty(DepartmentName))
-        {
-            var staff = await context.Staffs.Include(staffModel => staffModel.Projects)
-                .ThenInclude(x => x.Tasks).FirstAsync(x => x.UserId == Member.UserId);
-            MyProjects = staff.Projects;
+        Staffs.Projects = await db.Projects.ToListAsync();
+    }
 
-            AllProjects = await context.Projects.Include(x => x.Tasks)
-                .Include(x => x.Staffs).ToListAsync();
+    private async Task UploadFiles(InputFileChangeEventArgs e)
+    {
+        var reader = new StreamReader(e.File.OpenReadStream());
+        var result = await reader.ReadToEndAsync();
+        reader.Dispose();
+        if (string.IsNullOrEmpty(result)) return;
+        await using var context = await DbFactory.CreateDbContextAsync();
+
+        var json = JsonConvert.DeserializeObject<List<StaffModel>>(result);
+
+        if (json == null) return;
+
+        foreach (var staff in json)
+        {
+            if (await context.Staffs.AnyAsync(x => x.UserId == staff.UserId)) continue;
+            await context.Staffs.AddAsync(staff);
+        }
+
+        StateHasChanged();
+    }
+
+    private async Task CsvDownload()
+    {
+        var p = new List<MemberModel>();
+        await using var db = await DbFactory.CreateDbContextAsync();
+        foreach (var item in Staffs.Ministers)
+        {
+            var student = await db.Students.FirstOrDefaultAsync(x => x.UserId == item.UserId);
+            if (student == null) continue;
+            var member = MemberModel.CopyFrom(student);
+            member.Identity = item.Identity;
+            p.Add(member);
+        }
+
+        p.AddRange(Staffs.Member);
+        var jsonString = MemberModel.GetCsv(p);
+        var data = Encoding.UTF8.GetBytes(jsonString);
+        await Download("部员信息.csv", data);
+    }
+
+    private async Task Download(string fileName, byte[] data)
+    {
+        await JS.InvokeVoidAsync("jsSaveAsFile", fileName, Convert.ToBase64String(data));
+    }
+
+    private async Task Delete(StaffModel item, List<StaffModel> list)
+    {
+        await using var dbContext = await DbFactory.CreateDbContextAsync();
+        dbContext.Staffs.Remove(item);
+        list.Remove(item);
+        await dbContext.SaveChangesAsync();
+    }
+
+    private async Task Delete(MemberModel model)
+    {
+        await using var dbContext = await DbFactory.CreateDbContextAsync();
+        var s = await dbContext.Staffs.FirstOrDefaultAsync(x => x.UserId == model.UserId);
+        if (s == null) return;
+        dbContext.Staffs.Remove(s);
+        await dbContext.SaveChangesAsync();
+        StateHasChanged();
+    }
+
+    private bool _visible;
+
+    private void HandleCancel()
+    {
+        SearchResult.Clear();
+        _visible = false;
+    }
+
+    private DepartmentList? _department;
+    private string _identity = "";
+    private List<StudentModel> SearchResult { get; set; } = [];
+
+    private async Task Search(string s)
+    {
+        await using var context = await DbFactory.CreateDbContextAsync();
+        SearchResult = await context.Students.Where(x => x.UserName.StartsWith(s)).ToListAsync();
+        StateHasChanged();
+    }
+
+    private async Task Add(StudentModel model)
+    {
+        var staff = new StaffModel() { Name = model.UserName, UserId = model.UserId };
+
+        await using var context = await DbFactory.CreateDbContextAsync();
+        if (_department == null)
+        {
+            staff.Identity = "President";
         }
         else
         {
-            AllProjects = await context.Projects.Include(x => x.Tasks)
-                .Include(x => x.Staffs).Where(x => x.DepartmentName == DepartmentName).ToListAsync();
+            staff.Identity = _identity;
+            staff.Department = await context.Departments.FirstOrDefaultAsync(x => x.Name == _department.Name);
         }
 
-        await base.OnInitializedAsync();
+        if (await context.Staffs.AnyAsync(x => x.UserId == model.UserId))
+        {
+            await MessageService.Warn("该用户已存在");
+        }
+        else
+        {
+            await context.Staffs.AddAsync(staff);
+            await context.SaveChangesAsync();
+
+            if (_department == null)
+            {
+                Staffs.Ministers.Add(staff);
+            }
+            else
+            {
+                if (_identity == "Member")
+                {
+                    _department.Member.Add(staff);
+                }
+                else
+                {
+                    _department.Ministers.Add(staff);
+                }
+            }
+
+            StateHasChanged();
+            await MessageService.Success("添加成功");
+        }
     }
 
-    private static ListGridType grid => new()
+    public class DepartmentList
     {
-        Gutter = 16,
-        Xs = 1,
-        Sm = 2,
-        Md = 3,
-        Lg = 3,
-        Xl = 3,
-        Xxl = 3
-    };
-
-    private async Task Delete(ProjectModel project)
-    {
-        await using var context = await DbFactory.CreateDbContextAsync();
-        var projectModel = await context.Projects.FirstAsync(x => x.Id == project.Id);
-        context.Projects.Remove(projectModel);
-        await context.SaveChangesAsync();
-        AllProjects.Remove(project);
-        await MessageService.Success("删除成功");
+        public string Name { get; init; } = "";
+        public List<StaffModel> Ministers { get; init; } = [];
+        public List<StaffModel> Member { get; init; } = [];
+        public List<ProjectModel> Projects { get; set; } = [];
     }
 
-    private async Task Quit(ProjectModel model)
+    public class MemberList
     {
-        await using var context = await DbFactory.CreateDbContextAsync();
-        var staff = await context.Staffs.FirstAsync(x => x.UserId == Member.UserId);
-        var p = await context.Projects.FirstAsync(x => x.Id == model.Id);
-        staff.Projects.Remove(p);
-        await context.SaveChangesAsync();
-        MyProjects.Remove(model);
-        await MessageService.Success("退出成功");
+        public List<StaffModel> Ministers { get; set; } = [];
+        public List<MemberModel> Member { get; set; } = [];
+        public List<ProjectModel> Projects { get; set; } = [];
     }
 
+    private void OpenAddMember(DepartmentList? model = null, string identity = "Minister")
+    {
+        _department = model;
+        _identity = identity;
+        _visible = true;
+    }
+
+    private async Task DeleteAll(List<StaffModel> c)
+    {
+        await using var dbContext = await DbFactory.CreateDbContextAsync();
+        dbContext.Staffs.RemoveRange(c);
+        await dbContext.SaveChangesAsync();
+
+        c.Clear();
+        StateHasChanged();
+    }
 }

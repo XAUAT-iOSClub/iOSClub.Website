@@ -15,6 +15,7 @@ public sealed class iOSContext(DbContextOptions<iOSContext> options) : DbContext
     public DbSet<TodoModel> Todos { get; init; }
     public DbSet<ProjectModel> Projects { get; init; }
     public DbSet<ResourceModel> Resources { get; init; }
+    public  DbSet<DepartmentModel> Departments { get; init; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -30,6 +31,16 @@ public sealed class iOSContext(DbContextOptions<iOSContext> options) : DbContext
         modelBuilder.Entity<StaffModel>()
             .HasMany(x => x.Projects)
             .WithMany(x => x.Staffs);
+
+        modelBuilder.Entity<DepartmentModel>()
+            .HasMany(x => x.Staffs)
+            .WithOne(x => x.Department)
+            .IsRequired(false);
+        
+        modelBuilder.Entity<DepartmentModel>()
+            .HasMany(x => x.Projects)
+            .WithOne(x => x.Department)
+            .IsRequired(false);
     }
 }
 

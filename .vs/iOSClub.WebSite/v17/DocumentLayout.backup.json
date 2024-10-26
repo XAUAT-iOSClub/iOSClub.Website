@@ -3,16 +3,8 @@
   "WorkspaceRootPath": "C:\\Projects\\RiderProjects\\iOSClub.WebSite\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{738AF583-7116-46E6-8663-FF3C695B89FF}|iOSClub.WebSite\\iOSClub.WebSite.csproj|c:\\projects\\riderprojects\\iosclub.website\\iosclub.website\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{738AF583-7116-46E6-8663-FF3C695B89FF}|iOSClub.WebSite\\iOSClub.WebSite.csproj|solutionrelative:iosclub.website\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{738AF583-7116-46E6-8663-FF3C695B89FF}|iOSClub.WebSite\\iOSClub.WebSite.csproj|c:\\projects\\riderprojects\\iosclub.website\\iosclub.website\\centretoolpages\\adminpages\\memberdata.razor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{738AF583-7116-46E6-8663-FF3C695B89FF}|iOSClub.WebSite\\iOSClub.WebSite.csproj|solutionrelative:iosclub.website\\centretoolpages\\adminpages\\memberdata.razor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{738AF583-7116-46E6-8663-FF3C695B89FF}|iOSClub.WebSite\\iOSClub.WebSite.csproj|c:\\projects\\riderprojects\\iosclub.website\\iosclub.website\\centretoolpages\\adminpages\\memberdata.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{738AF583-7116-46E6-8663-FF3C695B89FF}|iOSClub.WebSite\\iOSClub.WebSite.csproj|solutionrelative:iosclub.website\\centretoolpages\\adminpages\\memberdata.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{738AF583-7116-46E6-8663-FF3C695B89FF}|iOSClub.WebSite\\iOSClub.WebSite.csproj|c:\\projects\\riderprojects\\iosclub.website\\iosclub.website\\centretoolpages\\departmentpages\\department.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{738AF583-7116-46E6-8663-FF3C695B89FF}|iOSClub.WebSite\\iOSClub.WebSite.csproj|solutionrelative:iosclub.website\\centretoolpages\\departmentpages\\department.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,45 +14,19 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "MemberData.razor",
-              "DocumentMoniker": "C:\\Projects\\RiderProjects\\iOSClub.WebSite\\iOSClub.WebSite\\CentreToolPages\\AdminPages\\MemberData.razor",
-              "RelativeDocumentMoniker": "iOSClub.WebSite\\CentreToolPages\\AdminPages\\MemberData.razor",
-              "ToolTip": "C:\\Projects\\RiderProjects\\iOSClub.WebSite\\iOSClub.WebSite\\CentreToolPages\\AdminPages\\MemberData.razor",
-              "RelativeToolTip": "iOSClub.WebSite\\CentreToolPages\\AdminPages\\MemberData.razor",
-              "ViewState": "AgIAAB4AAAAAAAAAAAAAADMAAABAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-10-20T05:04:07.735Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Projects\\RiderProjects\\iOSClub.WebSite\\iOSClub.WebSite\\Program.cs",
-              "RelativeDocumentMoniker": "iOSClub.WebSite\\Program.cs",
-              "ToolTip": "C:\\Projects\\RiderProjects\\iOSClub.WebSite\\iOSClub.WebSite\\Program.cs*",
-              "RelativeToolTip": "iOSClub.WebSite\\Program.cs*",
-              "ViewState": "AgIAAGwAAAAAAAAAAAAAAHYAAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-20T04:51:17.96Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "MemberData.razor.cs",
-              "DocumentMoniker": "C:\\Projects\\RiderProjects\\iOSClub.WebSite\\iOSClub.WebSite\\CentreToolPages\\AdminPages\\MemberData.razor.cs",
-              "RelativeDocumentMoniker": "iOSClub.WebSite\\CentreToolPages\\AdminPages\\MemberData.razor.cs",
-              "ToolTip": "C:\\Projects\\RiderProjects\\iOSClub.WebSite\\iOSClub.WebSite\\CentreToolPages\\AdminPages\\MemberData.razor.cs",
-              "RelativeToolTip": "iOSClub.WebSite\\CentreToolPages\\AdminPages\\MemberData.razor.cs",
-              "ViewState": "AgIAAPIAAAAAAAAAAAAAAPcAAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-20T04:24:16.114Z",
+              "Title": "Department.razor",
+              "DocumentMoniker": "C:\\Projects\\RiderProjects\\iOSClub.WebSite\\iOSClub.WebSite\\CentreToolPages\\DepartmentPages\\Department.razor",
+              "RelativeDocumentMoniker": "iOSClub.WebSite\\CentreToolPages\\DepartmentPages\\Department.razor",
+              "ToolTip": "C:\\Projects\\RiderProjects\\iOSClub.WebSite\\iOSClub.WebSite\\CentreToolPages\\DepartmentPages\\Department.razor",
+              "RelativeToolTip": "iOSClub.WebSite\\CentreToolPages\\DepartmentPages\\Department.razor",
+              "ViewState": "AgIAAMEAAAAAAAAAAAAQwBoAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-23T14:35:52.997Z",
               "EditorCaption": ""
             }
           ]

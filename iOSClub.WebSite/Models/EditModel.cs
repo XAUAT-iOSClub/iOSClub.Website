@@ -34,7 +34,7 @@ public class TaskEditModel
 public class ProjectEditModel
 {
     public string Title { get; set; } = "";
-    public string DepartmentName { get; set; } = "";
+    public DepartmentModel? Department { get; set; } = new();
     public DateTime StartTime { get; set; } = DateTime.Today;
     public DateTime EndTime { get; set; } = DateTime.Today;
     public string Description { get; set; } = "";
@@ -43,7 +43,7 @@ public class ProjectEditModel
         => new()
         {
             Title = project.Title,
-            DepartmentName = project.DepartmentName,
+            Department = project.Department,
             StartTime = DateTime.TryParse(project.StartTime, out var startTime) ? startTime : DateTime.Today,
             EndTime = DateTime.TryParse(project.EndTime, out var endTime) ? endTime : DateTime.Today.AddDays(7),
             Description = project.Description
@@ -53,7 +53,7 @@ public class ProjectEditModel
         => new()
         {
             Title = Title,
-            DepartmentName = DepartmentName,
+            Department = Department,
             StartTime = StartTime.ToString("yyyy年MM月dd日"),
             EndTime = EndTime.ToString("yyyy年MM月dd日"),
             Description = Description

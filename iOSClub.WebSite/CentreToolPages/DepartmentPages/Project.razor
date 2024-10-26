@@ -23,7 +23,7 @@
         <Title Level="2">@Data.Title</Title>
         <Text Type="secondary">@($"{Data.StartTime} - {Data.EndTime}")</Text>
         <div style="margin-top: 10px">
-            <Tag Icon="apple" Color="blue-inverse">@SignRecord.DepartmentDictionary[Data.DepartmentName]</Tag>
+            <Tag Icon="apple" Color="blue-inverse">@Data.Department?.Name</Tag>
         </div>
         <p>@((MarkupString)Markdown.ToHtml(Data.Description))</p>
         <Divider/>

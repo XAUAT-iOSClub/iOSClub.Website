@@ -21,9 +21,7 @@ public partial class MemberData
 {
     [Inject] [NotNull] public IJSRuntime? JS { get; set; }
     [Inject] [NotNull] public IDbContextFactory<iOSContext>? DbFactory { get; set; }
-    [Inject]
-    [NotNull]
-    public NavigationManager? Nav { get; set; }
+    [Inject] [NotNull] public NavigationManager? Nav { get; set; }
 
     private bool _runningStyle;
 
@@ -215,7 +213,7 @@ public partial class MemberData
 
         if (month >= 9)
         {
-            _yearData.Add(new { year = $"{year} - {year+1}", value = a.Count });
+            _yearData.Add(new { year = $"{year} - {year + 1}", value = a.Count });
         }
 
         a.GroupBy(x => x.Academy)
@@ -226,7 +224,7 @@ public partial class MemberData
         a.GroupBy(x => x.UserId[..2])
             .OrderBy(x => x.Key)
             .ForEach(grade
-                => _gradeData.Add(new { 年级 = grade.Key+"级", 人数 = grade.Count() }));
+                => _gradeData.Add(new { 年级 = grade.Key + "级", 人数 = grade.Count() }));
 
         context.Students.GroupBy(x => x.PoliticalLandscape)
             .ForEach(l
@@ -300,9 +298,16 @@ public partial class MemberData
 
         RunningStyle = true;
 
-        foreach (var model in list)
+        var b = Models;
+
+        if (Models.Count != await context.Students.CountAsync())
         {
-            if (await context.Students.AnyAsync(x => x.UserId == model.UserId)) continue;
+            b = await context.Students.ToListAsync();
+        }
+
+        foreach (var model in list.Where(model => model.IsStandardization()))
+        {
+            if (b.Any(x => x.UserId == model.UserId)) continue;
             var m = model.Standardization();
             await context.Students.AddAsync(m);
             await context.SaveChangesAsync();
@@ -310,7 +315,6 @@ public partial class MemberData
         }
 
         RunningStyle = false;
-        Models = await context.Students.ToListAsync();
         await context.DisposeAsync();
     }
 

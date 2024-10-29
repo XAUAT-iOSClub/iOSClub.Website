@@ -45,4 +45,16 @@ public class StudentModel
 
         return builder.ToString();
     }
+
+    public bool IsStandardization()
+    {
+        return !string.IsNullOrEmpty(UserId) &&
+               !string.IsNullOrEmpty(UserName) &&
+               !string.IsNullOrEmpty(Academy) &&
+               !string.IsNullOrEmpty(PoliticalLandscape) &&
+               !string.IsNullOrEmpty(Gender) &&
+               !string.IsNullOrEmpty(ClassName) &&
+               !string.IsNullOrEmpty(PhoneNum) &&
+               UserId.Length == 10;
+    }
 }

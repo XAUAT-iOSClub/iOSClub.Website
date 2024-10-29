@@ -119,6 +119,15 @@ using (var scope = app.Services.CreateScope())
 
         context.Staffs.Add(model);
     }
+
+    if (context.Staffs.Any())
+    {
+        var staff = await context.Staffs.Where(x => x.Identity == "Member").ToListAsync();
+        foreach (var t in staff)
+        {
+            t.Identity = "Department";
+        }
+    }
     
     await context.SaveChangesAsync();
     await context.DisposeAsync();

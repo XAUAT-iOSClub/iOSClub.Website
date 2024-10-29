@@ -374,4 +374,6 @@ public partial class Department
         _changeDepartmentName = "";
         await MessageService.Success("添加成功");
     }
+
+    private bool _operaVisible;
 }

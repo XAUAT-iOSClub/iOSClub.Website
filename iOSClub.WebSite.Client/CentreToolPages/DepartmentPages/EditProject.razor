@@ -119,7 +119,6 @@
             await context.Projects.AddAsync(p);
             await context.SaveChangesAsync();
             await MessageService.Success("添加成功");
-            Nav.NavigateTo("/Centre/Department");
         }
         else
         {
@@ -137,8 +136,9 @@
             a.Description = Project.Description;
             await context.SaveChangesAsync();
             await MessageService.Success("更改成功");
-            Nav.NavigateTo("/Centre/Department");
         }
+
+        Nav.NavigateTo("/Centre/Department");
     }
 
     private async Task OnFinishFailed()

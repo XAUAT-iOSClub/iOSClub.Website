@@ -1,10 +1,8 @@
 ﻿@page "/Centre/Department/{Key?}"
-@using System.Text
 @using iOSClub.Data
 @using iOSClub.Data.DataModels
 @using iOSClub.WebSite.Client.Models
 @using Microsoft.EntityFrameworkCore
-@using Newtonsoft.Json
 @inject IDbContextFactory<iOSContext> DbFactory
 @inject IJSRuntime JS
 @inject MessageService MessageService
@@ -64,30 +62,52 @@
     </Form>
 </Modal>
 
+<Modal Title="操作" 
+       Visible="@_operaVisible"
+       OnCancel="() => _operaVisible = false">
+    <Space Wrap>
+        <SpaceItem>
+            <Button Type="@ButtonType.Primary">下载文件</Button>
+        </SpaceItem>
+        <SpaceItem>
+            <Upload Name="files">
+                <label class="ant-btn" for="fileInput">上传Json数据</label>
+            </Upload>
+        </SpaceItem>
+        <SpaceItem>
+            <Button Type="@ButtonType.Primary" OnClick="() => OpenDepartment()">添加部门</Button>
+        </SpaceItem>
+    </Space>
+</Modal>
+
 <PageView Style="min-height: 100%;" ContextStyle="padding:10px;">
     <Extra>
-        <Space>
-            <SpaceItem>
-                <Button Type="@ButtonType.Primary">下载文件</Button>
-            </SpaceItem>
-            <SpaceItem>
-                <Upload Name="files">
-                    <label class="ant-btn" for="fileInput">上传Json数据</label>
-                </Upload>
-            </SpaceItem>
-            <SpaceItem>
-                <Button Type="@ButtonType.Primary" OnClick="() => OpenDepartment()">添加部门</Button>
-            </SpaceItem>
-        </Space>
+        @if (Member.Identity is "President" or "Minister")
+        {
+            <Space Wrap Class="desktop-phone-flex">
+                <SpaceItem>
+                    <Button Type="@ButtonType.Primary">下载文件</Button>
+                </SpaceItem>
+                <SpaceItem>
+                    <Upload Name="files">
+                        <label class="ant-btn" for="fileInput">上传Json数据</label>
+                    </Upload>
+                </SpaceItem>
+                <SpaceItem>
+                    <Button Type="@ButtonType.Primary" OnClick="() => OpenDepartment()">添加部门</Button>
+                </SpaceItem>
+            </Space>
+            <Button Type="@ButtonType.Primary" Class="phone-desktop" OnClick="() => _operaVisible = !_operaVisible">操作</Button>
+        }
     </Extra>
     <Context>
         <Tabs Centered @bind-ActiveKey="@Key">
             <TabPane Tab="总览" Key="总览">
-                <Flex Justify="space-between">
+                <Flex Justify="space-between" Wrap="wrap">
                     <h2>社长/团支书/秘书长</h2>
                     @if (Member.Identity is "President" or "Minister")
                     {
-                        <Space>
+                        <Space Wrap>
                             <SpaceItem>
                                 <Button OnClick="() => OpenAddMember()">添加成员</Button>
                             </SpaceItem>
@@ -98,7 +118,7 @@
                     }
                 </Flex>
                 <br/>
-                <Space>
+                <Space Wrap>
                     @foreach (var item in Staffs.Ministers)
                     {
                         <SpaceItem>
@@ -114,7 +134,7 @@
                 <Divider/>
                 <Flex Justify="space-between">
                     <h2>成员</h2>
-                    <Space>
+                    <Space Wrap>
                         <SpaceItem>
                             <Statistic GroupSeparator=" " Title="所有部员" Value="@Staffs.Member.Count" TValue="int" Class="desktop-phone">
                                 <PrefixTemplate>
@@ -186,11 +206,11 @@
             @foreach (var department in Departments)
             {
                 <TabPane Tab="@department.Name" Key="@department.Name">
-                    <Flex Justify="space-between">
+                    <Flex Justify="space-between" Wrap="wrap">
                         <h2>部长/副部长</h2>
                         @if (Member.Identity is "President" or "Minister")
                         {
-                            <Space>
+                            <Space Wrap Size=@(("8", "8"))>
                                 <SpaceItem>
                                     <Button OnClick="() => OpenAddMember(department)">添加成员</Button>
                                 </SpaceItem>
@@ -210,7 +230,7 @@
                         }
                     </Flex>
                     <br/>
-                    <Space>
+                    <Space Wrap>
                         @foreach (var item in department.Ministers)
                         {
                             <SpaceItem>
@@ -227,7 +247,7 @@
                         <h2>成员</h2>
                         @if (Member.Identity is "President" or "Minister")
                         {
-                            <Space>
+                            <Space Wrap>
                                 <SpaceItem>
                                     <Button OnClick="@(() => OpenAddMember(department, "Department"))">添加成员</Button>
                                 </SpaceItem>

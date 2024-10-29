@@ -1,5 +1,4 @@
 ﻿@inherits LayoutComponentBase
-@using System.Security.Claims
 @using iOSClub.Data
 @using iOSClub.Data.DataModels
 @using iOSClub.WebSite.Client.IdentityModels
@@ -90,22 +89,17 @@
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (!firstRender) return;
-        var authState = await authStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
+        
+        var m = await ((JwtProvider)authStateProvider).GetPermission();
 
-        if (user.Identity is not null && user.Identity.IsAuthenticated)
+        if (m != null)
         {
-            var name = user.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value;
-            var identity = user.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value;
-            var id = user.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
-
-            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(identity) || string.IsNullOrEmpty(id)) return;
             await using var context = await DbFactory.CreateDbContextAsync();
-            var model = await context.Students.FirstOrDefaultAsync(x => x.UserId == id && x.UserName == name);
+            var model = await context.Students.FirstOrDefaultAsync(x => x.UserId == m.UserId && x.UserName == m.Name);
 
             if (model == null)
             {
-                var f = await context.Staffs.FirstOrDefaultAsync(x => x.UserId == id && x.Name == name);
+                var f = await context.Staffs.FirstOrDefaultAsync(x => x.UserId == m.UserId && x.Name == m.Name);
                 if (f == null) return;
                 model = new MemberModel()
                 {
@@ -116,7 +110,7 @@
             }
 
             Member = MemberModel.AutoCopy<StudentModel, MemberModel>(model);
-            Member.Identity = identity;
+            Member.Identity = m.Identity;
             StateHasChanged();
         }
 

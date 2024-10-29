@@ -62,4 +62,28 @@ public class JwtProvider(IJSRuntime js, IConfiguration configuration) : AbsProvi
 
         NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(claimsPrincipal)));
     }
+    
+    public async Task<StaffModel?> GetPermission()
+    {
+        var token = await js.InvokeAsync<string>("localStorageHelper.getItem", "jwt");
+        
+        if (string.IsNullOrEmpty(token))
+            return null;
+
+        var handler = new JwtSecurityTokenHandler();
+        var jwtToken = handler.ReadJwtToken(token);
+        
+        var name = jwtToken.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value;
+        var identity = jwtToken.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value;
+        var id = jwtToken.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+        
+        if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(identity) || string.IsNullOrEmpty(id)) return null;
+        
+        return new StaffModel()
+        {
+            Name = name,
+            Identity = identity,
+            UserId = id
+        };
+    }
 }

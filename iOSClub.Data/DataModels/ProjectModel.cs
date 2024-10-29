@@ -6,7 +6,8 @@ namespace iOSClub.Data.DataModels;
 
 public class ProjectModel : DataModel
 {
-    public DepartmentModel? Department { get; set; } = new();
+    [JsonIgnore]
+    public DepartmentModel? Department { get; set; }
     [Column(TypeName = "varchar(20)")] public string Title { get; set; } = "";
 
     [Key] [Column(TypeName = "varchar(33)")]public string Id { get; set; } = "";

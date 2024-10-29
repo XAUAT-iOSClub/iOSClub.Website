@@ -3,14 +3,15 @@ using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using iOSClub.Data;
 using iOSClub.Data.DataModels;
-using iOSClub.WebSite.Client;
-using iOSClub.WebSite.Components;
-using iOSClub.WebSite.IdentityModels;
+using iOSClub.WebSite;
+using iOSClub.WebSite.Client.IdentityModels;
+using iOSClub.WebSite.Controllers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.WebEncoders;
 using Microsoft.IdentityModel.Tokens;
+using _Imports = iOSClub.WebSite.Client._Imports;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -54,6 +55,7 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddSingleton(new JwtHelper(builder.Configuration));
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
 builder.Services.AddScoped<TokenActionFilter>();
 builder.Services.AddHttpClient();
 

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace iOSClub.Data.DataModels;
 
@@ -21,8 +22,9 @@ public class StaffModel
     [Column(TypeName = "varchar(20)")]
     public string Identity { get; set; } = "Member";
 
-    public DepartmentModel? Department { get; set; } = new();
-
+    [JsonIgnore]
+    public DepartmentModel? Department { get; set; }
+    
     public List<ProjectModel> Projects { get; init; } = [];
     public List<TaskModel> Tasks { get; init; } = [];
 }

@@ -10,22 +10,9 @@
 @inject MessageService MessageService
 @inject NavigationManager NavigationManager
 
-
-<Drawer Placement="top" Closable="false"
-        Visible="@_drawerVisible"
-        Height="340"
-        OnClose="@(() => _drawerVisible = false)">
-    <Flex Gap="large" Justify="space-between">
-        <Image Src="iOS_Club_LOGO.png" Preview="false" Style="width:40px; height:40px"/>
-        <div style="font-size: 24px;font-weight: bold;color: #1c1f23">iMember</div>
-    </Flex>
-    <CentreMenu Style="margin-top: 10px;" State="@Member.Identity"/>
-</Drawer>
-
 <Layout Style="height: 100vh">
     <Header Class="Layout-Header">
-        <Flex Align="center" Justify="space-between">
-            @* ReSharper disable once Html.PathError *@
+        <Flex Align="center" Justify="space-between" Style="width: 100%">
             <a href="/">
                 <Flex Gap="large">
                     <Image Src="iOS_Club_LOGO.png" Preview="false" Style="width:40px; height:40px"/>
@@ -76,7 +63,15 @@
     </Header>
     <Content Class="Layout-Context">
         <CascadingValue Value="@Member">
-            @Body
+            @if (_drawerVisible)
+            {
+                <CentreMenu OnMenuItemClicked="() => _drawerVisible = false"
+                            Style="padding-top: 10px;" State="@Member.Identity"/>
+            }
+            else
+            {
+                @Body   
+            }
         </CascadingValue>
     </Content>
 </Layout>
@@ -130,6 +125,7 @@
 }
 
 <style>
+    
     .Layout-Header {
         
     }

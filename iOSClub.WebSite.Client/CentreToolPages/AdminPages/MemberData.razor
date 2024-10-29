@@ -4,7 +4,7 @@
 <PageTitle>成员数据 - iAdmin</PageTitle>
 
 <InputFile id="fileInput" OnChange="@UploadFiles" hidden multiple/>
-<Modal Title="@("Title")"
+<Modal Title="@("下载数据")"
        Visible="@_visible"
        OnCancel="@HandleCancel"
        Footer="null">
@@ -45,7 +45,7 @@
             </SpaceItem>
             <SpaceItem>
                 <div class="desktop-phone-flex">
-                    <Button Type="@ButtonType.Primary" OnClick="@RemoveAll">删除所有数据</Button>
+                    <Button Danger OnClick="@RemoveAll">删除所有数据</Button>
                 </div>
             </SpaceItem>
             <SpaceItem>
@@ -67,12 +67,14 @@
                 <Flex Justify="center" Gap="large">
                     <Space>
                         <SpaceItem>
-                            <select class="form-control" @bind="@SearchItem">
-                                @foreach (var item in SearchItems)
-                                {
-                                    <option value="@item">@item</option>
-                                }
-                            </select>
+                            <SimpleSelect @bind-Value="@SearchItem">
+                                <SelectOptions>
+                                    @foreach (var item in SearchItems)
+                                    {
+                                        <SimpleSelectOption Value="@item" Label="@item"/>
+                                    }
+                                </SelectOptions>
+                            </SimpleSelect>
                         </SpaceItem>
                         <SpaceItem>
                             <Search Placeholder="请输入搜索项" EnterButton="@("搜索")" @bind-Value="@SearchValue" Size="large"/>

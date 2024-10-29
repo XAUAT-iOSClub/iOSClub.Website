@@ -1,17 +1,6 @@
 ﻿@layout HomeLayout
 @inherits LayoutComponentBase
 
-<Drawer Placement="top" Closable="false"
-        Visible="@_drawerVisible"
-        Height="340"
-        OnClose="@(() => _drawerVisible = false)">
-    <Flex Gap="large" Justify="space-between">
-        <Image Src="iOS_Club_LOGO.png" Preview="false" Style="width:40px; height:40px"/>
-        <div style="font-size: 24px;font-weight: bold;color: #1c1f23">社团文章</div>
-    </Flex>
-    @Menu
-</Drawer>
-
 
 <GridRow>
     <GridCol Md="6" Lg="6" Xl="4" Xxl="4"
@@ -24,11 +13,18 @@
     </GridCol>
     <GridCol Xs="24" Sm="24" Md="18" Lg="18" Xl="20" Xxl="20"
              Style="padding: 20px;min-height: 100vh;">
-        <Button Type="@ButtonType.Text" Class="phone-desktop" OnClick="@(() => _drawerVisible = true)">
+        <Button Type="@ButtonType.Text" Class="phone-desktop" OnClick="() => _drawerVisible = !_drawerVisible">
             <Icon Type="menu" Theme="outline"/>
             <span style="margin-left: 10px">导航</span>
         </Button>
-        @Body
+        @if (_drawerVisible)
+        {
+            @Menu
+        }
+        else
+        {
+            @Body
+        }
         <BackTop Style="margin-bottom:60px">
             <div class="ant-back-top-inner">
                 <Icon Type="arrow-up" Theme="outline"/>
@@ -45,6 +41,8 @@
     private RenderFragment Menu =>
         @<Template>
             <Menu Theme="MenuTheme.Light"
+                  OnMenuItemClicked="Close"
+                  Style="padding-top: 10px;animation: fade-in ease-in 0.3s;"
                   Mode="MenuMode.Inline" Class="menu-block">
                 <MenuItemGroup Class="group-block">
                     <TitleTemplate>
@@ -53,9 +51,9 @@
                         </div>
                     </TitleTemplate>
                     <ChildContent>
-                        <MenuItem RouterLink="/About" RouterMatch="NavLinkMatch.All" OnClick="@Close">关于我们</MenuItem>
-                        <MenuItem RouterLink="/Structure" RouterMatch="NavLinkMatch.All" OnClick="@Close">社团结构</MenuItem>
-                        <MenuItem RouterLink="/OtherOrg" RouterMatch="NavLinkMatch.All" OnClick="@Close">其他组织</MenuItem>
+                        <MenuItem RouterLink="/About" RouterMatch="NavLinkMatch.All">关于我们</MenuItem>
+                        <MenuItem RouterLink="/Structure" RouterMatch="NavLinkMatch.All">社团结构</MenuItem>
+                        <MenuItem RouterLink="/OtherOrg" RouterMatch="NavLinkMatch.All">其他组织</MenuItem>
                     </ChildContent>
                 </MenuItemGroup>
                 <MenuItemGroup Class="group-block">
@@ -65,9 +63,9 @@
                         </div>
                     </TitleTemplate>
                     <ChildContent>
-                        <MenuItem RouterLink="/Article/Competitions" RouterMatch="NavLinkMatch.All" OnClick="@Close">资源支持</MenuItem>
-                        <MenuItem RouterLink="/Article/MobileApplication" RouterMatch="NavLinkMatch.All" OnClick="@Close">移动应用创新赛</MenuItem>
-                        <MenuItem RouterLink="/Article/Swift" RouterMatch="NavLinkMatch.All" OnClick="@Close">WWDC-Swift学生挑战赛</MenuItem>
+                        <MenuItem RouterLink="/Article/Competitions" RouterMatch="NavLinkMatch.All">资源支持</MenuItem>
+                        <MenuItem RouterLink="/Article/MobileApplication" RouterMatch="NavLinkMatch.All">移动应用创新赛</MenuItem>
+                        <MenuItem RouterLink="/Article/Swift" RouterMatch="NavLinkMatch.All">WWDC-Swift学生挑战赛</MenuItem>
                     </ChildContent>
                 </MenuItemGroup>
                 <MenuItemGroup Class="group-block">
@@ -77,8 +75,8 @@
                         </div>
                     </TitleTemplate>
                     <ChildContent>
-                        <MenuItem RouterLink="/Article/VisionPro" RouterMatch="NavLinkMatch.All" OnClick="@Close">体验最新产品</MenuItem>
-                        <MenuItem RouterLink="/Article/PressConference" RouterMatch="NavLinkMatch.All" OnClick="@Close">一起看发布会</MenuItem>
+                        <MenuItem RouterLink="/Article/VisionPro" RouterMatch="NavLinkMatch.All">体验最新产品</MenuItem>
+                        <MenuItem RouterLink="/Article/PressConference" RouterMatch="NavLinkMatch.All">一起看发布会</MenuItem>
                     </ChildContent>
                 </MenuItemGroup>
                 <MenuItemGroup Class="group-block">
@@ -88,9 +86,9 @@
                         </div>
                     </TitleTemplate>
                     <ChildContent>
-                        <MenuItem RouterLink="/Article/History-Overview" RouterMatch="NavLinkMatch.All" OnClick="@Close">总述</MenuItem>
-                        <MenuItem RouterLink="/Article/History-Founding" RouterMatch="NavLinkMatch.All" OnClick="@Close">创社史</MenuItem>
-                        <MenuItem RouterLink="/Article/History-Shao Han's Reign" RouterMatch="NavLinkMatch.All" OnClick="@Close">邵韩之治</MenuItem>
+                        <MenuItem RouterLink="/Article/History-Overview" RouterMatch="NavLinkMatch.All">总述</MenuItem>
+                        <MenuItem RouterLink="/Article/History-Founding" RouterMatch="NavLinkMatch.All">创社史</MenuItem>
+                        <MenuItem RouterLink="/Article/History-Shao Han's Reign" RouterMatch="NavLinkMatch.All">邵韩之治</MenuItem>
                     </ChildContent>
                 </MenuItemGroup>
             </Menu>

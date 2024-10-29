@@ -43,7 +43,6 @@
       <AdditionalFiles Include="CentreToolPages\DepartmentPages\Resource.razor" />
       <AdditionalFiles Include="CentreToolPages\PersonalData.razor" />
       <AdditionalFiles Include="CentreToolPages\_Imports.razor" />
-      <AdditionalFiles Include="Components\App.razor" />
       <AdditionalFiles Include="Components\CentrePages\Centre.razor" />
       <AdditionalFiles Include="Components\CentrePages\_Imports.razor" />
       <AdditionalFiles Include="Components\DesignPages\CardHolder.razor" />

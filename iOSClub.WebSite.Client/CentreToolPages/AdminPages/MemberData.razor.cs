@@ -315,6 +315,7 @@ public partial class MemberData
         }
 
         RunningStyle = false;
+        Total = Models.Count;
         await context.DisposeAsync();
     }
 

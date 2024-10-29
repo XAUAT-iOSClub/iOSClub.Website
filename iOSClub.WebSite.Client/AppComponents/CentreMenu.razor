@@ -6,8 +6,9 @@
 
 
 <Menu Theme="MenuTheme.Light"
-      Class="@Class"
+      Class="@($"{Class} center-menu")"
       Style="@Style"
+      OnMenuItemClicked="OnMenuItemClicked"
       Mode="MenuMode.Inline">
 
     <MenuItemGroup Class="group-block">
@@ -90,6 +91,7 @@
     [Parameter] public string State { get; set; } = "Member";
     [Parameter] public string Style { get; set; } = "";
     [Parameter] public string Class { get; set; } = "";
+    [Parameter] public EventCallback OnMenuItemClicked { get; set; }
 
     private async Task Logout()
     {
@@ -109,5 +111,9 @@
     .group-title {
         padding-bottom: 10px;
         border-bottom: 1px solid #ededed;
+    }
+    
+    .center-menu{
+        animation: fade-in ease-in 0.3s;
     }
 </style>

@@ -1,12 +1,34 @@
 ﻿<div class="data @Class" style="@Style" id="@Id">
     <header class="header">
-        <header>
-            <i class="light" style="background-color: #fd6458;"></i>
-            <i class="light" style="background-color: #ffbf2b; margin-left: 8px;"></i>
-            <i class="light" style="background-color: #24cc3d; margin-left: 8px;"></i>
-        </header>
+        <Space Size="@("8")" Class="desktop-phone-flex">
+            <SpaceItem>
+                <i class="light" @onclick="@OnDelete"
+                   style="background-color: #fd6458;">
+                </i>
+            </SpaceItem>
+            <SpaceItem>
+                <i class="light"
+                   @onclick="@(string.IsNullOrEmpty(Title) ? 
+                    OnMinimize :
+                    new EventCallback(this, (MouseEventArgs _) => _isShowTitle = !_isShowTitle))"
+                   style="background-color: #ffbf2b;">
+                </i>
+            </SpaceItem>
+            <SpaceItem>
+                <i class="light" @onclick="@(FullScreen ? new EventCallback(this,(MouseEventArgs _) => _isFullScreen = !_isFullScreen) : OnFullScreen)"
+                   style="background-color: #24cc3d;">
+                </i>
+            </SpaceItem>
+        </Space>
         <nav class="navbar">
-            @Extra
+            @if (_isShowTitle)
+            {
+                <Title Level="4">@Title</Title>
+            }
+            else
+            {
+                @Extra
+            }
         </nav>
     </header>
     <main class="context @ContextClass" style="@ContextStyle">
@@ -26,8 +48,16 @@
     [Parameter] public string? ContextClass { get; set; }
 
     [Parameter] public string? ContextStyle { get; set; }
-    
+
     [Parameter] public string? Id { get; set; }
+
+    [Parameter] public EventCallback OnDelete { get; set; }
+    [Parameter] public EventCallback OnMinimize { get; set; }
+    [Parameter] public EventCallback OnFullScreen { get; set; }
+    [Parameter] public string? Title { get; set; }
+    [Parameter] public bool FullScreen { get; set; }
+    private bool _isShowTitle = false;
+    private bool _isFullScreen;
 }
 
 <style>
@@ -41,6 +71,14 @@
         width: 12px;
         height: 12px;
         border-radius: 50%;
+    }
+    
+    .light:hover{
+        cursor: pointer;
+    }
+
+    .light:hover+:before{
+        content: 'X';
     }
 
     header {
@@ -76,4 +114,15 @@
             border-radius : 0;
         }
     }
+
+    
+</style>
+
+<style>
+     .layout-context-body{
+         @if (_isFullScreen)
+         {
+             @("padding: 0 !important;")
+         }
+     }
 </style>

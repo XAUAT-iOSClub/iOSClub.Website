@@ -30,7 +30,10 @@
     </Template>
 </Drawer>
 
-<PageView ContextStyle="padding:10px;">
+<PageView ContextStyle="padding:10px;"
+          FullScreen="true"
+          OnDelete="@(() => Nav.NavigateTo("/Centre"))"
+          Title="成员数据">
     <Extra>
         <Space>
             <SpaceItem>

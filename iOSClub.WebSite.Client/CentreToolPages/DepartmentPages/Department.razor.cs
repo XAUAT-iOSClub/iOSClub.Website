@@ -376,4 +376,5 @@ public partial class Department
     }
 
     private bool _operaVisible;
+    
 }

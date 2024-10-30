@@ -4,10 +4,14 @@
 @using iOSClub.WebSite.Client.Models
 @using Microsoft.EntityFrameworkCore
 @inject IDbContextFactory<iOSContext> DbFactory
+@inject NavigationManager Nav
 
 <PageTitle>我的信息 - 西建大iOS Club</PageTitle>
 
-<PageView Style="height: 100%">
+<PageView Style="height: 100%"
+          FullScreen="true"
+          OnDelete="@(() => Nav.NavigateTo("/Centre"))"
+          Title="我的信息">
     <Extra>
         <p>当前身份:@MemberModel.IdentityDictionary[Member.Identity]</p>
     </Extra>

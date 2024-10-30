@@ -66,7 +66,8 @@
             @if (_drawerVisible)
             {
                 <CentreMenu OnMenuItemClicked="() => _drawerVisible = false"
-                            Style="padding-top: 10px;" State="@Member.Identity"/>
+                            Style="padding-top: 10px;animation: fade-in ease-in 0.3s;"
+                            State="@Member.Identity"/>
             }
             else
             {
@@ -127,13 +128,13 @@
 <style>
     
     .Layout-Header {
-        
+        background: #ffffff;
     }
 
     .Layout-Title {
         font-size: 24px;
         font-weight: bold;
-        color: #f3f5f7;
+        color: #191c1f;
     }
     
     .Layout-Popover{

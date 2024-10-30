@@ -10,7 +10,10 @@
 
 <PageTitle>当前项目 : @Data.Title -iStaff</PageTitle>
 
-<PageView Style="min-height: 100%" ContextStyle="margin: 20px;">
+<PageView Style="min-height: 100%" ContextStyle="margin: 20px;"
+          FullScreen="true"
+          OnDelete="@(() => Nav.NavigateTo("/Centre"))"
+          Title="@($"当前项目 : {Data.Title}")">
     <Extra>
         @if (IsAdmin)
         {

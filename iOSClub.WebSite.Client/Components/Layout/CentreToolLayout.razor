@@ -4,7 +4,9 @@
 
 <CentreMenu Class="layout-sider" State="@Member.Identity"/>
 <div class="layout-context">
-    @Body
+    <div class="layout-context-body">
+        @Body
+    </div>
 </div>
 
 @code
@@ -21,18 +23,25 @@
     }
 
     .layout-context {
-        background-color: #f3f5f7;
-        padding: 24px 16px;
+       background-color: #ffffff;
         margin-left: 230px
+    }
+    
+    .layout-context-body{
+        background-color: #f3f5f7;
+        padding: 24px;
+        border-radius: 10px;
+        transition: 0.2s;
     }
     
     .layout-sider{
         overflow: auto;
         height: calc(100vh - 64px);
-        width:230px;
+        width: 230px;
         position: fixed;
         left: 0;
         padding-top: 10px;
+        border: none;
     }
     
     .Layout-Header{
@@ -50,8 +59,10 @@
     
     @@media screen and (max-width: 768px) {
         .layout-context {
-            padding: 0;
             margin-left: 0;
+        }
+        .layout-context-body{
+            padding: 0;
         }
         .layout-sider {
             display: none;

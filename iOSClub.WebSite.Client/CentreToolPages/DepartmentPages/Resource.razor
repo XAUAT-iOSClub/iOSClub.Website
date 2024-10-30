@@ -9,7 +9,10 @@
 
 <PageTitle>社团资源 -iStaff</PageTitle>
 
-<PageView Style="min-height: 100%">
+<PageView Style="min-height: 100%"
+          FullScreen="true"
+          OnDelete="@(() => Nav.NavigateTo("/Centre"))"
+          Title="社团资源">
     <Extra>
         @if (IsAdmin)
         {

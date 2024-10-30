@@ -9,7 +9,9 @@
 
 <PageTitle>@(string.IsNullOrEmpty(Id) ? "编辑" : "更改")项目 -iStaff</PageTitle>
 
-<PageView>
+<PageView FullScreen="true"
+    OnDelete="@(() => Nav.NavigateTo("/Centre/Department"))"
+    Title="编辑项目">
     <Context>
         <Form Model="Project"
               ValidateMode="@FormValidateMode.Rules"

@@ -46,6 +46,11 @@ public class MemberModel : StudentModel
 
         return child;
     }
+    
+    public bool IsAdmin()
+    {
+        return Identity is "Founder" or "President" or "Minister";
+    }
 
     public static MemberModel CopyFrom(StudentModel model)
     {

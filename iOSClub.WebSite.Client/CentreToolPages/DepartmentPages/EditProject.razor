@@ -99,6 +99,7 @@
 
     private async Task OnFinish()
     {
+        if(Member.Identity == "Member")return;
         await using var context = await DbFactory.CreateDbContextAsync();
         if (string.IsNullOrEmpty(Id))
         {

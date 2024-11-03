@@ -189,7 +189,7 @@ public partial class Department
             }
             else
             {
-                if (_identity == "Member")
+                if (_identity == "Department")
                 {
                     _department.Member.Add(staff);
                 }

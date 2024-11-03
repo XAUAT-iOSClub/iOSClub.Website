@@ -8,6 +8,7 @@ using AntDesign;
 using AntDesign.Charts;
 using iOSClub.Data;
 using iOSClub.Data.DataModels;
+using iOSClub.WebSite.Client.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.EntityFrameworkCore;
@@ -177,7 +178,7 @@ public partial class MemberData
     private List<StudentModel> DeleteModels { get; } = [];
 
     private List<StudentModel> _models = [];
-
+    [CascadingParameter] private MemberModel Member { get; set; } = new();
     private int Total { get; set; }
 
     private List<StudentModel> Models

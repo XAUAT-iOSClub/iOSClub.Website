@@ -14,7 +14,7 @@
           OnDelete="@(() => Nav.NavigateTo("/Centre"))"
           Title="社团资源">
     <Extra>
-        @if (IsAdmin)
+        @if (Member.IsAdmin())
         {
             <Button Type="@ButtonType.Primary" OnClick="@(() => _visible = true)">
                 添加资源
@@ -47,7 +47,7 @@
                                 </div>
                             </div>
 
-                            @if (IsAdmin)
+                            @if (Member.IsAdmin())
                             {
                                 <Space>
                                     <SpaceItem>
@@ -141,7 +141,7 @@
         Xxl = 3,
     };
 
-    private bool IsAdmin { get; set; }
+    
     private List<ResourceModel> Resources { get; set; } = [];
     [CascadingParameter] private MemberModel Member { get; set; } = new();
 
@@ -156,7 +156,6 @@
         await using var context = await DbFactory.CreateDbContextAsync();
 
         Resources = await context.Resources.ToListAsync();
-        IsAdmin = Member.Identity.Contains("President") || Member.Identity.Contains("Minister");
 
         await base.OnInitializedAsync();
     }

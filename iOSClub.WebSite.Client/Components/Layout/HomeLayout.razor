@@ -57,24 +57,24 @@
     <Content>
         @if (_drawerVisible)
         {
-            <Menu Style="padding-top: 10px;animation: fade-in ease-in 0.3s;"
+            <Menu Style="padding-top: 10px;animation: fade-in ease-in 0.3s;" OnMenuItemClicked="Close"
                   Accordion Mode="@MenuMode.Inline">
-                <MenuItem RouterLink="/" RouterMatch="NavLinkMatch.All" Title="首页" OnClick="@Close"/>
+                <MenuItem RouterLink="/" RouterMatch="NavLinkMatch.All" Title="首页" />
                 <SubMenu Title="关于我们">
-                    <MenuItem RouterLink="/About" RouterMatch="NavLinkMatch.All" Title="社团简介" OnClick="@Close"/>
-                    <MenuItem RouterLink="/Structure" RouterMatch="NavLinkMatch.All" Title="社团结构" OnClick="@Close"/>
-                    <MenuItem RouterLink="/OtherOrg" RouterMatch="NavLinkMatch.All" Title="其他组织" OnClick="@Close"/>
-                    <MenuItem RouterLink="/Article/Competitions" RouterMatch="NavLinkMatch.All" Title="竟赛资源" OnClick="@Close"/>
-                    <MenuItem RouterLink="/History" RouterMatch="NavLinkMatch.All" Title="社团历史" OnClick="@Close"/>
+                    <MenuItem RouterLink="/About" RouterMatch="NavLinkMatch.All" Title="社团简介" />
+                    <MenuItem RouterLink="/Structure" RouterMatch="NavLinkMatch.All" Title="社团结构" />
+                    <MenuItem RouterLink="/OtherOrg" RouterMatch="NavLinkMatch.All" Title="其他组织" />
+                    <MenuItem RouterLink="/Article/Competitions" RouterMatch="NavLinkMatch.All" Title="竟赛资源" />
+                    <MenuItem RouterLink="/History" RouterMatch="NavLinkMatch.All" Title="社团历史"/>
                 </SubMenu>
                 <SubMenu Title="社团动态">
-                    <MenuItem RouterLink="/Event" RouterMatch="NavLinkMatch.All" Title="社团活动" OnClick="@Close"/>
-                    <MenuItem RouterLink="/Articles" RouterMatch="NavLinkMatch.All" Title="技术博客" OnClick="@Close"/>
-                    <MenuItem RouterLink="/Learn" RouterMatch="NavLinkMatch.All" Title="iOS Learn" OnClick="@Close"/>
-                    <MenuItem RouterLink="/Tools" RouterMatch="NavLinkMatch.All" Title="iOS App" OnClick="@Close"/>
-                    <MenuItem RouterLink="/Projects" RouterMatch="NavLinkMatch.All" Title="精品项目" OnClick="@Close"/>
+                    <MenuItem RouterLink="/Event" RouterMatch="NavLinkMatch.All" Title="社团活动"/>
+                    <MenuItem RouterLink="/Articles" RouterMatch="NavLinkMatch.All" Title="技术博客"/>
+                    <MenuItem RouterLink="/Learn" RouterMatch="NavLinkMatch.All" Title="iOS Learn"/>
+                    <MenuItem RouterLink="/Tools" RouterMatch="NavLinkMatch.All" Title="iOS App"/>
+                    <MenuItem RouterLink="/Projects" RouterMatch="NavLinkMatch.All" Title="精品项目"/>
                 </SubMenu>
-                <MenuItem RouterLink="/Login" RouterMatch="NavLinkMatch.All" Title="登录/注册" OnClick="@Close"/>
+                <MenuItem RouterLink="/Login" RouterMatch="NavLinkMatch.All" Title="登录/注册"/>
             </Menu>
         }
         else

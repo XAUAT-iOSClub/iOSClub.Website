@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace iOSClub.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class ChangeJoinTime : Migration
+    public partial class Change : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -14,7 +14,7 @@ namespace iOSClub.Data.Migrations
             migrationBuilder.AlterColumn<DateTime>(
                 name: "JoinTime",
                 table: "Students",
-                type: "TEXT",
+                type: "DATE",
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "varchar(20)");
@@ -29,7 +29,7 @@ namespace iOSClub.Data.Migrations
                 type: "varchar(20)",
                 nullable: false,
                 oldClrType: typeof(DateTime),
-                oldType: "TEXT");
+                oldType: "DATE");
         }
     }
 }

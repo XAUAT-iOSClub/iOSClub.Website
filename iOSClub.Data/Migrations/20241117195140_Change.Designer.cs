@@ -11,8 +11,8 @@ using iOSClub.Data;
 namespace iOSClub.Data.Migrations
 {
     [DbContext(typeof(iOSContext))]
-    [Migration("20241117191545_ChangeJoinTime")]
-    partial class ChangeJoinTime
+    [Migration("20241117195140_Change")]
+    partial class Change
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -150,7 +150,7 @@ namespace iOSClub.Data.Migrations
                         .HasColumnType("varchar(2)");
 
                     b.Property<DateTime>("JoinTime")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("DATE");
 
                     b.Property<string>("PhoneNum")
                         .IsRequired()

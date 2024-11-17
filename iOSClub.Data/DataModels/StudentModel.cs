@@ -17,7 +17,7 @@ public class StudentModel
     [Column(TypeName = "varchar(2)")] public string Gender { get; set; } = "";
     [Column(TypeName = "varchar(20)")] public string ClassName { get; set; } = "";
     [Column(TypeName = "varchar(11)")] public string PhoneNum { get; set; } = "";
-    public DateTime JoinTime { get; set; } = DateTime.Today;
+    [Column(TypeName = "DATE")] public DateTime JoinTime { get; set; } = DateTime.Today;
 
     public override string ToString()
     {

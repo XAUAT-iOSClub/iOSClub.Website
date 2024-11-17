@@ -147,7 +147,7 @@ namespace iOSClub.Data.Migrations
                         .HasColumnType("varchar(2)");
 
                     b.Property<DateTime>("JoinTime")
-                        .HasColumnType("datetime");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("PhoneNum")
                         .IsRequired()

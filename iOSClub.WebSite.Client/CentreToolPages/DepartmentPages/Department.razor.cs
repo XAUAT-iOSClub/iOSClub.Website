@@ -30,7 +30,6 @@ public partial class Department
 
     protected override async Task OnInitializedAsync()
     {
-        await base.OnInitializedAsync();
         Key ??= "总览";
         await using var db = await DbFactory.CreateDbContextAsync();
 
@@ -40,7 +39,8 @@ public partial class Department
             .Include(x => x.Staffs)
             .Select(x => new DepartmentList()
             {
-                Name = x.Name, Projects = x.Projects, Ministers = x.Staffs.Where(y => y.Identity == "Minister").ToList(),
+                Name = x.Name, Projects = x.Projects,
+                Ministers = x.Staffs.Where(y => y.Identity == "Minister").ToList(),
                 Member = x.Staffs.Where(y => y.Identity == "Department").ToList()
             })
             .ToListAsync();
@@ -116,7 +116,7 @@ public partial class Department
         var data = Encoding.UTF8.GetBytes(jsonString);
         await Download("部员信息.csv", data);
     }
-    
+
     private async Task Download(string fileName, byte[] data)
     {
         await JS.InvokeVoidAsync("jsSaveAsFile", fileName, Convert.ToBase64String(data));
@@ -273,15 +273,17 @@ public partial class Department
             .Include(x => x.Projects)
             .FirstOrDefaultAsync(x => x.Name == department.Name);
         if (d == null) return;
-        
+
         foreach (var item in d.Staffs)
         {
             dbContext.Staffs.Remove(item);
         }
+
         foreach (var item in d.Projects)
         {
             dbContext.Projects.Remove(item);
         }
+
         dbContext.Departments.Remove(d);
         await dbContext.SaveChangesAsync();
         Departments.Remove(department);
@@ -376,5 +378,4 @@ public partial class Department
     }
 
     private bool _operaVisible;
-    
 }

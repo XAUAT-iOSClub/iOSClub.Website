@@ -14,7 +14,7 @@ namespace iOSClub.Data.Migrations
             migrationBuilder.AlterColumn<DateTime>(
                 name: "JoinTime",
                 table: "Students",
-                type: "datetime",
+                type: "TEXT",
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "varchar(20)");
@@ -29,7 +29,7 @@ namespace iOSClub.Data.Migrations
                 type: "varchar(20)",
                 nullable: false,
                 oldClrType: typeof(DateTime),
-                oldType: "datetime");
+                oldType: "TEXT");
         }
     }
 }

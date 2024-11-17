@@ -116,7 +116,7 @@ public partial class Department
         var data = Encoding.UTF8.GetBytes(jsonString);
         await Download("部员信息.csv", data);
     }
-
+    
     private async Task Download(string fileName, byte[] data)
     {
         await JS.InvokeVoidAsync("jsSaveAsFile", fileName, Convert.ToBase64String(data));

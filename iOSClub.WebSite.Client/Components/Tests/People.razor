@@ -1,0 +1,241 @@
+﻿@page "/People"
+<h2 id="制作人员">制作人员</h2>
+
+<h3 id="一期人员">一期人员</h3>
+
+<div class="row">
+    <div class="card">
+        <span class="img" style="background-color: #7265e6;">
+            <span>王</span>
+        </span>
+        王楷超
+    </div>
+    <div class="card">
+        <span class="img" style="background-color: #1890ff;">
+            <span>李</span>
+        </span>
+        李嘉俊
+    </div>
+    <div class="card">
+        <span class="img" style="background-color: #3498db;">
+            <span>李</span>
+        </span>
+        李首鸣
+    </div>
+    <div class="card">
+        <span class="img" style="background-color: #1abc9c;">
+            <span>A</span>
+        </span>
+        Aiying
+    </div>
+    <div class="card">
+        <span class="img" style="background-color: #95a5a6;">
+            <span>王</span>
+        </span>
+        王嘉瑞
+    </div>
+    <div class="card">
+        <span class="img" style="background-color: #34495e;">
+            <span>C</span>
+        </span>
+        cardiomyocyte
+    </div>
+    <div class="card">
+        <span class="img" style="background-color: #3498db;">
+            <span>杨</span>
+        </span>
+        杨雨泽
+    </div>
+    <div class="card">
+        <span class="img" style="background-color: #2ecc71;">
+            <span>B</span>
+        </span>
+        bumo
+    </div>
+    <div class="card">
+        <span class="img" style="background-color: #85b8cb;">
+            <span>X</span>
+        </span>
+        XF233
+    </div>
+</div>
+
+<h3 id="二期人员">二期人员</h3>
+
+<div class="row">
+    <div class="card">
+        <span class="img" style="background-color: #7265e6;">
+            <span>物</span>
+        </span>
+        物
+    </div>
+    <div class="card">
+        <span class="img" style="background-color: #1890ff;">
+            <span>蔡</span>
+        </span>
+        蔡浩
+    </div>
+    <div class="card">
+        <span class="img" style="background-color: #3498db;">
+            <span>H</span>
+        </span>
+        huang
+    </div>
+    <div class="card">
+        <span class="img" style="background-color: #1abc9c;">
+            <span>C</span>
+        </span>
+        CHEN
+    </div>
+    <div class="card">
+        <span class="img" style="background-color: #95a5a6;">
+            <span>白</span>
+        </span>
+        白糖
+    </div>
+    <div class="card">
+        <span class="img" style="background-color: #34495e;">
+            <span>巩</span>
+        </span>
+        巩毅涵
+    </div>
+    <div class="card">
+        <span class="img" style="background-color: #3498db;">
+            <span>闫</span>
+        </span>
+        闫秦汉
+    </div>
+    <div class="card">
+        <span class="img" style="background-color: #2ecc71;">
+            <span>何</span>
+        </span>
+        何悦溪
+    </div>
+    <div class="card">
+        <span class="img" style="background-color: #7265e6;">
+            <span>王</span>
+        </span>
+        王楷超
+    </div>
+    <div class="card">
+        <span class="img" style="background-color: #1890ff;">
+            <span>李</span>
+        </span>
+        李嘉俊
+    </div>
+    <div class="card">
+        <span class="img" style="background-color: #3498db;">
+            <span>李</span>
+        </span>
+        李首鸣
+    </div>
+    <div class="card">
+        <span class="img" style="background-color: #1abc9c;">
+            <span>A</span>
+        </span>
+        Aiying
+    </div>
+    <div class="card">
+        <span class="img" style="background-color: #34495e;">
+            <span>C</span>
+        </span>
+        cardiomyocyte
+    </div>
+</div>
+
+<style>
+    .card {
+        transition: .2s;
+        cursor: pointer;
+        margin: 0 5px;
+        border-radius: 10px;
+        align-items: center;
+        border: 1px solid transparent;
+        display: flex;
+        flex-direction: column;
+        flex: 0 0 13.333%;
+        max-width: 13.333%;
+        padding: 8px;
+    }
+
+    .img {
+        width: 2.6rem;
+        height: 2.6rem;
+        margin: .5rem 0;
+        border-radius: 4rem;
+        align-items: center;
+        justify-items: center;
+        display: flex;
+        flex-direction: column;
+        vertical-align: middle;
+    }
+
+    .img span {
+        display: grid;
+        height: 100%;
+        align-items: center;
+        justify-items: center;
+        color: #ffffff;
+    }
+
+    .card:hover {
+        border-color: #1890ff;
+    }
+
+    @@media screen and (max-width: 767px) {
+        .card {
+            flex: 0 0 25%;
+            max-width: 25%;
+        }
+    }
+
+    .row {
+        display: flex;
+        flex-flow: row wrap;
+        min-width: 0;
+        margin-top: 5px;
+    }
+
+    h4:after {
+        height: 0 !important
+    }
+
+    .page-row {
+        display: flex;
+        flex-flow: row
+    }
+
+    .page-col-1 {
+        padding: 10px;
+        flex-direction: column;
+        flex: 0 0 20%;
+        max-width: 100%;
+        display: grid;
+        align-items: center;
+        justify-items: center;
+        text-align: center
+    }
+
+    @@media screen and (max-width: 767px) {
+        .page-row {
+            flex-flow: column
+        }
+
+        .page-col-1 {
+            display: none
+        }
+
+        .page-col-2 {
+            flex: 0 0 100% !important;
+            padding: 0 !important
+        }
+    }
+
+    .page-col-2 {
+        padding-left: 10px;
+        flex-direction: column;
+        flex: 0 0 80%;
+        max-width: 100% !important
+    }
+
+</style>

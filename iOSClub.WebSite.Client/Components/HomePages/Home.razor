@@ -92,24 +92,13 @@
     @foreach (var item in Cards)
     {
         <GridCol Xs="24" Sm="24" Md="12" Lg="12" Xl="8" Xxl="8">
-            @if (string.IsNullOrEmpty(item.Url))
-            {
+            <a href="@item.Url" target="_blank">
                 <Card Hoverable Class="card">
                     <div class="card-d">@item.ImageUrl</div>
                     <h3>@item.Title</h3>
                     <Paragraph Type="secondary">@item.Content</Paragraph>
                 </Card>
-            }
-            else
-            {
-                <a href="@item.Url" target="_blank">
-                    <Card Hoverable Class="card">
-                        <div class="card-d">@item.ImageUrl</div>
-                        <h3>@item.Title</h3>
-                        <Paragraph Type="secondary">@item.Content</Paragraph>
-                    </Card>
-                </a>
-            }
+            </a>
         </GridCol>
     }
 </GridRow>
@@ -159,11 +148,11 @@
     
     private static CardModel[] Cards =>
     [
-        new("\ud83c\udf4e", "我们是谁?", "我们是由Apple公司资金支持，受南山书院和西安建筑科技大学大学生创新创业实践中心指导的学术型学生团体。", "/About"),
+        new("\ud83c\udf4e", "我们是谁?", "我们是由Apple公司资金支持，受学管和西安建筑科技大学大学生创新创业实践中心指导的创新创业类社团。", "/About"),
         new("\ud83e\udd1d", "和iOS Club一起结伴同行", "不管是零基础的小白还是大神，只要你有兴趣，这里就是你的天堂", "/Articles"),
         new("\ud83c\udf10", "iOS Club,不止iOS", "我们不止只有iOS，西建大iOS Club是一个跨专业与课堂的数码编程爱好者社团", "OtherOrg"),
         new("\ud83d\ude00", "Apple \u2716\ufe0f 西建大", "苹果公司每个学期都会在学校举办各种活动，俱乐部成员可以参与合作软件开发，共同创造世界", "/Event"),
-        new("\ud83d\udc69\ud83c\udffb\u200d\ud83d\udcbb", "合作软件开发", "加入我们，和志同道合的iMember一起合作开发，一起创造世界"),
+        new("\ud83d\udc69\ud83c\udffb\u200d\ud83d\udcbb", "合作软件开发", "加入我们，和志同道合的iMember一起合作开发，一起创造世界","https://gitee.com/XAUATiOSClub"),
         new("\ud83d\udcc8", "全校数码编程爱好者,联合起来！", "我们意图打造全校最大的科技社区，快来加入我们成为一名iMember吧", "/Login")
     ];
 

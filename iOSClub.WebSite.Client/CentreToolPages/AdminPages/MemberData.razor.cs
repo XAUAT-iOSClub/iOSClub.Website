@@ -1,5 +1,4 @@
-﻿using System.Collections.Frozen;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
@@ -24,17 +23,7 @@ public partial class MemberData
     [Inject] [NotNull] public IDbContextFactory<iOSContext>? DbFactory { get; set; }
     [Inject] [NotNull] public NavigationManager? Nav { get; set; }
 
-    private bool _runningStyle;
-
-    private bool RunningStyle
-    {
-        get => _runningStyle;
-        set
-        {
-            _runningStyle = value;
-            StateHasChanged();
-        }
-    }
+    private bool RunningStyle { get; set; }
 
     #region Data Download
 
@@ -42,6 +31,8 @@ public partial class MemberData
     {
         var options = new JsonSerializerOptions();
         options.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
+        await using var context = await DbFactory.CreateDbContextAsync();
+        var Models = await context.Students.AsNoTracking().ToArrayAsync();
         var jsonString = JsonSerializer.Serialize(Models, options);
         var data = Encoding.UTF8.GetBytes(jsonString);
 
@@ -58,6 +49,8 @@ public partial class MemberData
 
     private async Task CsvDownload()
     {
+        await using var context = await DbFactory.CreateDbContextAsync();
+        var Models = await context.Students.AsNoTracking().ToListAsync();
         var jsonString = StudentModel.GetCsv(Models);
         var data = Encoding.UTF8.GetBytes(jsonString);
         await Download("data.csv", data);
@@ -135,7 +128,7 @@ public partial class MemberData
 
     #region Search
 
-    private static IEnumerable<string> SearchItems => new[] { "姓名", "学号", "学院" };
+    private static IEnumerable<string> SearchItems => ["姓名", "学号", "学院"];
     private string SearchItem { get; set; } = "姓名";
 
     private string _searchValue = "";
@@ -152,22 +145,11 @@ public partial class MemberData
 
     private async void GetData()
     {
-        if (string.IsNullOrEmpty(_searchValue))
-        {
-            Models = [];
-            return;
-        }
+        if (string.IsNullOrEmpty(_searchValue)) return;
 
-        RunningStyle = true;
         var context = await DbFactory.CreateDbContextAsync();
-        Models = SearchItem switch
-        {
-            "姓名" => await context.Students.Where(x => x.UserName.StartsWith(_searchValue)).ToListAsync(),
-            "学号" => await context.Students.Where(x => x.UserId.StartsWith(_searchValue)).ToListAsync(),
-            "学院" => await context.Students.Where(x => x.Academy.StartsWith(_searchValue)).ToListAsync(),
-            _ => Models
-        };
-        RunningStyle = false;
+
+        await ShowChange(context);
 
         await context.DisposeAsync();
     }
@@ -175,31 +157,68 @@ public partial class MemberData
     #endregion
 
 
-    private List<StudentModel> DeleteModels { get; } = [];
+    private List<StudentModel> ShowData { get; set; } = [];
+    private int PageSize { get; set; } = 10;
+    private int PageIndex { get; set; } = 1;
 
-    private List<StudentModel> _models = [];
+    private async Task ShowChange(iOSContext context)
+    {
+        if (string.IsNullOrEmpty(_searchValue))
+        {
+            ShowData = await context.Students.OrderBy(x => x.UserId).Skip((PageIndex - 1) * PageSize).Take(PageSize)
+                .ToListAsync();
+            return;
+        }
+
+        RunningStyle = true;
+        switch (SearchItem)
+        {
+            case "姓名":
+                ShowData = await context.Students.Where(x => x.UserName.StartsWith(_searchValue))
+                    .OrderBy(x => x.UserId).Skip((PageIndex - 1) * PageSize).Take(PageSize).ToListAsync();
+                Total = await context.Students.Where(x => x.UserName.StartsWith(_searchValue)).CountAsync();
+                break;
+            case "学号":
+                ShowData = await context.Students.Where(x => x.UserId.StartsWith(_searchValue))
+                    .OrderBy(x => x.UserId).Skip((PageIndex - 1) * PageSize).Take(PageSize).ToListAsync();
+                Total = await context.Students.Where(x => x.UserId.StartsWith(_searchValue)).CountAsync();
+                break;
+            case "学院":
+                ShowData = await context.Students.Where(x => x.Academy.StartsWith(_searchValue))
+                    .OrderBy(x => x.UserId).Skip((PageIndex - 1) * PageSize).Take(PageSize).ToListAsync();
+                Total = await context.Students.Where(x => x.Academy.StartsWith(_searchValue)).CountAsync();
+                break;
+        }
+
+        RunningStyle = false;
+    }
+
+    private async Task PageIndexChanged(int s)
+    {
+        PageIndex = s;
+        await using var context = await DbFactory.CreateDbContextAsync();
+        await ShowChange(context);
+    }
+
+    private async Task PageSizeChanged(int s)
+    {
+        PageSize = s;
+        await using var context = await DbFactory.CreateDbContextAsync();
+        await ShowChange(context);
+    }
+
+    private List<StudentModel> DeleteModels { get; } = [];
     [CascadingParameter] private MemberModel Member { get; set; } = new();
     private int Total { get; set; }
-
-    private List<StudentModel> Models
-    {
-        get => _models;
-        set
-        {
-            _models = value;
-            Total = value.Count;
-            StateHasChanged();
-        }
-    }
 
     private string GenderWord { get; set; } = "";
 
     protected override async Task OnInitializedAsync()
     {
-        if (Models.Count != 0) return;
+        if (ShowData.Count != 0) return;
         await using var context = await DbFactory.CreateDbContextAsync();
-        Models = await context.Students.AsNoTracking().ToListAsync();
-        var a = Models.ToFrozenSet();
+        ShowData = await context.Students.Take(PageSize).ToListAsync();
+        Total = await context.Students.CountAsync();
         if (context.Students.Count() < 430) return;
         _yearData.AddRange([new { year = "2021 - 2022", value = 231 }, new { year = "2022 - 2023", value = 429 }]);
         var (year, month, _) = DateTime.Today;
@@ -207,32 +226,34 @@ public partial class MemberData
         {
             _yearData.Add(new
             {
-                year = $"{year - i - 1} - {year - i}", value = a.Count(s =>
-                    DateTime.Parse(s.JoinTime) < DateTime.Parse($"{year - i}-09-01"))
+                year = $"{year - i - 1} - {year - i}", value = context.Students.Count(s =>
+                    s.JoinTime < DateTime.Parse($"{year - i}-09-01"))
             });
         }
 
         if (month >= 9)
         {
-            _yearData.Add(new { year = $"{year} - {year + 1}", value = a.Count });
+            _yearData.Add(new { year = $"{year} - {year + 1}", value = context.Students.Count() });
         }
 
-        a.GroupBy(x => x.Academy)
-            .OrderBy(x => x.Count())
-            .ForEach(college
-                => _collegeData.Add(new { type = college.Key, value = college.Count() }));
+        context.Database
+            .SqlQuery<AcademyCount>(
+                $"SELECT Academy AS type, COUNT(*) AS value FROM Students GROUP BY Academy ORDER BY COUNT(*);").ForEach(
+                x =>
+                    _collegeData.Add(new { type = x.Type, value = x.Value }));
 
-        a.GroupBy(x => x.UserId[..2])
-            .OrderBy(x => x.Key)
-            .ForEach(grade
-                => _gradeData.Add(new { 年级 = grade.Key + "级", 人数 = grade.Count() }));
+        context.Database
+            .SqlQuery<AcademyCount>(
+                $"SELECT SUBSTRING(UserId, 1, 2) AS type, COUNT(*) AS value FROM Students GROUP BY SUBSTRING(UserId, 1, 2) ORDER BY type")
+            .ForEach(grade =>
+                _gradeData.Add(new { 年级 = grade.Type + "级", 人数 = grade.Value }));
 
         context.Students.GroupBy(x => x.PoliticalLandscape)
             .ForEach(l
                 => _landscapeData.Add(new { type = l.Key, sales = l.Count() }));
 
-        var man = a.Count(x => x.Gender == "男");
-        var woman = a.Count(x => x.Gender == "女");
+        var man = await context.Students.CountAsync(x => x.Gender == "男");
+        var woman = await context.Students.CountAsync(x => x.Gender == "女");
 
         _genderData.AddRange(new List<object>
         {
@@ -253,9 +274,9 @@ public partial class MemberData
         var context = await DbFactory.CreateDbContextAsync();
         context.Students.Remove(model);
         await context.SaveChangesAsync();
-        Models.Remove(model);
         DeleteModels.Add(model);
         await context.DisposeAsync();
+        await ShowChange(context);
     }
 
 
@@ -265,12 +286,13 @@ public partial class MemberData
         foreach (var item in DeleteModels)
         {
             await context.Students.AddAsync(item);
-            Models.Add(item);
         }
 
         DeleteModels.Clear();
         await context.SaveChangesAsync();
         await context.DisposeAsync();
+
+        Flushed();
     }
 
     private bool Visible;
@@ -299,12 +321,7 @@ public partial class MemberData
 
         RunningStyle = true;
 
-        var b = Models;
-
-        if (Models.Count != await context.Students.CountAsync())
-        {
-            b = await context.Students.ToListAsync();
-        }
+        var b = await context.Students.ToListAsync();
 
         foreach (var model in list.Where(model => model.IsStandardization()))
         {
@@ -312,11 +329,11 @@ public partial class MemberData
             var m = model.Standardization();
             await context.Students.AddAsync(m);
             await context.SaveChangesAsync();
-            Models.Add(m);
         }
 
         RunningStyle = false;
-        Total = Models.Count;
+        Total = await context.Students.CountAsync();
+        await ShowChange(context);
         await context.DisposeAsync();
     }
 
@@ -331,7 +348,14 @@ public partial class MemberData
         var context = await DbFactory.CreateDbContextAsync();
         await context.Students.ExecuteDeleteAsync();
         await context.SaveChangesAsync();
-        Models.Clear();
         await context.DisposeAsync();
+        Flushed();
+    }
+
+    [Serializable]
+    public class AcademyCount
+    {
+        public string Type { get; set; } = "";
+        public int Value { get; set; }
     }
 }

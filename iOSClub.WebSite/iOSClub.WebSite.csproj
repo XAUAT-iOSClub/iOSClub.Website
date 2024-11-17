@@ -7,71 +7,75 @@
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
+    <PropertyGroup>
+        <InvariantTimezone>true</InvariantTimezone>
+    </PropertyGroup>
+
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.10" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.10" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.10"/>
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.10"/>
     </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.10">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\iOSClub.Data\iOSClub.Data.csproj" />
-      <ProjectReference Include="..\iOSClub.WebSite.Client\iOSClub.WebSite.Client.csproj" />
+        <ProjectReference Include="..\iOSClub.Data\iOSClub.Data.csproj"/>
+        <ProjectReference Include="..\iOSClub.WebSite.Client\iOSClub.WebSite.Client.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <_ContentIncludedByDefault Remove="AppComponents\AppleCard.razor" />
-      <_ContentIncludedByDefault Remove="AppComponents\AppleLink.razor" />
-      <_ContentIncludedByDefault Remove="AppComponents\CentreMenu.razor" />
-      <_ContentIncludedByDefault Remove="AppComponents\ErrorView.razor" />
-      <_ContentIncludedByDefault Remove="AppComponents\MarkdownRenderer.razor" />
-      <_ContentIncludedByDefault Remove="AppComponents\MemberTable.razor" />
-      <_ContentIncludedByDefault Remove="AppComponents\PageView.razor" />
-      <_ContentIncludedByDefault Remove="AppComponents\ReturnView.razor" />
-      <_ContentIncludedByDefault Remove="CentreToolPages\AdminPages\Env.razor" />
-      <_ContentIncludedByDefault Remove="CentreToolPages\AdminPages\MemberData.razor" />
-      <_ContentIncludedByDefault Remove="CentreToolPages\DepartmentPages\Department.razor" />
-      <_ContentIncludedByDefault Remove="CentreToolPages\DepartmentPages\EditProject.razor" />
-      <_ContentIncludedByDefault Remove="CentreToolPages\DepartmentPages\Project.razor" />
-      <_ContentIncludedByDefault Remove="CentreToolPages\DepartmentPages\Resource.razor" />
-      <_ContentIncludedByDefault Remove="CentreToolPages\PersonalData.razor" />
-      <_ContentIncludedByDefault Remove="CentreToolPages\_Imports.razor" />
-      <_ContentIncludedByDefault Remove="Components\App.razor" />
-      <_ContentIncludedByDefault Remove="Components\CentrePages\Centre.razor" />
-      <_ContentIncludedByDefault Remove="Components\CentrePages\_Imports.razor" />
-      <_ContentIncludedByDefault Remove="Components\DesignPages\CardHolder.razor" />
-      <_ContentIncludedByDefault Remove="Components\DesignPages\Desktop.razor" />
-      <_ContentIncludedByDefault Remove="Components\DesignPages\FridgeMagnets.razor" />
-      <_ContentIncludedByDefault Remove="Components\HomePages\Home.razor" />
-      <_ContentIncludedByDefault Remove="Components\HomePages\IOSPic.razor" />
-      <_ContentIncludedByDefault Remove="Components\HomePages\Login.razor" />
-      <_ContentIncludedByDefault Remove="Components\HomePages\Series.razor" />
-      <_ContentIncludedByDefault Remove="Components\HomePages\Signup.razor" />
-      <_ContentIncludedByDefault Remove="Components\HomePages\_Imports.razor" />
-      <_ContentIncludedByDefault Remove="Components\Layout\CentreLayout.razor" />
-      <_ContentIncludedByDefault Remove="Components\Layout\CentreToolLayout.razor" />
-      <_ContentIncludedByDefault Remove="Components\Layout\HomeLayout.razor" />
-      <_ContentIncludedByDefault Remove="Components\Layout\WordLayout.razor" />
-      <_ContentIncludedByDefault Remove="Components\Routes.razor" />
-      <_ContentIncludedByDefault Remove="Components\ShowPages\Articles.razor" />
-      <_ContentIncludedByDefault Remove="Components\ShowPages\Event.razor" />
-      <_ContentIncludedByDefault Remove="Components\ShowPages\History.razor" />
-      <_ContentIncludedByDefault Remove="Components\ShowPages\Learn.razor" />
-      <_ContentIncludedByDefault Remove="Components\ShowPages\Projects.razor" />
-      <_ContentIncludedByDefault Remove="Components\ShowPages\Tools.razor" />
-      <_ContentIncludedByDefault Remove="Components\ShowPages\YearProj.razor" />
-      <_ContentIncludedByDefault Remove="Components\ShowPages\_Imports.razor" />
-      <_ContentIncludedByDefault Remove="Components\Tests\Auth.razor" />
-      <_ContentIncludedByDefault Remove="Components\WordPages\About.razor" />
-      <_ContentIncludedByDefault Remove="Components\WordPages\Article.razor" />
-      <_ContentIncludedByDefault Remove="Components\WordPages\OtherOrg.razor" />
-      <_ContentIncludedByDefault Remove="Components\WordPages\Structure.razor" />
-      <_ContentIncludedByDefault Remove="Components\WordPages\_Imports.razor" />
+        <_ContentIncludedByDefault Remove="AppComponents\AppleCard.razor"/>
+        <_ContentIncludedByDefault Remove="AppComponents\AppleLink.razor"/>
+        <_ContentIncludedByDefault Remove="AppComponents\CentreMenu.razor"/>
+        <_ContentIncludedByDefault Remove="AppComponents\ErrorView.razor"/>
+        <_ContentIncludedByDefault Remove="AppComponents\MarkdownRenderer.razor"/>
+        <_ContentIncludedByDefault Remove="AppComponents\MemberTable.razor"/>
+        <_ContentIncludedByDefault Remove="AppComponents\PageView.razor"/>
+        <_ContentIncludedByDefault Remove="AppComponents\ReturnView.razor"/>
+        <_ContentIncludedByDefault Remove="CentreToolPages\AdminPages\Env.razor"/>
+        <_ContentIncludedByDefault Remove="CentreToolPages\AdminPages\MemberData.razor"/>
+        <_ContentIncludedByDefault Remove="CentreToolPages\DepartmentPages\Department.razor"/>
+        <_ContentIncludedByDefault Remove="CentreToolPages\DepartmentPages\EditProject.razor"/>
+        <_ContentIncludedByDefault Remove="CentreToolPages\DepartmentPages\Project.razor"/>
+        <_ContentIncludedByDefault Remove="CentreToolPages\DepartmentPages\Resource.razor"/>
+        <_ContentIncludedByDefault Remove="CentreToolPages\PersonalData.razor"/>
+        <_ContentIncludedByDefault Remove="CentreToolPages\_Imports.razor"/>
+        <_ContentIncludedByDefault Remove="Components\App.razor"/>
+        <_ContentIncludedByDefault Remove="Components\CentrePages\Centre.razor"/>
+        <_ContentIncludedByDefault Remove="Components\CentrePages\_Imports.razor"/>
+        <_ContentIncludedByDefault Remove="Components\DesignPages\CardHolder.razor"/>
+        <_ContentIncludedByDefault Remove="Components\DesignPages\Desktop.razor"/>
+        <_ContentIncludedByDefault Remove="Components\DesignPages\FridgeMagnets.razor"/>
+        <_ContentIncludedByDefault Remove="Components\HomePages\Home.razor"/>
+        <_ContentIncludedByDefault Remove="Components\HomePages\IOSPic.razor"/>
+        <_ContentIncludedByDefault Remove="Components\HomePages\Login.razor"/>
+        <_ContentIncludedByDefault Remove="Components\HomePages\Series.razor"/>
+        <_ContentIncludedByDefault Remove="Components\HomePages\Signup.razor"/>
+        <_ContentIncludedByDefault Remove="Components\HomePages\_Imports.razor"/>
+        <_ContentIncludedByDefault Remove="Components\Layout\CentreLayout.razor"/>
+        <_ContentIncludedByDefault Remove="Components\Layout\CentreToolLayout.razor"/>
+        <_ContentIncludedByDefault Remove="Components\Layout\HomeLayout.razor"/>
+        <_ContentIncludedByDefault Remove="Components\Layout\WordLayout.razor"/>
+        <_ContentIncludedByDefault Remove="Components\Routes.razor"/>
+        <_ContentIncludedByDefault Remove="Components\ShowPages\Articles.razor"/>
+        <_ContentIncludedByDefault Remove="Components\ShowPages\Event.razor"/>
+        <_ContentIncludedByDefault Remove="Components\ShowPages\History.razor"/>
+        <_ContentIncludedByDefault Remove="Components\ShowPages\Learn.razor"/>
+        <_ContentIncludedByDefault Remove="Components\ShowPages\Projects.razor"/>
+        <_ContentIncludedByDefault Remove="Components\ShowPages\Tools.razor"/>
+        <_ContentIncludedByDefault Remove="Components\ShowPages\YearProj.razor"/>
+        <_ContentIncludedByDefault Remove="Components\ShowPages\_Imports.razor"/>
+        <_ContentIncludedByDefault Remove="Components\Tests\Auth.razor"/>
+        <_ContentIncludedByDefault Remove="Components\WordPages\About.razor"/>
+        <_ContentIncludedByDefault Remove="Components\WordPages\Article.razor"/>
+        <_ContentIncludedByDefault Remove="Components\WordPages\OtherOrg.razor"/>
+        <_ContentIncludedByDefault Remove="Components\WordPages\Structure.razor"/>
+        <_ContentIncludedByDefault Remove="Components\WordPages\_Imports.razor"/>
     </ItemGroup>
-    
+
 </Project>

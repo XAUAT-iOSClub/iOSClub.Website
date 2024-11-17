@@ -91,29 +91,30 @@
                             </PrefixTemplate>
                         </Statistic>
                     </Flex>
-                    <Spin Spinning="@RunningStyle">
-                        <Table TItem="StudentModel" DataSource="@Models" Responsive>
-                            <PropertyColumn Title="姓名" Property="c => c.UserName"/>
-                            <PropertyColumn Title="学号" Property="c => c.UserId"/>
-                            <PropertyColumn Title="学院" Property="c => c.Academy"/>
-                            <PropertyColumn Title="政治面貌" Property="c => c.PoliticalLandscape"/>
-                            <PropertyColumn Title="性别" Property="c => c.Gender"/>
-                            <PropertyColumn Title="专业班级" Property="c => c.ClassName"/>
-                            <PropertyColumn Title="手机号码" Property="c => c.PhoneNum"/>
-                            <ActionColumn Title="操作">
-                                <Space>
-                                    <SpaceItem>
-                                        <Button Danger OnClick="@(() => Delete(context))">删除</Button>
-                                    </SpaceItem>
-                                    <SpaceItem>
-                                        <div class="phone-left-display">
-                                            <Button Danger OnClick="@(() => OpenTable(context))">更改</Button>
-                                        </div>
-                                    </SpaceItem>
-                                </Space>
-                            </ActionColumn>
-                        </Table>
-                    </Spin>
+                    <Table TItem="StudentModel" DataSource="@ShowData" Responsive
+                           PageIndex="PageIndex" PageSize="PageSize" Total="Total"
+                           PageIndexChanged="PageIndexChanged" Loading="RunningStyle"
+                           PageSizeChanged="PageSizeChanged">
+                        <PropertyColumn Title="姓名" Property="c => c.UserName"/>
+                        <PropertyColumn Title="学号" Property="c => c.UserId"/>
+                        <PropertyColumn Title="学院" Property="c => c.Academy"/>
+                        <PropertyColumn Title="政治面貌" Property="c => c.PoliticalLandscape"/>
+                        <PropertyColumn Title="性别" Property="c => c.Gender"/>
+                        <PropertyColumn Title="专业班级" Property="c => c.ClassName"/>
+                        <PropertyColumn Title="手机号码" Property="c => c.PhoneNum"/>
+                        <ActionColumn Title="操作">
+                            <Space>
+                                <SpaceItem>
+                                    <Button Danger OnClick="@(() => Delete(context))">删除</Button>
+                                </SpaceItem>
+                                <SpaceItem>
+                                    <div class="phone-left-display">
+                                        <Button Danger OnClick="@(() => OpenTable(context))">更改</Button>
+                                    </div>
+                                </SpaceItem>
+                            </Space>
+                        </ActionColumn>
+                    </Table>
                 </TabPane>
                 <TabPane Tab="历年人数" Key="2">
                     <AntDesign.Charts.Line Data="_yearData" Config="_yearConfig"/>

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using iOSClub.Data;
 
@@ -10,9 +11,11 @@ using iOSClub.Data;
 namespace iOSClub.Data.Migrations
 {
     [DbContext(typeof(iOSContext))]
-    partial class SignContextModelSnapshot : ModelSnapshot
+    [Migration("20241117174805_ChangeJoinTime")]
+    partial class ChangeJoinTime
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.10");

@@ -13,11 +13,11 @@ public class StudentModel
     public string UserId { get; set; } = "";
 
     [Column(TypeName = "varchar(50)")] public string Academy { get; set; } = "";
-    [Column(TypeName = "varchar(10)")] public string PoliticalLandscape { get; set; } = "";
+    [Column(TypeName = "varchar(10)")] public string PoliticalLandscape { get; set; } = "群众";
     [Column(TypeName = "varchar(2)")] public string Gender { get; set; } = "";
     [Column(TypeName = "varchar(20)")] public string ClassName { get; set; } = "";
     [Column(TypeName = "varchar(11)")] public string PhoneNum { get; set; } = "";
-    [Column(TypeName = "varchar(20)")] public string JoinTime { get; set; } = DateTime.Today.ToString("yyyy-MM-dd");
+    [Column(TypeName = "datetime")] public DateTime JoinTime { get; set; } = DateTime.Today;
 
     public override string ToString()
     {
@@ -27,17 +27,17 @@ public class StudentModel
     public StudentModel Standardization(string? time = null)
     {
         UserId = UserId.Replace(" ", "");
-        if (string.IsNullOrEmpty(JoinTime))
+        if (JoinTime.Year == 0)
         {
             JoinTime = string.IsNullOrEmpty(time)
-                ? DateTime.Today.ToString("yyyy-MM-dd")
-                : time;
+                ? DateTime.Today
+                : DateTime.Parse(time);
         }
 
         return this;
     }
 
-    public static string GetCsv(List<StudentModel> models)
+    public static string GetCsv(IEnumerable<StudentModel> models)
     {
         var builder = new StringBuilder("姓名,学号,性别,学院,政治面貌,专业班级,电话号码");
         foreach (var model in models)

@@ -102,24 +102,35 @@ a, .btn-link {
     }
 }
 
-.apple-card {
-    border-radius: 20px;
-    height: 300px;
-    transition: .3s;
-    background-color: #fff;
-}
-
-.apple-card:hover {
-    box-shadow: 0 0 10px #C0C0C0;
-    transform: scale(1.02);
-}
-
 .FrostedGlass {
     padding: 30px;
     background: rgba(255, 255, 255, 0.5);
     -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
     box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.3);
+}
+
+.apple-card {
+    border-radius: 20px;
+    height: 300px;
+    max-height: 100%;
+    transition: .2s;
+    background: rgba(255, 255, 255);
+    
+}
+
+@media screen and (min-width: 768px) {
+    .apple-card:hover {
+        box-shadow: 0 0 10px #C0C0C0;
+        transform: scale(1.02);
+        transition: box-shadow 0.3s, border-color 0.3s, transform 0.2s;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .apple-card:active {
+        transform: scale(0.98);
+    }
 }
 
 .apple-card .apple-card-header {
@@ -131,6 +142,6 @@ a, .btn-link {
 .apple-card .apple-card-context {
     border-radius: 0 0 20px 20px;
     padding: 1px 30px 1px;
+    height: 210px;
     overflow: auto;
-    height: 240px;
 }

@@ -239,9 +239,10 @@ public partial class MemberData
         context.Database
             .SqlQuery<AcademyCount>(
                 $"""
-                 SELECT Academy AS type, COUNT(*) AS value 
-                 FROM Students 
-                 GROUP BY Academy ORDER BY COUNT(*);
+                 SELECT "Academy" AS type, COUNT(*) AS value 
+                 FROM "Students"
+                 GROUP BY "Academy" 
+                 ORDER BY COUNT(*);
                  """).ForEach(
                 x =>
                     _collegeData.Add(new { type = x.Type, value = x.Value }));
@@ -249,9 +250,9 @@ public partial class MemberData
         context.Database
             .SqlQuery<AcademyCount>(
                 $"""
-                 SELECT SUBSTRING(UserId, 1, 2) AS type, COUNT(*) AS value 
-                 FROM Students 
-                 GROUP BY SUBSTRING(UserId, 1, 2) ORDER BY type
+                 SELECT SUBSTRING("UserId", 1, 2) AS type, COUNT(*) AS value 
+                 FROM "Students" 
+                 GROUP BY SUBSTRING("UserId", 1, 2) ORDER BY type
                  """)
             .ForEach(grade =>
                 _gradeData.Add(new { 年级 = grade.Type + "级", 人数 = grade.Value }));

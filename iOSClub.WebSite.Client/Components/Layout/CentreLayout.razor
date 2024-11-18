@@ -96,7 +96,11 @@
             if (model == null)
             {
                 var f = await context.Staffs.FirstOrDefaultAsync(x => x.UserId == m.UserId && x.Name == m.Name);
-                if (f == null) return;
+                if (f == null)
+                {
+                    await ((JwtProvider)authStateProvider).Logout();
+                    return;
+                }
                 model = new MemberModel()
                 {
                     UserId = f.UserId,

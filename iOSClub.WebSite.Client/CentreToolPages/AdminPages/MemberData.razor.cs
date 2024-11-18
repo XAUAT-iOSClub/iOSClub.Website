@@ -78,7 +78,7 @@ public partial class MemberData
         }
     };
 
-    private readonly List<object> _collegeData = [];
+    private List<AcademyCount> _collegeData = [];
 
     private readonly PieConfig _collegeConfig = new()
     {
@@ -90,7 +90,7 @@ public partial class MemberData
         ColorField = "type"
     };
 
-    private readonly List<object> _gradeData = [];
+    private readonly List<Con> _gradeData = [];
 
     private readonly BarConfig _gradeConfig = new()
     {
@@ -156,7 +156,6 @@ public partial class MemberData
 
     #endregion
 
-
     private List<StudentModel> ShowData { get; set; } = [];
     private int PageSize { get; set; } = 10;
     private int PageIndex { get; set; } = 1;
@@ -219,38 +218,54 @@ public partial class MemberData
         await using var context = await DbFactory.CreateDbContextAsync();
         ShowData = await context.Students.Take(PageSize).ToListAsync();
         Total = await context.Students.CountAsync();
-        if (context.Students.Count() < 430) return;
         _yearData.AddRange([new { year = "2021 - 2022", value = 231 }, new { year = "2022 - 2023", value = 429 }]);
-        var (year, month, _) = DateTime.Today;
-        for (var i = year - 2024; i >= 0; i--)
+        if (Total > 430)
         {
-            _yearData.Add(new
+            var (year, month, _) = DateTime.Today;
+            for (var i = year - 2024; i >= 0; i--)
             {
-                year = $"{year - i - 1} - {year - i}", value = context.Students.Count(s =>
-                    s.JoinTime < DateTime.Parse($"{year - i}-09-01"))
-            });
+#if DEBUG
+                var v = await context.Database
+                    .SqlQuery<int>($"""
+                                    SELECT COUNT(*) as value
+                                    FROM "Students" 
+                                    WHERE "JoinTime" < '{year - i}-09-01' AND CAST(SUBSTRING("UserId", 1, 2) AS INTEGER) > {year - i - 2004} 
+                                    """).FirstAsync();
+#else
+                var v = await context.Database.SqlQuery<int>($"""
+                         SELECT COUNT(*) as value FROM "Students" WHERE "JoinTime" < '{year - i}-09-01' AND CAST(SUBSTRING("UserId" FROM 1 FOR 2) AS INTEGER) > {year - 2004} 
+                         """).FirstAsync();
+#endif
+                _yearData.Add(new
+                {
+                    year = $"{year - i - 1} - {year - i}", value = v
+                });
+            }
+
+            if (month >= 9)
+            {
+                _yearData.Add(new { year = $"{year} - {year + 1}", value = context.Students.Count() });
+            }
+
+            GradientDescent();
         }
 
-        if (month >= 9)
-        {
-            _yearData.Add(new { year = $"{year} - {year + 1}", value = context.Students.Count() });
-        }
-
-        context.Database
+        _collegeData = await context.Database
             .SqlQuery<AcademyCount>(
-                $"SELECT \"Academy\" AS type, COUNT(*) AS value FROM \"Students\" GROUP BY \"Academy\" ORDER BY COUNT(*)").ForEach(
-                x =>
-                    _collegeData.Add(new { type = x.Type, value = x.Value }));
+                $"SELECT \"Academy\" AS type, COUNT(*) AS value FROM \"Students\" GROUP BY \"Academy\" ORDER BY COUNT(*) DESC")
+            .ToListAsync();
 
         context.Database
             .SqlQuery<AcademyCount>(
                 $"SELECT SUBSTRING(\"UserId\", 1, 2) AS type, COUNT(*) AS value FROM \"Students\" GROUP BY SUBSTRING(\"UserId\", 1, 2) ORDER BY type")
             .ForEach(grade =>
-                _gradeData.Add(new { 年级 = grade.Type + "级", 人数 = grade.Value }));
+                _gradeData.Add(new Con(grade.Type + "级", grade.Value)));
 
-        context.Students.GroupBy(x => x.PoliticalLandscape)
+        context.Database
+            .SqlQuery<AcademyCount>(
+                $"SELECT \"PoliticalLandscape\" AS type, COUNT(*) AS value FROM \"Students\" GROUP BY \"PoliticalLandscape\"")
             .ForEach(l
-                => _landscapeData.Add(new { type = l.Key, sales = l.Count() }));
+                => _landscapeData.Add(new { type = l.Type, sales = l.Value }));
 
         var man = await context.Students.CountAsync(x => x.Gender == "男");
         var woman = await context.Students.CountAsync(x => x.Gender == "女");
@@ -357,5 +372,62 @@ public partial class MemberData
     {
         public string Type { get; set; } = "";
         public int Value { get; set; }
+    }
+
+    public record Con(string 年级, int 人数);
+
+    private void CollegeMore(string college)
+    {
+        SearchItem = "学院";
+        SearchValue = college;
+        ActiveKey = "1";
+    }
+
+    private string ActiveKey { get; set; } = "1";
+
+    private void GradientDescent()
+    {
+        double[] x = [1, 2, 3, 4];
+        double[] y = [231, 429, 772, 1181];
+
+        // 学习率
+        const double learningRate = 0.01;
+        // 迭代次数
+        const int iterations = 1000;
+
+        // 初始化斜率和截距
+        double m = 0; // 斜率
+        double b = 0; // 截距
+
+        // 梯度下降算法
+        for (int i = 0; i < iterations; i++)
+        {
+            double mGradient = 0;
+            double bGradient = 0;
+            int N = x.Length;
+
+            // 计算梯度
+            for (int j = 0; j < N; j++)
+            {
+                double xValue = x[j];
+                double yValue = y[j];
+
+                // 预测值
+                double yPredicted = m * xValue + b;
+
+                // 计算梯度
+                mGradient += -(2.0 / N) * xValue * (yValue - yPredicted);
+                bGradient += -(2.0 / N) * (yValue - yPredicted);
+            }
+
+            // 更新斜率和截距
+            m -= learningRate * mGradient;
+            b -= learningRate * bGradient;
+        }
+
+        // 输出结果
+        Console.WriteLine($"斜率 (m): {m}");
+        Console.WriteLine($"截距 (b): {b}");
+        Console.WriteLine($"预测明年有:{m * 5 + b}人");
     }
 }

@@ -67,7 +67,7 @@
             </Space>
         </Extra>
         <Context>
-            <Tabs Centered>
+            <Tabs Centered @bind-ActiveKey="ActiveKey">
                 <TabPane Tab="成员数据" Key="1">
                     <Flex Justify="center" Gap="large">
                         <Space>
@@ -121,6 +121,26 @@
                 </TabPane>
                 <TabPane Tab="学院分布" Key="3">
                     <AntDesign.Charts.Pie Data="_collegeData" Config="_collegeConfig"/>
+                    <Divider/>
+                    <GridRow Gutter="(16, 16)">
+                        @foreach (var item in _collegeData)
+                        {
+                            <GridCol Xs="12" Sm="12" Md="8" Lg="6" Xl="6" Xxl="6">
+                                <Card Title="@item.Type" Style="border-radius: 10px;box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);">
+                                    <Extra>
+                                        <Button Type="link" OnClick="() => CollegeMore(item.Type)">更多</Button>
+                                    </Extra>
+                                    <ChildContent>
+                                        <Statistic GroupSeparator=" " Title="当前成员" Value="@item.Value" TValue="int">
+                                            <PrefixTemplate>
+                                                <Icon Type="team" Theme="outline"/>
+                                            </PrefixTemplate>
+                                        </Statistic>
+                                    </ChildContent>
+                                </Card>
+                            </GridCol>
+                        }
+                    </GridRow>
                 </TabPane>
                 <TabPane Tab="年级分布" Key="4">
                     <AntDesign.Charts.Bar Data="_gradeData" Config="_gradeConfig"/>

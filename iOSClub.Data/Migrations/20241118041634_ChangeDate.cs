@@ -1,15 +1,24 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace iOSClub.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class AddDe : Migration
+    public partial class ChangeDate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AlterColumn<DateTime>(
+                name: "JoinTime",
+                table: "Students",
+                type: "DATE",
+                nullable: false,
+                oldClrType: typeof(string),
+                oldType: "varchar(20)");
+
             migrationBuilder.AddColumn<string>(
                 name: "DepartmentName",
                 table: "Staffs",
@@ -85,6 +94,14 @@ namespace iOSClub.Data.Migrations
             migrationBuilder.DropColumn(
                 name: "DepartmentName",
                 table: "Staffs");
+
+            migrationBuilder.AlterColumn<string>(
+                name: "JoinTime",
+                table: "Students",
+                type: "varchar(20)",
+                nullable: false,
+                oldClrType: typeof(DateTime),
+                oldType: "DATE");
 
             migrationBuilder.AlterColumn<string>(
                 name: "DepartmentName",

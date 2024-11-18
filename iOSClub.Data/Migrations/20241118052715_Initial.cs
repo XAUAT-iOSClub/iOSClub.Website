@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -11,33 +12,14 @@ namespace iOSClub.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Articles",
+                name: "Departments",
                 columns: table => new
                 {
-                    Link = table.Column<string>(type: "varchar(256)", nullable: false),
-                    Title = table.Column<string>(type: "varchar(256)", nullable: false),
-                    Cover = table.Column<string>(type: "varchar(256)", nullable: false),
-                    Digest = table.Column<string>(type: "varchar(256)", nullable: false)
+                    Name = table.Column<string>(type: "varchar(20)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Articles", x => x.Link);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Projects",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "varchar(33)", nullable: false),
-                    DepartmentName = table.Column<string>(type: "varchar(20)", nullable: false),
-                    Title = table.Column<string>(type: "varchar(20)", nullable: false),
-                    Description = table.Column<string>(type: "varchar(512)", nullable: false),
-                    StartTime = table.Column<string>(type: "varchar(20)", nullable: true),
-                    EndTime = table.Column<string>(type: "varchar(20)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Projects", x => x.Id);
+                    table.PrimaryKey("PK_Departments", x => x.Name);
                 });
 
             migrationBuilder.CreateTable(
@@ -55,19 +37,6 @@ namespace iOSClub.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Staffs",
-                columns: table => new
-                {
-                    UserId = table.Column<string>(type: "varchar(10)", nullable: false),
-                    Name = table.Column<string>(type: "varchar(50)", nullable: false),
-                    Identity = table.Column<string>(type: "varchar(20)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Staffs", x => x.UserId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Students",
                 columns: table => new
                 {
@@ -77,7 +46,8 @@ namespace iOSClub.Data.Migrations
                     PoliticalLandscape = table.Column<string>(type: "varchar(10)", nullable: false),
                     Gender = table.Column<string>(type: "varchar(2)", nullable: false),
                     ClassName = table.Column<string>(type: "varchar(20)", nullable: false),
-                    PhoneNum = table.Column<string>(type: "varchar(11)", nullable: false)
+                    PhoneNum = table.Column<string>(type: "varchar(11)", nullable: false),
+                    JoinTime = table.Column<DateTime>(type: "DATE", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -85,19 +55,66 @@ namespace iOSClub.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Tools",
+                name: "Projects",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "varchar(33)", nullable: false),
-                    Name = table.Column<string>(type: "varchar(20)", nullable: false),
-                    Url = table.Column<string>(type: "varchar(64)", nullable: false),
-                    IconUrl = table.Column<string>(type: "varchar(64)", nullable: false),
-                    Description = table.Column<string>(type: "varchar(64)", nullable: false),
-                    Tag = table.Column<string>(type: "varchar(64)", nullable: true)
+                    DepartmentName = table.Column<string>(type: "varchar(20)", nullable: true),
+                    Title = table.Column<string>(type: "varchar(20)", nullable: false),
+                    Description = table.Column<string>(type: "varchar(512)", nullable: false),
+                    StartTime = table.Column<string>(type: "varchar(20)", nullable: true),
+                    EndTime = table.Column<string>(type: "varchar(20)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Tools", x => x.Id);
+                    table.PrimaryKey("PK_Projects", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Projects_Departments_DepartmentName",
+                        column: x => x.DepartmentName,
+                        principalTable: "Departments",
+                        principalColumn: "Name");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Staffs",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(type: "varchar(10)", nullable: false),
+                    Name = table.Column<string>(type: "varchar(50)", nullable: false),
+                    Identity = table.Column<string>(type: "varchar(20)", nullable: false),
+                    DepartmentName = table.Column<string>(type: "varchar(20)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Staffs", x => x.UserId);
+                    table.ForeignKey(
+                        name: "FK_Staffs_Departments_DepartmentName",
+                        column: x => x.DepartmentName,
+                        principalTable: "Departments",
+                        principalColumn: "Name");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Todos",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "varchar(33)", nullable: false),
+                    Title = table.Column<string>(type: "varchar(20)", nullable: false),
+                    Description = table.Column<string>(type: "varchar(200)", nullable: false),
+                    StartTime = table.Column<string>(type: "varchar(20)", nullable: false),
+                    EndTime = table.Column<string>(type: "varchar(20)", nullable: false),
+                    Status = table.Column<bool>(type: "boolean", nullable: false),
+                    StudentId = table.Column<string>(type: "varchar(10)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Todos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Todos_Students_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "Students",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -177,22 +194,34 @@ namespace iOSClub.Data.Migrations
                 column: "StaffsUserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Projects_DepartmentName",
+                table: "Projects",
+                column: "DepartmentName");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_StaffModelTaskModel_UsersUserId",
                 table: "StaffModelTaskModel",
                 column: "UsersUserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Staffs_DepartmentName",
+                table: "Staffs",
+                column: "DepartmentName");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Tasks_ProjectId",
                 table: "Tasks",
                 column: "ProjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Todos_StudentId",
+                table: "Todos",
+                column: "StudentId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Articles");
-
             migrationBuilder.DropTable(
                 name: "ProjectModelStaffModel");
 
@@ -203,10 +232,7 @@ namespace iOSClub.Data.Migrations
                 name: "StaffModelTaskModel");
 
             migrationBuilder.DropTable(
-                name: "Students");
-
-            migrationBuilder.DropTable(
-                name: "Tools");
+                name: "Todos");
 
             migrationBuilder.DropTable(
                 name: "Staffs");
@@ -215,7 +241,13 @@ namespace iOSClub.Data.Migrations
                 name: "Tasks");
 
             migrationBuilder.DropTable(
+                name: "Students");
+
+            migrationBuilder.DropTable(
                 name: "Projects");
+
+            migrationBuilder.DropTable(
+                name: "Departments");
         }
     }
 }

@@ -205,14 +205,14 @@
 
         if (Staff == null || Staff.Identity == "Member") return;
         Resources = await context.Resources.ToArrayAsync();
-        if (Staff.Identity == "Department")
+        if (Staff.Identity != "Department")
             Total = await context.Students.CountAsync();
         await base.OnParametersSetAsync();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (Tools.Length == 0 || firstRender)
+        if (firstRender)
         {
             var data = await client.GetFromJsonAsync<CategoryModel>("https://link.xauat.site/api/Link/GetCategory/社团出品");
             if (data == null) return;

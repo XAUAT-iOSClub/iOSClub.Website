@@ -23,7 +23,6 @@ public partial class MemberData
     [Inject] [NotNull] public IDbContextFactory<iOSContext>? DbFactory { get; set; }
     [Inject] [NotNull] public NavigationManager? Nav { get; set; }
 
-    private bool RunningStyle { get; set; }
 
     #region Data Download
 
@@ -41,10 +40,8 @@ public partial class MemberData
 
     private async Task Download(string fileName, byte[] data)
     {
-        RunningStyle = true;
         await JS.InvokeVoidAsync("jsSaveAsFile", fileName, Convert.ToBase64String(data));
         HandleCancel();
-        RunningStyle = false;
     }
 
     private async Task CsvDownload()
@@ -171,7 +168,6 @@ public partial class MemberData
             return;
         }
 
-        RunningStyle = true;
         switch (SearchItem)
         {
             case "姓名":
@@ -190,8 +186,6 @@ public partial class MemberData
                 Total = await context.Students.Where(x => x.Academy.StartsWith(_searchValue)).CountAsync();
                 break;
         }
-
-        RunningStyle = false;
     }
 
     private async Task PageIndexChanged(int s)
@@ -353,8 +347,6 @@ public partial class MemberData
         var list = JsonConvert.DeserializeObject<List<StudentModel>>(result)!;
         var context = await DbFactory.CreateDbContextAsync();
 
-        RunningStyle = true;
-
         var b = await context.Students.ToListAsync();
 
         foreach (var model in list.Where(model => model.IsStandardization()))
@@ -364,8 +356,7 @@ public partial class MemberData
             await context.Students.AddAsync(m);
             await context.SaveChangesAsync();
         }
-
-        RunningStyle = false;
+        
         Total = await context.Students.CountAsync();
         await ShowChange(context);
         await context.DisposeAsync();

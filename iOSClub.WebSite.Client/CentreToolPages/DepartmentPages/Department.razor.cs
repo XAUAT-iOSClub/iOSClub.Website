@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using AntDesign;
+using AntDesign.Charts;
 using iOSClub.Data.DataModels;
 using iOSClub.WebSite.Client.Models;
 using Microsoft.AspNetCore.Components;
@@ -27,6 +28,19 @@ public partial class Department
     [CascadingParameter] private MemberModel Member { get; set; } = new();
     private List<DepartmentList> Departments { get; set; } = [];
     private MemberList Staffs { get; } = new();
+
+    private List<object> _collegeData = [];
+    private readonly List<object> _genderData = [];
+
+    private readonly PieConfig _collegeConfig = new()
+    {
+        AppendPadding = 10,
+        InnerRadius = 0.6,
+        Radius = 0.8,
+        Padding = "auto",
+        AngleField = "value",
+        ColorField = "type"
+    };
 
     protected override async Task OnInitializedAsync()
     {
@@ -73,6 +87,21 @@ public partial class Department
             member.Identity = $"{model.Department?.Name}{MemberModel.IdentityDictionary[model.Identity]}";
             Staffs.Member.Add(member);
         }
+
+        var man = Staffs.Member.Count(x => x.Gender == "男");
+        var woman = Staffs.Member.Count(x => x.Gender == "女");
+
+        _genderData.AddRange(new List<object>
+        {
+            new { type = "男", value = man },
+            new { type = "女", value = woman }
+        });
+        
+        _collegeData.AddRange(Staffs.Member.GroupBy(x => x.Academy).OrderBy(x => x.Count()).Select(x => new
+        {
+            type = x.Key,
+            value = x.Count()
+        }));
 
         Staffs.Projects = await db.Projects.Include(x => x.Department).ToListAsync();
     }

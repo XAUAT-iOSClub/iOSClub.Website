@@ -205,6 +205,11 @@
                 <Empty Image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
                        Style="padding: 20px" Description="@("没有项目")"/>
             }
+            <h2>学院分布</h2>
+            <AntDesign.Charts.Pie Data="_collegeData" Config="_collegeConfig"/>
+            <Divider/>
+            <h2>男女比例</h2>
+            <AntDesign.Charts.Pie Data="_genderData" Config="_collegeConfig"/>
         </TabPane>
         @foreach (var department in Departments)
         {

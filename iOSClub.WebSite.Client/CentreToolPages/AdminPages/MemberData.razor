@@ -72,7 +72,7 @@
                     <Flex Justify="center" Gap="large">
                         <Space>
                             <SpaceItem>
-                                <SimpleSelect @bind-Value="@SearchItem">
+                                <SimpleSelect Value="@SearchItem" ValueChanged="async s => await GetDataFromItem(s)">
                                     <SelectOptions>
                                         @foreach (var item in SearchItems)
                                         {
@@ -82,7 +82,8 @@
                                 </SimpleSelect>
                             </SpaceItem>
                             <SpaceItem>
-                                <Search Placeholder="请输入搜索项" EnterButton="@("搜索")" @bind-Value="@SearchValue" Size="large"/>
+                                <Search Placeholder="请输入搜索项" EnterButton="@("搜索")"
+                                        Value="@SearchValue" Size="large" ValueChanged="async s => await GetData(s)"/>
                             </SpaceItem>
                         </Space>
                         <Statistic GroupSeparator=" " Title="当前成员" Value="@Total" TValue="int" Class="desktop-phone">

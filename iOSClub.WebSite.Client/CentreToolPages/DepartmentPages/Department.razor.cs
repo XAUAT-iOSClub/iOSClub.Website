@@ -29,7 +29,7 @@ public partial class Department
     private List<DepartmentList> Departments { get; set; } = [];
     private MemberList Staffs { get; } = new();
 
-    private List<object> _collegeData = [];
+    private readonly List<object> _collegeData = [];
     private readonly List<object> _genderData = [];
 
     private readonly PieConfig _collegeConfig = new()

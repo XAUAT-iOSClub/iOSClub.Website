@@ -128,22 +128,25 @@ public partial class MemberData
     private static IEnumerable<string> SearchItems => ["姓名", "学号", "学院"];
     private string SearchItem { get; set; } = "姓名";
 
-    private string _searchValue = "";
+    private string SearchValue { get; set; } = "";
 
-    private string SearchValue
+    private async Task GetData(string s)
     {
-        get => _searchValue;
-        set
-        {
-            _searchValue = value;
-            GetData();
-        }
+        if (string.IsNullOrEmpty(s)) return;
+
+        SearchValue = s;
+        var context = await DbFactory.CreateDbContextAsync();
+
+        await ShowChange(context);
+
+        await context.DisposeAsync();
     }
 
-    private async void GetData()
+    private async Task GetDataFromItem(string s)
     {
-        if (string.IsNullOrEmpty(_searchValue)) return;
+        if (string.IsNullOrEmpty(SearchValue)) return;
 
+        SearchItem = s;
         var context = await DbFactory.CreateDbContextAsync();
 
         await ShowChange(context);
@@ -161,7 +164,7 @@ public partial class MemberData
 
     private async Task ShowChange(iOSContext context)
     {
-        if (string.IsNullOrEmpty(_searchValue))
+        if (string.IsNullOrEmpty(SearchValue))
         {
             ShowData = await context.Students.OrderBy(x => x.UserId).Skip((PageIndex - 1) * PageSize).Take(PageSize)
                 .ToListAsync();
@@ -171,19 +174,19 @@ public partial class MemberData
         switch (SearchItem)
         {
             case "姓名":
-                ShowData = await context.Students.Where(x => x.UserName.StartsWith(_searchValue))
+                ShowData = await context.Students.Where(x => x.UserName.StartsWith(SearchValue))
                     .OrderBy(x => x.UserId).Skip((PageIndex - 1) * PageSize).Take(PageSize).ToListAsync();
-                Total = await context.Students.Where(x => x.UserName.StartsWith(_searchValue)).CountAsync();
+                Total = await context.Students.Where(x => x.UserName.StartsWith(SearchValue)).CountAsync();
                 break;
             case "学号":
-                ShowData = await context.Students.Where(x => x.UserId.StartsWith(_searchValue))
+                ShowData = await context.Students.Where(x => x.UserId.StartsWith(SearchValue))
                     .OrderBy(x => x.UserId).Skip((PageIndex - 1) * PageSize).Take(PageSize).ToListAsync();
-                Total = await context.Students.Where(x => x.UserId.StartsWith(_searchValue)).CountAsync();
+                Total = await context.Students.Where(x => x.UserId.StartsWith(SearchValue)).CountAsync();
                 break;
             case "学院":
-                ShowData = await context.Students.Where(x => x.Academy.StartsWith(_searchValue))
+                ShowData = await context.Students.Where(x => x.Academy.StartsWith(SearchValue))
                     .OrderBy(x => x.UserId).Skip((PageIndex - 1) * PageSize).Take(PageSize).ToListAsync();
-                Total = await context.Students.Where(x => x.Academy.StartsWith(_searchValue)).CountAsync();
+                Total = await context.Students.Where(x => x.Academy.StartsWith(SearchValue)).CountAsync();
                 break;
         }
     }
@@ -356,7 +359,7 @@ public partial class MemberData
             await context.Students.AddAsync(m);
             await context.SaveChangesAsync();
         }
-        
+
         Total = await context.Students.CountAsync();
         await ShowChange(context);
         await context.DisposeAsync();
@@ -385,10 +388,11 @@ public partial class MemberData
     }
 
 
-    private void CollegeMore(string college)
+    private async Task CollegeMore(string college)
     {
         SearchItem = "学院";
-        SearchValue = college;
+        // SearchValue = college;
+        await GetData(college);
         ActiveKey = "1";
     }
 

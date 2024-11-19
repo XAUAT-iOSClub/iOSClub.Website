@@ -17,13 +17,7 @@ public class MemberModel : StudentModel
     public static readonly Dictionary<string, string> IdentityDictionary = new()
     {
         { "Founder", "创始人" },
-        { "President", "社长/副社长/秘书长" },
-        { "TechnologyMinister", "科技部部长/副部长" },
-        { "PracticalMinister", "实践交流部部长/副部长" },
-        { "PracticalMember", "实践交流部成员" },
-        { "NewMediaMinister", "新媒体部部长/副部长" },
-        { "NewMediaMember", "新媒体部成员" },
-        { "TechnologyMember", "科技部成员" },
+        { "President", "社长/团支书" },
         { "Department", "部员" },
         { "Minister", "部长/副部长" },
         { "Member", "普通成员" }

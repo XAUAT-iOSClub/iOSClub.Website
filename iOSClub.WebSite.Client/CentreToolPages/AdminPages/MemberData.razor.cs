@@ -132,8 +132,6 @@ public partial class MemberData
 
     private async Task GetData(string s)
     {
-        if (string.IsNullOrEmpty(s)) return;
-
         SearchValue = s;
         var context = await DbFactory.CreateDbContextAsync();
 
@@ -144,9 +142,8 @@ public partial class MemberData
 
     private async Task GetDataFromItem(string s)
     {
-        if (string.IsNullOrEmpty(SearchValue)) return;
-
         SearchItem = s;
+        if (string.IsNullOrEmpty(SearchValue)) return;
         var context = await DbFactory.CreateDbContextAsync();
 
         await ShowChange(context);
@@ -168,25 +165,32 @@ public partial class MemberData
         {
             ShowData = await context.Students.OrderBy(x => x.UserId).Skip((PageIndex - 1) * PageSize).Take(PageSize)
                 .ToListAsync();
+            Total = await context.Students.CountAsync();
             return;
         }
 
         switch (SearchItem)
         {
             case "姓名":
+                Total = await context.Students.Where(x => x.UserName.StartsWith(SearchValue)).CountAsync();
+                if ((PageIndex - 1) * PageSize >= Total)
+                    PageIndex = 1;
                 ShowData = await context.Students.Where(x => x.UserName.StartsWith(SearchValue))
                     .OrderBy(x => x.UserId).Skip((PageIndex - 1) * PageSize).Take(PageSize).ToListAsync();
-                Total = await context.Students.Where(x => x.UserName.StartsWith(SearchValue)).CountAsync();
                 break;
             case "学号":
+                Total = await context.Students.Where(x => x.UserId.StartsWith(SearchValue)).CountAsync();
+                if ((PageIndex - 1) * PageSize >= Total)
+                    PageIndex = 1;
                 ShowData = await context.Students.Where(x => x.UserId.StartsWith(SearchValue))
                     .OrderBy(x => x.UserId).Skip((PageIndex - 1) * PageSize).Take(PageSize).ToListAsync();
-                Total = await context.Students.Where(x => x.UserId.StartsWith(SearchValue)).CountAsync();
                 break;
             case "学院":
+                Total = await context.Students.Where(x => x.Academy.StartsWith(SearchValue)).CountAsync();
+                if ((PageIndex - 1) * PageSize >= Total)
+                    PageIndex = 1;
                 ShowData = await context.Students.Where(x => x.Academy.StartsWith(SearchValue))
                     .OrderBy(x => x.UserId).Skip((PageIndex - 1) * PageSize).Take(PageSize).ToListAsync();
-                Total = await context.Students.Where(x => x.Academy.StartsWith(SearchValue)).CountAsync();
                 break;
         }
     }
@@ -242,7 +246,7 @@ public partial class MemberData
 
                 _yearData.Add(new
                 {
-                    year = $"{year - i - 1} - {year - i}", value = v
+                    year = $"{year - i - 1}学年", value = v
                 });
             }
 

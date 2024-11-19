@@ -84,7 +84,7 @@ public partial class Department
             var student = await db.Students.FirstOrDefaultAsync(x => x.UserId == model.UserId);
             if (student == null) continue;
             var member = MemberModel.CopyFrom(student);
-            member.Identity = $"{model.Department?.Name}{MemberModel.IdentityDictionary[model.Identity]}";
+            member.Identity = $"{model.Department?.Name} {MemberModel.IdentityDictionary[model.Identity]}";
             Staffs.Member.Add(member);
         }
 

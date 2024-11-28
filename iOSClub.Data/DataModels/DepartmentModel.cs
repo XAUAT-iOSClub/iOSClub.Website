@@ -11,12 +11,15 @@ public class DepartmentModel
     [Key]
     [Column(TypeName = "varchar(20)")]
     public string Name { get; set; } = "";
-    
+
+    [Column(TypeName = "varchar(32)")] 
+    public string? Description { get; set; }
+
     /// <summary>
     /// 部员
     /// </summary>
     public List<StaffModel> Staffs { get; init; } = [];
-    
+
     /// <summary>
     /// 项目
     /// </summary>

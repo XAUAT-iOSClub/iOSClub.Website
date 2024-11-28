@@ -42,6 +42,19 @@ public partial class Department
         ColorField = "type"
     };
 
+    private readonly List<object> _departmentData = [];
+
+    private readonly BarConfig _departmentConfig = new()
+    {
+        YField = "部门",
+        XField = "人数",
+        Label = new BarViewConfigLabel
+        {
+            Visible = true
+        },
+        AutoFit = true
+    };
+
     protected override async Task OnInitializedAsync()
     {
         Key ??= "总览";
@@ -54,11 +67,16 @@ public partial class Department
             .Select(x => new DepartmentList()
             {
                 Name = x.Name, Projects = x.Projects,
+                Description = x.Description,
                 Ministers = x.Staffs.Where(y => y.Identity == "Minister").ToList(),
                 Member = x.Staffs.Where(y => y.Identity == "Department").ToList()
             })
             .ToListAsync();
 
+        Departments.ForEach(grade =>
+        {
+            _departmentData.Add(new { 部门 = grade.Name, 人数 = grade.Member.Count + grade.Ministers.Count });
+        });
 
         Staffs.Ministers = await db.Staffs.Where(x => x.Identity == "President").ToListAsync();
         var departmentMember = new List<StaffModel>();
@@ -96,7 +114,7 @@ public partial class Department
             new { type = "男", value = man },
             new { type = "女", value = woman }
         });
-        
+
         _collegeData.AddRange(Staffs.Member.GroupBy(x => x.Academy).OrderBy(x => x.Count()).Select(x => new
         {
             type = x.Key,
@@ -236,6 +254,7 @@ public partial class Department
     public class DepartmentList
     {
         public string Name { get; set; } = "";
+        public string? Description { get; set; }
         public List<StaffModel> Ministers { get; init; } = [];
         public List<StaffModel> Member { get; init; } = [];
         public List<ProjectModel> Projects { get; init; } = [];
@@ -243,6 +262,7 @@ public partial class Department
         public void Update(DepartmentModel model)
         {
             Name = model.Name;
+            Description = model.Description;
             Ministers.Clear();
             Member.Clear();
             foreach (var item in model.Staffs)
@@ -349,7 +369,11 @@ public partial class Department
         }
         else
         {
-            _departmentModel = new DepartmentModel() { Name = model.Name };
+            _departmentModel = new DepartmentModel()
+            {
+                Name = model.Name,
+                Description = model.Description
+            };
             _changeDepartmentName = model.Name;
         }
 

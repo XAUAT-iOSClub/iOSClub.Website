@@ -119,19 +119,6 @@ using (var scope = app.Services.CreateScope())
 
         context.Staffs.Add(model);
     }
-
-    if (context.Departments.Any())
-    {
-        var software = await context.Departments.FirstAsync(x => x.Name == "软件部");
-        var hardware = await context.Departments.FirstAsync(x => x.Name == "硬件部");
-        var media = await context.Departments.FirstAsync(x => x.Name == "新媒体部");
-        var practice = await context.Departments.FirstAsync(x => x.Name == "交流实践部");
-        software.Description = "感受软件开发的魅力";
-        hardware.Description = "感受硬件开发的魅力";
-        media.Description = "分享社团的点滴";
-        practice.Description = "组织各种活动并参与其中";
-        await context.SaveChangesAsync();
-    }
     
     await context.SaveChangesAsync();
     await context.DisposeAsync();

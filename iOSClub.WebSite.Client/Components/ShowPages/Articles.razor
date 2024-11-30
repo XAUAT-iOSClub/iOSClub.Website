@@ -16,16 +16,17 @@
 <GridRow Gutter="(16, 16)" Style="padding: 20px">
     @foreach (var context in RssModels)
     {
-        <GridCol Xs="24" Sm="24" Md="12" Lg="12" Xl="12" Xxl="12" Style="padding: 10px;">
+        <GridCol Xs="24" Sm="24" Md="12" Lg="12" Xl="12" Xxl="12" 
+                 Style="padding: 10px;">
             <a href="@context.Url" target="_blank">
                 <Card Hoverable Class="div" Bordered="false">
-                    <Flex Vertical Style="height: 100%" Justify="center">
+                    <Flex Vertical Style="height: 100%" Justify="center" Align="center">
                         <Title Level="3">
                             @context.Title
                         </Title>
                         <img alt=""
                              src="@context.Image"
-                             style="width:80%;text-align: center" class="desktop-phone"/>
+                             style="width:80%;text-align: center"/>
                     </Flex>
                 </Card>
             </a>
@@ -78,7 +79,7 @@
 <style>
     .div{
         margin: 10px;
-        height: 270px;
+        max-height: 270px;
         max-width: 100%;
         background: #f3f5f7;
         border-radius: 10px;

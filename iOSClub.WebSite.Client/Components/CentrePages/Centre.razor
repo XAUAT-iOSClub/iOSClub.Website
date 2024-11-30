@@ -16,7 +16,8 @@
             <Card Hoverable Class="card" Bordered="false">
                 @if (Member.Identity != "Founder")
                 {
-                    <Image Style="height: 100px;width: 100px" Preview="false" Src="@(Member.Gender == "男" ? "Centre/男生.png" : "Centre/女生.png")"/>
+                    <Image Style="height: 100px;width: 100px" Preview="false"
+                           Src="@(Member.Gender == "男" ? "Centre/男生.png" : "Centre/女生.png")"/>
                 }
                 else
                 {
@@ -70,7 +71,8 @@
                 <ContextTemplate>
                     @if (Staff == null || Staff.Tasks.Count == 0)
                     {
-                        <Empty Image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg" Style="padding: 20px" Description="@("您的任务都已经完成了")"/>
+                        <Empty Image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+                               Style="padding: 20px" Description="@("您的任务都已经完成了")"/>
                     }
                     else
                     {
@@ -80,7 +82,8 @@
                                     <TitleTemplate>
                                         <Space Align="center" Size="@("large")">
                                             <SpaceItem>
-                                                <div style="font-size: 18px;line-height: 1.35em;color: #1c1f23">@context.Title</div>
+                                                <div
+                                                    style="font-size: 18px;line-height: 1.35em;color: #1c1f23">@context.Title</div>
                                             </SpaceItem>
                                             <SpaceItem>
                                                 <Tag Color="@TaskColor(context)">@TaskString(context)</Tag>
@@ -88,7 +91,8 @@
                                         </Space>
                                     </TitleTemplate>
                                     <DescriptionTemplate>
-                                        <div style="color: #00000073;margin-top: 3px;margin-bottom: 3px">@($"{context.StartTime} - {context.EndTime}")</div>
+                                        <div
+                                            style="color: #00000073;margin-top: 3px;margin-bottom: 3px">@($"{context.StartTime} - {context.EndTime}")</div>
                                     </DescriptionTemplate>
                                 </ListItemMeta>
                             </ListItem>
@@ -107,7 +111,8 @@
                     <ContextTemplate>
                         @if (Resources.Length == 0)
                         {
-                            <Empty Image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg" Style="padding: 20px"
+                            <Empty Image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+                                   Style="padding: 20px"
                                    Description="@("社团现在还没有资源")"/>
                         }
                         else
@@ -162,11 +167,29 @@
                         <div style="color: #00000073;margin-top: 3px;margin-bottom: 3px">展示社团数据</div>
                     </TitleTemplate>
                     <ContextTemplate>
-                        <Statistic GroupSeparator=" " Title="当前成员" Value="@Total" TValue="int">
-                            <PrefixTemplate>
-                                <Icon Type="team" Theme="outline"/>
-                            </PrefixTemplate>
-                        </Statistic>
+                        <GridRow Gutter="(16,16)" Style="padding-top: 10px">
+                            <GridCol Xs="8" Sm="8" Md="8" Lg="6" Xl="4" Xxl="4">
+                                <Statistic GroupSeparator=" " Title="当前成员" Value="@Total" TValue="int"/>
+                            </GridCol>
+                            <GridCol Xs="8" Sm="8" Md="8" Lg="6" Xl="4" Xxl="4">
+                                <Statistic GroupSeparator=" " Title="部员数量" Value="@StaffsCount" TValue="int"/>
+                            </GridCol>
+                            <GridCol Xs="8" Sm="8" Md="8" Lg="6" Xl="4" Xxl="4">
+                                <Statistic GroupSeparator=" " Title="项目数量" Value="@ProjectsCount" TValue="int"/>
+                            </GridCol>
+                            <GridCol Xs="8" Sm="8" Md="8" Lg="6" Xl="4" Xxl="4">
+                                <Statistic GroupSeparator=" " Title="任务数量" Value="@TasksCount" TValue="int"/>
+                            </GridCol>
+                            <GridCol Xs="8" Sm="8" Md="8" Lg="6" Xl="4" Xxl="4">
+                                <Statistic GroupSeparator=" " Title="资源数量" Value="@ResourcesCount" TValue="int"/>
+                            </GridCol>
+                            <GridCol Xs="8" Sm="8" Md="8" Lg="6" Xl="4" Xxl="4">
+                                <Statistic GroupSeparator=" " Title="部门数量" Value="@DepartmentsCount" TValue="int"/>
+                            </GridCol>
+                            <GridCol Xs="8" Sm="8" Md="8" Lg="6" Xl="4" Xxl="4">
+                                <Statistic GroupSeparator=" " Title="待办数量" Value="@TodosCount" TValue="int"/>
+                            </GridCol>
+                        </GridRow>
                     </ContextTemplate>
                 </AppleCard>
             </a>
@@ -175,6 +198,7 @@
 </GridRow>
 
 @code
+
 {
     [CascadingParameter] private MemberModel Member { get; set; } = new();
 
@@ -204,6 +228,12 @@
     private DepartmentModel[] Departments { get; set; } = [];
     private LinkModel[] Tools { get; set; } = [];
     private int Total { get; set; }
+    private int ProjectsCount { get; set; }
+    private int TasksCount { get; set; }
+    private int ResourcesCount { get; set; }
+    private int DepartmentsCount { get; set; }
+    private int TodosCount { get; set; }
+    private int StaffsCount { get; set; }
 
     protected override async Task OnParametersSetAsync()
     {
@@ -212,25 +242,24 @@
             .Include(x => x.Tasks)
             .FirstOrDefaultAsync(x => x.UserId == Member.UserId);
 
+        var data = await client.GetFromJsonAsync<CategoryModel>("https://link.xauat.site/api/Link/GetCategory/社团出品");
+        Tools = data?.Links.ToArray() ?? [];
         if (Staff == null || Staff.Identity == "Member") return;
         Resources = await context.Resources.ToArrayAsync();
         if (Staff.Identity != "Department")
-            Total = await context.Students.CountAsync();
-        Departments = await context.Departments.ToArrayAsync();
-        await base.OnParametersSetAsync();
-    }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
         {
-            var data = await client.GetFromJsonAsync<CategoryModel>("https://link.xauat.site/api/Link/GetCategory/社团出品");
-            if (data == null) return;
-            Tools = data.Links.ToArray();
-            StateHasChanged();
+            Total = await context.Students.CountAsync();
+            StaffsCount = await context.Staffs.CountAsync();
+            ProjectsCount = await context.Projects.CountAsync();
+            TasksCount = await context.Tasks.CountAsync();
+            ResourcesCount = await context.Resources.CountAsync();
+            DepartmentsCount = await context.Departments.CountAsync();
+            TodosCount = await context.Todos.CountAsync();
         }
 
-        await base.OnAfterRenderAsync(firstRender);
+        Departments = await context.Departments.ToArrayAsync();
+
+        await base.OnParametersSetAsync();
     }
 }
 
@@ -239,16 +268,17 @@
     .Layout-Title {
         color: #f3f5f7 !important;
     }
-    .ant-layout{
+
+    .ant-layout {
         background-image: linear-gradient(to bottom right, #ff6b6b, #7171ae, #10bce7);
         overflow: auto;
     }
-    
-    .ant-layout-content{
+
+    .ant-layout-content {
         min-height: 100vh;
     }
-    
-    .Layout-Header{
+
+    .Layout-Header {
         background: rgba(255, 255, 255, 0.3) !important;
         -webkit-backdrop-filter: blur(20px);
         backdrop-filter: blur(20px);
@@ -258,20 +288,20 @@
         margin: 10px;
         border-radius: 10px;
     }
-    
-    .card{
+
+    .card {
         border-radius: 20px;
         padding: 10px;
         height: 300px;
         background-color: #fff;
         transition: .2s;
     }
-    
-    .card:hover{
+
+    .card:hover {
         transform: scale(1.02)
     }
-    
-    .block{
+
+    .block {
         padding-left: 10vw;
         padding-right: 10vw;
         margin-top: 45px;
@@ -279,7 +309,7 @@
         margin-left: 0 !important;
         margin-right: 0 !important;
     }
-    
+
 </style>
 
 <style>

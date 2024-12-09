@@ -221,7 +221,10 @@ public partial class MemberData
         await using var context = await DbFactory.CreateDbContextAsync();
         ShowData = await context.Students.Take(PageSize).ToListAsync();
         Total = await context.Students.CountAsync();
-        _yearData.AddRange([new { year = "2021学年", value = 231 }, new { year = "2022学年", value = 429 }]);
+        _yearData.AddRange([
+            new { year = "2019学年", value = 33 }, new { year = "2020学年", value = 1 },
+            new { year = "2021学年", value = 231 }, new { year = "2022学年", value = 429 }
+        ]);
         //_yearList = [231, 429];
         if (Total > 430)
         {

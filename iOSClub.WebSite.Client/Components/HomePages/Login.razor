@@ -12,7 +12,7 @@
 
 <PageTitle>登录到您的iMember - 西建大iOS Club</PageTitle>
 
-<Flex Justify="center" Align="center" Style="height: calc(100vh - 170px);">
+<Flex Justify="center" Align="center" Class="page-flex">
     <div class="login-container">
         <div style="text-align: center;">
             <h2 style="font-size: 1.875rem;line-height: 2.25rem;color: rgba(31, 41, 55, 1);margin: 0;">登录</h2>
@@ -124,6 +124,9 @@
             width: 100%;
             box-shadow: none;
         }
+        .page-flex{
+            align-items: flex-start !important;
+        }
     }
 
     .apple-input {
@@ -145,5 +148,9 @@
 
     .apple-button {
         border-radius: 4px
+    }
+
+    .page-flex{
+        height: calc(100vh - 170px);
     }
 </style>

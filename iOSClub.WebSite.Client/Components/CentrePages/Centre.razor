@@ -46,11 +46,26 @@
                     {
                         <SpaceItem>
                             <a href="@link.Url" target="_blank"
-                               style="margin: 5px 5px 0 0;"
                                class="a-btn"
                                title="@link.Description">
                                 <div style="text-align: center">
-                                    <IconFont Style="font-size: 40px" Type="@($"icon-{link.Icon}")"/>
+                                    @if (!string.IsNullOrEmpty(link.Icon))
+                                    {
+                                        if (link.Icon.StartsWith("http"))
+                                        {
+                                            <img alt="" src="@link.Icon"
+                                                 style="height: 40px;width: 40px;border-radius: 4px"/>
+                                        }
+                                        else
+                                        {
+                                            <IconFont Style="font-size: 40px" Type="@($"icon-{link.Icon}")"/>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <img alt="" src="@link.Url.GetIcon()"
+                                             style="height: 40px;width: 40px;border-radius: 4px"/>
+                                    }
                                     <div class="btn-description">@link.Name</div>
                                 </div>
                             </a>
@@ -199,6 +214,8 @@
 
 @code
 
+
+
 {
     [CascadingParameter] private MemberModel Member { get; set; } = new();
 
@@ -332,6 +349,30 @@
         color: #00000073;
         text-align: center;
         font-size: 0.8em;
+    }
+
+    @@media screen and (max-width: 767px) {
+        .a-btn {
+            width: 18vw;
+        }
+    }
+
+    @@media screen and (min-width: 862px) {
+        .a-btn {
+            width: 6vw;
+        }
+    }
+
+    @@media screen and (min-width: 768px) {
+        .a-btn {
+            width: 8vw;
+        }
+    }
+
+    @@media screen and (min-width: 992px) {
+        .a-btn {
+            width: initial;
+        }
     }
 </style>
 

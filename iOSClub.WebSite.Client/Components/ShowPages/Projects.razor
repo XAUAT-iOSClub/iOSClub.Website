@@ -25,32 +25,34 @@
 </Flex>
 
 @code
+
 {
     private record ProjectCardModel(string Title, string Content, string Url = "");
 
     private static ProjectCardModel[] Cards =>
     [
-        new ProjectCardModel("Old8Lang", "西建大iOS Club出品的脚本语言解释器 使用C#开发",
+        new("Old8Lang", "西建大iOS Club出品的脚本语言解释器 使用C#开发",
             "https://gitee.com/XAUATiOSClub/Old8Lang"),
-        new ProjectCardModel("西建大iOS Club官网", "西建大iOS Club官网，使用Blazor开发",
+        new("西建大iOS Club官网", "西建大iOS Club官网，使用Blazor开发",
             "https://gitee.com/XAUATiOSClub/iOSClub.Web"),
-        new ProjectCardModel("代码综合平台", "将在线编辑器，编译器，OJ系统结合起来的代码综合平台，使用FastApi+Vue开发",
-        "https://gitee.com/XAUATiOSClub/LetCoding"),
-        new ProjectCardModel("文档生成平台", "将各式各样的文档进行生成，使用WPF+Asp.net Webapi开发",
-        "https://gitee.com/XAUATiOSClub/DocumentMaking"),
-        new ProjectCardModel("滑稽账本", "用.NET MAUI开发的账本App",
-        "https://gitee.com/XAUATiOSClub/huaji-ledger"),
-        new ProjectCardModel("LuckyFish.Json", "用C#开发的json解析器",
+        new("代码综合平台", "将在线编辑器，编译器，OJ系统结合起来的代码综合平台，使用FastApi+Vue开发",
+            "https://gitee.com/XAUATiOSClub/LetCoding"),
+        new("文档生成平台", "将各式各样的文档进行生成，使用WPF+Asp.net Webapi开发",
+            "https://gitee.com/XAUATiOSClub/DocumentMaking"),
+        new("滑稽账本", "用.NET MAUI开发的账本App",
+            "https://gitee.com/XAUATiOSClub/huaji-ledger"),
+        new("LuckyFish.Json", "用C#开发的json解析器",
             "https://gitee.com/XAUATiOSClub/LuckyFish.Json")
     ];
 }
 
 <style>
-    .block{
+    .block {
         width: 95%;
         margin-top: 45px;
         margin-bottom: 45px;
     }
+
     .card {
         margin: 10px;
         height: 200px;

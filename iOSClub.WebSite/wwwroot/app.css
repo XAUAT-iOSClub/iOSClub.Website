@@ -145,3 +145,16 @@ a, .btn-link {
     height: 210px;
     overflow: auto;
 }
+
+.apple-link {
+    color: #0066dd;
+    transition: .2s !important;
+    text-decoration: none;
+    background: linear-gradient(#07f2,#07f2) no-repeat center bottom / 100% 0;
+}
+
+.apple-link:hover{
+    color: #0066dd;
+    background: linear-gradient(#07f2,#07f2) no-repeat center bottom / 100% 100%;
+    border-radius: .2em;
+}

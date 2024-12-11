@@ -14,7 +14,21 @@
                title="@link.Description">
                 <Flex Align="center" Justify="space-between">
                     <div>
-                        <IconFont class="btn-title" Type="@($"icon-{link.Icon}")"/>
+                        @if (!string.IsNullOrEmpty(link.Icon))
+                        {
+                            if (link.Icon.StartsWith("http"))
+                            {
+                                <img alt="" src="@link.Icon" style="height: 22px;width: 22px;border-radius: 4px"/>
+                            }
+                            else
+                            {
+                                <IconFont class="btn-title" Type="@($"icon-{link.Icon}")"/>
+                            }
+                        }
+                        else
+                        {
+                            <img alt="" src="@link.Url.GetIcon()" style="height: 22px;width: 22px;border-radius: 4px"/>
+                        }
                         <span class="btn-title">@link.Name</span>
                     </div>
                     <span class="btn-description">@link.Description</span>

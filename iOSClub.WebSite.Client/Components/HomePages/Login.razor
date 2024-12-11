@@ -12,39 +12,38 @@
 
 <PageTitle>登录到您的iMember - 西建大iOS Club</PageTitle>
 
-<GridRow Type="flex" Justify="center" Style="height: 80vh;">
-    <GridCol Xs="24" Sm="24" Md="15" Lg="12" Xl="10" Xxl="10">
-        <Card Class="login-form" Bordered="false">
-            <Title Level="2" Style="text-align: center">登录</Title>
-            <Form Model="Model"
-                  OnFinish="Submit"
-                  OnFinishFailed="OnFinishFailed">
-                <FormItem Class="item">
-                    <div class="input-box">
-                        <input @bind="@context.Name" required=""/>
-                        <label>姓名</label>
-                    </div>
-                </FormItem>
-                <FormItem Class="item">
-                    <div class="input-box">
-                        <input @bind="@context.Id" required=""/>
-                        <label>学号</label>
-                    </div>
-                </FormItem>
-                <FormItem Class="item" Style="text-align: center">
-                    <Button Style="border-radius: 4px;" Type="@ButtonType.Primary" HtmlType="submit">提交</Button>
-                </FormItem>
-                <FormItem Class="item">
-                    <Paragraph class="Submit" Style="text-align: center">
-                        没有账号？去
-                        <NavLink href="Signup" Match="NavLinkMatch.All">注册</NavLink>
-                        一个
-                    </Paragraph>
-                </FormItem>
-            </Form>
-        </Card>
-    </GridCol>
-</GridRow>
+<Flex Justify="center" Align="center" Style="height: calc(100vh - 170px);">
+    <div class="login-container">
+        <div style="text-align: center;">
+            <h2 style="font-size: 1.875rem;line-height: 2.25rem;color: rgba(31, 41, 55, 1);margin: 0;">登录</h2>
+            <div style="color: rgba(107, 114, 128, 1);margin-top: 4px;font-size: 0.8rem">使用您的iMember账户</div>
+        </div>
+        <Form Model="Model"
+              OnFinish="Submit"
+              OnFinishFailed="OnFinishFailed">
+            <FormItem Class="item">
+                <div style="margin-bottom: 4px;font-size: .8rem;">姓名</div>
+                <input class="apple-input" placeholder="请输入您的姓名" @bind="@context.Name" required=""/>
+            </FormItem>
+            <FormItem Class="item">
+                <div style="margin-bottom: 4px;font-size: .8rem;">学号</div>
+                <input class="apple-input" placeholder="请输入您的学号" @bind="@context.Id" required=""/>
+            </FormItem>
+            <FormItem>
+                <div style="text-align: center;margin-bottom: 1rem;margin-top: 1rem">
+                    <Button class="apple-button"
+                            Type="@ButtonType.Primary"
+                            HtmlType="submit">提交
+                    </Button>
+                </div>
+                <Paragraph class="Submit" Style="text-align: center">
+                    还没有账户？
+                    <AppleLink Url="Signup" IsIcon="false">立即注册!</AppleLink>
+                </Paragraph>
+            </FormItem>
+        </Form>
+    </div>
+</Flex>
 
 @code {
     public LoginModel Model { get; } = new();
@@ -90,67 +89,61 @@
     {
         if (firstRender)
         {
-            var authState = await authStateProvider.GetAuthenticationStateAsync() ;
+            var authState = await authStateProvider.GetAuthenticationStateAsync();
             var user = authState.User;
-            
+
             if (user.Identity is not null && user.Identity.IsAuthenticated)
             {
                 navigation.NavigateTo("/Centre");
             }
         }
+
         await base.OnAfterRenderAsync(firstRender);
     }
 
 }
 
 <style>
-    .login-form {
-        border-radius: 10px;
-        background: rgba(255, 255, 255, 0.3);
-        -webkit-backdrop-filter: blur(20px);
-        backdrop-filter: blur(20px);
-        box-shadow: 0 0 10px #c8c8c8;
-        margin-top: 30px; 
-        margin-bottom: 30px;
-        max-width: 100vw
+
+    body, html {
+        font-size: 18px;
+        overflow: hidden;
     }
 
-    @@media screen and (max-width: 768px) {
-        .login-form{
+    .login-container {
+        backdrop-filter: blur(10px);
+        background-color: rgba(255, 255, 255, 0.7);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+        border-radius: 1rem;
+        width: 28rem;
+    }
+    
+    @@media screen and (max-width: 768px){
+        .login-container{
+            width: 100%;
             box-shadow: none;
-            margin : 0;
         }
     }
 
-    .input-box input {
-        color: #1c1f23;
+    .apple-input {
+        border: 1px solid #d1d5db;
+        transition: all 0.3s ease;
         width: 100%;
-        padding: 10px;
-        font-size: 16px;
-        letter-spacing: 1px;
-        margin-bottom: 30px;
-        border: none;
-        border-bottom: 1px solid #ededed;
+        line-height: 1.15;
+        margin: 0;
+        border-radius: .5rem;
+        padding: .5rem;
+        overflow: hidden;
+    }
+
+    .apple-input:focus {
         outline: none;
-        background: transparent;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
     }
 
-    .input-box label {
-        color: #1c1f23;
-        padding: 10px;
-        font-size: 16px;
-        position: absolute;
-        top: 0;
-        left: 0;
-        pointer-events: none;
-        transition: .5s;
-    }
-
-    .input-box input:focus ~ label,
-    .input-box input:valid ~ label {
-        top: -18px;
-        left: 0;
-        color: #3c3c43;
-        font-size: 12px;
+    .apple-button {
+        border-radius: 4px
     }
 </style>

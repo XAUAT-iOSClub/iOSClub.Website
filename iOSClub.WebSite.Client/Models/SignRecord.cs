@@ -2,7 +2,7 @@
 
 namespace iOSClub.WebSite.Client.Models;
 
-public class SignRecord
+public static class SignRecord
 {
     public static readonly OrgSignRecord ios = new(
         "mqqapi://card/show_pslcard?src_type=internal&version=1&uin=952954710&card_type=group&source=external",
@@ -19,6 +19,9 @@ public class SignRecord
         { "History-Overview", "历史总述" },
         { "History-Shao Han's Reign", "邵韩之治" }
     };
+    
+    public static string GetIcon(this string url)
+        => $"https://{url.Replace("https://", "").Replace("http://", "").Split('/').First()}/favicon.ico";
 
     #region Table
 

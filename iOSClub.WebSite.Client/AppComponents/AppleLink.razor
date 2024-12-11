@@ -1,15 +1,21 @@
 ﻿@if (!string.IsNullOrEmpty(Url))
 {
-    <a class="a" href="@Url" target="_blank">
+    <a class="apple-link" href="@Url" target="_blank">
         @ChildContent
-        <Icon Type="link" Theme="outline"/>
+        @if (IsIcon)
+        {
+            <Icon Type="link" Theme="outline"/>
+        }
     </a>
 }
 else
 {
-    <a class="a" @onclick="OnClick">
+    <a class="apple-link" @onclick="OnClick">
         @ChildContent
-        <Icon Type="link" Theme="outline"/>
+        @if (IsIcon)
+        {
+            <Icon Type="link" Theme="outline"/>
+        }
     </a>
 }
 
@@ -17,19 +23,5 @@ else
     [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public EventCallback<MouseEventArgs> OnClick { get; set; }
     [Parameter] public string? Url { get; set; }
+    [Parameter] public bool IsIcon { get; set; } = true;
 }
-
-<style>
-    .a {
-        color: #0066dd;
-        transition: .2s;
-        text-decoration: none;
-        background: linear-gradient(#07f2,#07f2) no-repeat center bottom / 100% 0;
-    }
-
-    .a:hover{
-        color: #0066dd;
-        background: linear-gradient(#07f2,#07f2) no-repeat center bottom / 100% 100%;
-        border-radius: .2em;
-    }
-</style>

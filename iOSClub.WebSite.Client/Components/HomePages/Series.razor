@@ -1,8 +1,4 @@
 ﻿@page "/Series/{Se}/{Name?}"
-@using Markdig.Syntax
-@using Markdig.Syntax.Inlines
-
-@using Markdig
 
 <PageTitle>@(string.IsNullOrEmpty(Name) ? "序列" : Name.Replace("-", " ")) - iOS Club和你一起学 @Se</PageTitle>
 
@@ -110,29 +106,9 @@
         if (string.IsNullOrEmpty(Name)) return;
         var info = new FileInfo($"wwwroot/Learn/{Se}-{Name}.md");
         if (!info.Exists) return;
-        // BootStrap, Emoji, SmartyPants and soft line as hard line breaks extensions.
-        var pipeline = new MarkdownPipelineBuilder()
-            .UseAdvancedExtensions()
-            .UseBootstrap()
-            .UseEmojiAndSmiley()
-            .UseSmartyPants()
-            .UseSoftlineBreakAsHardlineBreak()
-            .Build();
         var content = await File.ReadAllTextAsync(info.FullName);
-       
-        var document = Markdown.Parse(content, pipeline);
-        foreach (var node in document)
-        {
-            if (node is not ParagraphBlock { Inline: not null } paragraphBlock) continue;
-            foreach (var inline in paragraphBlock.Inline)
-            {
-                if (inline is not LinkInline { IsImage: true } linkInline) continue;
-                if (!linkInline.Url!.StartsWith("http"))
-                    linkInline.Url = $"Learn/{linkInline.Url}";
-            }
-        }
 
-        Content = document.ToHtml();
+        Content = content;
     }
 }
 

@@ -45,48 +45,48 @@
 
         var info = new FileInfo($"wwwroot/ArticleFile/{Name.Replace("-", "/")}.md");
         if (!info.Exists) return;
-        var pipeline = new MarkdownPipelineBuilder()
-            .UseAdvancedExtensions()
-            .UseBootstrap()
-            .UseGridTables()
-            .UseEmojiAndSmiley()
-            .Build();
+        // var pipeline = new MarkdownPipelineBuilder()
+        //     .UseAdvancedExtensions()
+        //     .UseBootstrap()
+        //     .UseGridTables()
+        //     .UseEmojiAndSmiley()
+        //     .Build();
         var content = await File.ReadAllTextAsync(info.FullName);
-        var document = Markdown.Parse(content, pipeline);
-        Content = document.ToHtml();
-        var count = 1;
-        Anchors.Clear();
-        foreach (var node in document.AsEnumerable())
-        {
-            if (node is HeadingBlock { Inline: not null } headingBlock)
-            {
-                if (Anchors.Count == 0)
-                {
-                    Anchors.Add(new MarkAnchorModel()
-                    {
-                        Name = headingBlock.Inline.FirstChild!.ToString()!,
-                        Link = $"/Article/{Name}#section"
-                    });
-                    continue;
-                }
-
-                Anchors.Add(new MarkAnchorModel()
-                {
-                    Name = headingBlock.Inline.FirstChild!.ToString()!,
-                    Link = $"/Article/{Name}#section-{count}"
-                });
-
-                count++;
-            }
-
-            if (node is not ParagraphBlock { Inline: not null } paragraphBlock) continue;
-            foreach (var inline in paragraphBlock.Inline)
-            {
-                if (inline is not LinkInline { IsImage: true } linkInline) continue;
-                if(!linkInline.Url!.StartsWith("http"))
-                    linkInline.Url = $"wwwroot/ArticleFile/{linkInline.Url}";
-            }
-        }
+        // var document = Markdown.Parse(content, pipeline);
+        Content = content;
+        //var count = 1;
+        //Anchors.Clear();
+        // foreach (var node in document.AsEnumerable())
+        // {
+        //     if (node is HeadingBlock { Inline: not null } headingBlock)
+        //     {
+        //         if (Anchors.Count == 0)
+        //         {
+        //             Anchors.Add(new MarkAnchorModel()
+        //             {
+        //                 Name = headingBlock.Inline.FirstChild!.ToString()!,
+        //                 Link = $"/Article/{Name}#section"
+        //             });
+        //             continue;
+        //         }
+        //
+        //         Anchors.Add(new MarkAnchorModel()
+        //         {
+        //             Name = headingBlock.Inline.FirstChild!.ToString()!,
+        //             Link = $"/Article/{Name}#section-{count}"
+        //         });
+        //
+        //         count++;
+        //     }
+        //
+        //     if (node is not ParagraphBlock { Inline: not null } paragraphBlock) continue;
+        //     foreach (var inline in paragraphBlock.Inline)
+        //     {
+        //         if (inline is not LinkInline { IsImage: true } linkInline) continue;
+        //         if(!linkInline.Url!.StartsWith("http"))
+        //             linkInline.Url = $"wwwroot/ArticleFile/{linkInline.Url}";
+        //     }
+        // }
     }
 
 }

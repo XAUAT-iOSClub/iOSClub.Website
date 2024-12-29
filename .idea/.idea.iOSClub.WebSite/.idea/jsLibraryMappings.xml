@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="JavaScriptLibraryMappings">
-    <file url="PROJECT" libraries="{font-awesome, marked, marked-base-url}" />
+    <file url="PROJECT" libraries="{font-awesome, markdown-it, markdown-it-container, markdown-it-tips, marked, marked-base-url}" />
+    <includedPredefinedLibrary name="Node.js Core" />
   </component>
 </project>

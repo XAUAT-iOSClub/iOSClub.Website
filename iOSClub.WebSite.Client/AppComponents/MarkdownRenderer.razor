@@ -16,14 +16,16 @@
 
 }
 
-<script>
+<script type="module">
     window.insertHtml = function (element, html) {
         const md = markdownit({
             html: true,
             linkify: true,
             typographer: true
         })
-        
+
+        md.use(markdownItAnchor);
+
         md.use(markdownitContainer, 'warning', {
             validate: function (params) {
                 return params.trim().match(/^warning\s+(.*)$/);
@@ -56,10 +58,12 @@
         Prism.highlightAll(); // 如果使用 Prism.js
     }
 
+
 </script>
 
 <script src="JS/markdown-it.min.js"></script>
 <script src="JS/markdown-it-container.min.js"></script>
+<script src="JS/markdown-it-anchor.js"></script>
 
 
 <style>

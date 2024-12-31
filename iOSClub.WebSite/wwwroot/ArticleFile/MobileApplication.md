@@ -1,4 +1,4 @@
-﻿# 中国高校计算机大赛——移动应用创新赛
+﻿# 移动应用创新赛
 
 ## 竞赛亮点
 
@@ -43,7 +43,11 @@
 
 ## 赛制
 
-<table><thead><tr><th style="text-align:center;">阶段</th><th style="text-align:center;">时间</th><th style="text-align:left;">要求</th></tr></thead><tbody><tr><td style="text-align:center;">初赛</td><td style="text-align:center;">6月20日截止</td><td style="text-align:left;">仅提交有关 App 的描述文档即可（使用模板），无论是哪一赛道均无需提交任何代码</td></tr><tr><td style="text-align:center;">复赛（赛区奖）</td><td style="text-align:center;">7月20日截止</td><td style="text-align:left;">在复赛基础上完善作品说明文档，并补充提交简短的介绍视频。启迪赛道建议提交部分核心代码，启明赛道建议提交产品原型图。</td></tr><tr><td style="text-align:center;">全国总决赛</td><td style="text-align:center;">11月中旬</td><td style="text-align:left;">组委会提供竞赛训练营，免费提供开发者账号，决赛参赛作品必须能进行现场演示（路演），苹果公司将提供必要的技术支持。</td></tr></tbody></table>
+|   阶段    |   时间    | 要求                                                          |
+|:-------:|:-------:|:------------------------------------------------------------|
+|   初赛    | 6月20日截止 | 仅提交有关 App 的描述文档即可（使用模板），无论是哪一赛道均无需提交任何代码                    |
+| 复赛（赛区奖） | 7月20日截止 | 在复赛基础上完善作品说明文档，并补充提交简短的介绍视频。启迪赛道建议提交部分核心代码，启明赛道建议提交产品原型图。   |
+|  全国总决赛  |  11月中旬  | 组委会提供竞赛训练营，免费提供开发者账号，决赛参赛作品必须能进行现场演示（路演），苹果公司将提供必要的技术支持。    |
 
 ## 时间线
 

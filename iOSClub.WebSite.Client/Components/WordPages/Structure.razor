@@ -34,7 +34,7 @@
     private string Content { get; set; } = "";
     private List<MarkAnchorModel> Anchors { get; } = [];
 
-    protected override async Task OnParametersSetAsync()
+    protected override async Task OnInitializedAsync()
     {
         var info = new FileInfo("wwwroot/ArticleFile/Structure.md");
         if (!info.Exists) return;

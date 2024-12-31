@@ -39,8 +39,6 @@
     protected override async Task OnParametersSetAsync()
     {
         if (string.IsNullOrEmpty(Name)) return;
-        Title = Name.Replace("-", "/");
-        if (SignRecord.MarkdownData.TryGetValue(Name, out var value)) Title = value;
 
         var info = new FileInfo($"wwwroot/ArticleFile/{Name.Replace("-", "/")}.md");
         if (!info.Exists) return;
@@ -49,15 +47,23 @@
         var pipeline = new MarkdownPipelineBuilder().Build();
         var document = Markdown.Parse(content, pipeline);
         Anchors.Clear();
+        var count = 0;
         await document.ForEachAsync(x =>
         {
             if (x is not HeadingBlock { Inline: not null } headingBlock) return Task.CompletedTask;
-            
 
+            var id = headingBlock.Inline.FirstChild!.ToString()!;
+            count++;
+            if (count == 1)
+            {
+                Title = id;
+                return Task.CompletedTask;
+            }
+            
             Anchors.Add(new MarkAnchorModel()
             {
-                Name = headingBlock.Inline.FirstChild!.ToString()!,
-                Link = $"/Article/{Name}#{headingBlock.Inline.FirstChild!}"
+                Name = id,
+                Link = $"/Article/{Name}#{id}"
             });
 
             return Task.CompletedTask;

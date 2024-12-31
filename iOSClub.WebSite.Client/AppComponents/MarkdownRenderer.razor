@@ -17,13 +17,14 @@
 
 }
 
-<script type="module">
+<script>
     window.insertHtml = function (element, html, imageUrl) {
         const md = markdownit({
             html: true,
             linkify: true,
             typographer: true
         })
+        mermaid.initialize({ startOnLoad: true });
 
         md.use(markdownItAnchor);
 
@@ -39,6 +40,10 @@
                             }
                         }
                         token.attrs.push(['class', 'img-fluid'])
+                    }
+                    
+                    if (token.type === 'link_open'){
+                        token.attrs.push(['class', 'apple-link'])
                     }
                     // Process recursively
                     if (token.children !== null) {
@@ -77,15 +82,35 @@
                 }
             }
         })
+        
+        md.use(markdownitContainer, 'tip', {
+            validate: function (params) {
+                return params.trim().match(/^tip\s+(.*)$/);
+            },
+            render: function (tokens, idx) {
+                const m = tokens[idx].info.trim().match(/^tip\s+(.*)$/);
+                if (tokens[idx].nesting === 1) {
+                    return `<div class="tip custom-block"><p style="font-weight: bold">${md.utils.escapeHtml(m[1])}</p>\n`;
+                } else {
+                    return '</div>\n';
+                }
+            }
+        })
 
         element.innerHTML = md.render(html);
-        Prism.highlightAll(); // 如果使用 Prism.js
+        //Prism.highlightAll();
+        mermaid.init(undefined, document.querySelectorAll('.language-mermaid'));
+        // // 如果使用 Prism.js
+        setTimeout(() => {
+            Prism.highlightAll();
+        }, 50); // 根据需要调整延迟时间
     }
 </script>
 
 <script src="JS/markdown-it.min.js"></script>
 <script src="JS/markdown-it-container.min.js"></script>
 <script src="JS/markdown-it-anchor.js"></script>
+<script src="JS/mermaid.min.js"></script>
 
 
 <style>
@@ -142,5 +167,11 @@
         font-size: 14px;
         color: rgba(60, 60, 67, .78);
         margin-bottom: 10px;
+    }
+    
+    .tip{
+        border-color: transparent;
+        color: rgba(60, 60, 67);
+        background-color: rgba(100, 108, 255, .14);
     }
 </style>

@@ -7,17 +7,18 @@
     private ElementReference markdownContainer;
 
     [Parameter] public string html { get; set; } = "";
+    [Parameter] public string BaseUrl { get; set; } = "";
 
     protected override void OnParametersSet()
     {
         if (string.IsNullOrEmpty(html)) return;
-        JSRuntime.InvokeVoidAsync("insertHtml", markdownContainer, html);
+        JSRuntime.InvokeVoidAsync("insertHtml", markdownContainer, html, BaseUrl);
     }
 
 }
 
 <script type="module">
-    window.insertHtml = function (element, html) {
+    window.insertHtml = function (element, html, imageUrl) {
         const md = markdownit({
             html: true,
             linkify: true,
@@ -25,6 +26,29 @@
         })
 
         md.use(markdownItAnchor);
+
+        md.core.ruler.push('baseurl', (state) => {
+            const baseUrl = `/${imageUrl}/`;
+
+            function rewrite(tokens) {
+                for (const token of tokens) {
+                    if (token.type === 'image') {
+                        for (const attr of token.attrs) {
+                            if (attr[0] === 'src') {
+                                attr[1] = baseUrl + attr[1];
+                            }
+                        }
+                        token.attrs.push(['class', 'img-fluid'])
+                    }
+                    // Process recursively
+                    if (token.children !== null) {
+                        rewrite(token.children);
+                    }
+                }
+            }
+
+            rewrite(state.tokens);
+        });
 
         md.use(markdownitContainer, 'warning', {
             validate: function (params) {
@@ -57,8 +81,6 @@
         element.innerHTML = md.render(html);
         Prism.highlightAll(); // 如果使用 Prism.js
     }
-
-
 </script>
 
 <script src="JS/markdown-it.min.js"></script>
@@ -69,6 +91,15 @@
 <style>
     .img-fluid {
         max-width: 80%;
+    }
+
+    .blockquote {
+        border-left: 5px solid #e8e8e8;
+        padding-left: 10px;
+    }
+
+    .blockquote p {
+        font-size: 14px;
     }
 
     table {

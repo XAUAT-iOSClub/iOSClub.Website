@@ -1,4 +1,7 @@
 ﻿@page "/Structure"
+@using iOSClub.WebSite.Client.Models
+@using Markdig
+@using Markdig.Syntax
 
 <PageTitle>社团结构 - 西建大iOS Club</PageTitle>
 
@@ -13,53 +16,46 @@
 
 <GridRow>
     <GridCol Xs="24" Sm="24" Md="20" Lg="20" Xl="20" Xxl="20">
-        <div id="社团结构">
-            <h2>社团结构</h2>
-            <p>
-                西安建筑科技大学iOS Club是一个致力于iOS应用开发和设计的学生组织。本社团旨在为对iOS平台感兴趣的学生提供一个交流和学习的平台，同时也为那些希望在未来从事相关工作的学生提供实践机会。西建大iOS Club由社长、副社长、社团科技部、社团交流实践部、社团新媒体部组成。
-            </p>
-            <div id="社团负责人">
-                <h2>社团负责人</h2>
-                <p>
-                    负责领导和管理整个社团
-                </p>
-            </div>
-            <div id="软件部">
-                <h2>软件部</h2>
-                <p>
-                    感受软件开发的魅力
-                </p>
-            </div>
-            <div id="硬件部">
-                <h2>硬件部</h2>
-                <p>
-                    感受硬件开发的魅力
-                </p>
-            </div>
-            <div id="交流实践部">
-                <h2>交流实践部</h2>
-                <p>
-                    组织各种活动并参与其中
-                </p>
-            </div>
-            <div id="新媒体部">
-                <h2>新媒体部</h2>
-                <p>
-                    分享社团的点滴
-                </p>
-            </div>
-        </div>
+        <MarkdownRenderer html="@Content" BaseUrl="ArticleFile"/>
     </GridCol>
-    <GridCol Lg="4" Xl="4" Xxl="4" Class="desktop-phone">
+    <GridCol Md="4" Lg="4" Xl="4" Xxl="4" Class="desktop-phone">
         <Affix>
-            <Anchor >
-                <AnchorLink Href="/Structure#社团结构" Title="社团结构"/>
-                <AnchorLink Href="/Structure#社团负责人" Title="社团负责人"/>
-                <AnchorLink Href="/Structure#软件部" Title="软件部"/>
-                <AnchorLink Href="/Structure#硬件部" Title="硬件部"/>
-                <AnchorLink Href="/Structure#交流实践部" Title="交流实践部"/>
-                <AnchorLink Href="/Structure#新媒体部" Title="新媒体部"/>
+            <Anchor>
+                @foreach (var s in Anchors)
+                {
+                    <AnchorLink Href="@s.Link" Title="@s.Name"/>
+                }
             </Anchor>
         </Affix>
     </GridCol>
 </GridRow>
+
+@code {
+    private string Content { get; set; } = "";
+    private List<MarkAnchorModel> Anchors { get; } = [];
+
+    protected override async Task OnParametersSetAsync()
+    {
+        var info = new FileInfo("wwwroot/ArticleFile/Structure.md");
+        if (!info.Exists) return;
+        var content = await File.ReadAllTextAsync(info.FullName);
+        Content = content;
+        var pipeline = new MarkdownPipelineBuilder().Build();
+        var document = Markdown.Parse(content, pipeline);
+        Anchors.Clear();
+        await document.ForEachAsync(x =>
+        {
+            if (x is not HeadingBlock { Inline: not null } headingBlock) return Task.CompletedTask;
+            
+
+            Anchors.Add(new MarkAnchorModel()
+            {
+                Name = headingBlock.Inline.FirstChild!.ToString()!,
+                Link = $"/Structure#{headingBlock.Inline.FirstChild!}"
+            });
+
+            return Task.CompletedTask;
+        });
+    }
+
+}

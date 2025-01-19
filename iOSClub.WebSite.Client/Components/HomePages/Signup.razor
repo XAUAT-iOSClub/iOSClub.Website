@@ -1,4 +1,6 @@
 ﻿@page "/Signup"
+@using System.Net.Http.Headers
+@using System.Text.Json.Nodes
 @using iOSClub.Data
 @using iOSClub.Data.DataModels
 @using iOSClub.WebSite.Client.Models
@@ -97,7 +99,7 @@
                     <Paragraph class="Submit" Style="text-align: center">
                         已经有iMember账户了？
                         <AppleLink Url="Login" IsIcon="false">现在登录!</AppleLink>
-                    </Paragraph>   
+                    </Paragraph>
                 }
             </FormItem>
         </Form>
@@ -124,6 +126,37 @@
             if (f == null) context.Students.Add(Model);
 
             await context.SaveChangesAsync();
+
+            using var client = new HttpClient();
+
+            var appId = Environment.GetEnvironmentVariable("APP_ID", EnvironmentVariableTarget.Process);
+            var appSecret = Environment.GetEnvironmentVariable("APP_SECRET", EnvironmentVariableTarget.Process);
+
+            if (!string.IsNullOrEmpty(appId) && !string.IsNullOrEmpty(appSecret))
+            {
+                var content = new FormUrlEncodedContent([
+                    new KeyValuePair<string, string>("grant_type", "client_credentials"),
+                    new KeyValuePair<string, string>("client_id", appId),
+                    new KeyValuePair<string, string>("client_secret", appSecret),
+                    new KeyValuePair<string, string>("resource", "https://default.logto.app/api"),
+                    new KeyValuePair<string, string>("scope", "all")
+                ]);
+
+                // 发送请求并获取响应
+                var response = await client.PostAsync("https://logtoasfd.zeabur.app/oidc/token", content);
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var obj = JsonNode.Parse(responseContent);
+                var accessToken = obj?["access_token"]?.GetValue<string>();
+                using var httpClient = new HttpClient();
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+                await httpClient.PostAsJsonAsync("https://logtoasfd.zeabur.app/api/users",
+                    new UserClass()
+                    {
+                        PrimaryPhone = "86" + Model.PhoneNum,
+                        Password = Model.UserId,
+                        Name = Model.UserName
+                    });
+            }
 
             if (isWeiXin)
             {
@@ -173,6 +206,14 @@
         await base.OnAfterRenderAsync(firstRender);
     }
 
+    [Serializable]
+    public class UserClass
+    {
+        public string PrimaryPhone { get; set; } = "";
+        public string Password { get; set; } = "";
+        public string Name { get; set; } = "";
+    }
+
 }
 
 <style>
@@ -213,10 +254,10 @@
         color: #555;
     }
 
-    option:hover{
+    option:hover {
         background-color: #0071c1;
     }
-    
+
 
     body, html {
         font-size: 18px;
@@ -231,8 +272,8 @@
         border-radius: 1rem;
         width: 28rem;
     }
-    
-    .page-flex{
+
+    .page-flex {
         height: calc(100vh - 170px);
     }
 
@@ -240,13 +281,14 @@
         border-radius: 4px
     }
 
-    @@media screen and (max-width: 768px){
-        .login-container{
+    @@media screen and (max-width: 768px) {
+        .login-container {
             width: 100%;
             box-shadow: none;
             padding-bottom: 0;
         }
-        .page-flex{
+
+        .page-flex {
             align-items: flex-start !important;
         }
     }

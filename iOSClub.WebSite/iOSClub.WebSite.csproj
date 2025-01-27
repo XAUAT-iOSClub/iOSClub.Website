@@ -13,7 +13,12 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.10"/>
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.10"/>
+        <PackageReference Include="AntDesign" Version="0.20.4.2" />
+        <PackageReference Include="AntDesign.Charts" Version="0.5.6" />
+        <PackageReference Include="Markdig" Version="0.38.0" />
+        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.1.2" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.1.2" />
     </ItemGroup>
 
     <ItemGroup>
@@ -25,57 +30,36 @@
 
     <ItemGroup>
         <ProjectReference Include="..\iOSClub.Data\iOSClub.Data.csproj"/>
-        <ProjectReference Include="..\iOSClub.WebSite.Client\iOSClub.WebSite.Client.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-        <_ContentIncludedByDefault Remove="AppComponents\AppleCard.razor"/>
-        <_ContentIncludedByDefault Remove="AppComponents\AppleLink.razor"/>
-        <_ContentIncludedByDefault Remove="AppComponents\CentreMenu.razor"/>
-        <_ContentIncludedByDefault Remove="AppComponents\ErrorView.razor"/>
-        <_ContentIncludedByDefault Remove="AppComponents\MarkdownRenderer.razor"/>
-        <_ContentIncludedByDefault Remove="AppComponents\MemberTable.razor"/>
-        <_ContentIncludedByDefault Remove="AppComponents\PageView.razor"/>
-        <_ContentIncludedByDefault Remove="AppComponents\ReturnView.razor"/>
-        <_ContentIncludedByDefault Remove="CentreToolPages\AdminPages\Env.razor"/>
-        <_ContentIncludedByDefault Remove="CentreToolPages\AdminPages\MemberData.razor"/>
-        <_ContentIncludedByDefault Remove="CentreToolPages\DepartmentPages\Department.razor"/>
-        <_ContentIncludedByDefault Remove="CentreToolPages\DepartmentPages\EditProject.razor"/>
-        <_ContentIncludedByDefault Remove="CentreToolPages\DepartmentPages\Project.razor"/>
-        <_ContentIncludedByDefault Remove="CentreToolPages\DepartmentPages\Resource.razor"/>
-        <_ContentIncludedByDefault Remove="CentreToolPages\PersonalData.razor"/>
-        <_ContentIncludedByDefault Remove="CentreToolPages\_Imports.razor"/>
-        <_ContentIncludedByDefault Remove="Components\App.razor"/>
-        <_ContentIncludedByDefault Remove="Components\CentrePages\Centre.razor"/>
-        <_ContentIncludedByDefault Remove="Components\CentrePages\_Imports.razor"/>
-        <_ContentIncludedByDefault Remove="Components\DesignPages\CardHolder.razor"/>
-        <_ContentIncludedByDefault Remove="Components\DesignPages\Desktop.razor"/>
-        <_ContentIncludedByDefault Remove="Components\DesignPages\FridgeMagnets.razor"/>
-        <_ContentIncludedByDefault Remove="Components\HomePages\Home.razor"/>
-        <_ContentIncludedByDefault Remove="Components\HomePages\IOSPic.razor"/>
-        <_ContentIncludedByDefault Remove="Components\HomePages\Login.razor"/>
-        <_ContentIncludedByDefault Remove="Components\HomePages\Series.razor"/>
-        <_ContentIncludedByDefault Remove="Components\HomePages\Signup.razor"/>
-        <_ContentIncludedByDefault Remove="Components\HomePages\_Imports.razor"/>
-        <_ContentIncludedByDefault Remove="Components\Layout\CentreLayout.razor"/>
-        <_ContentIncludedByDefault Remove="Components\Layout\CentreToolLayout.razor"/>
-        <_ContentIncludedByDefault Remove="Components\Layout\HomeLayout.razor"/>
-        <_ContentIncludedByDefault Remove="Components\Layout\WordLayout.razor"/>
-        <_ContentIncludedByDefault Remove="Components\Routes.razor"/>
-        <_ContentIncludedByDefault Remove="Components\ShowPages\Articles.razor"/>
-        <_ContentIncludedByDefault Remove="Components\ShowPages\Event.razor"/>
-        <_ContentIncludedByDefault Remove="Components\ShowPages\History.razor"/>
-        <_ContentIncludedByDefault Remove="Components\ShowPages\Learn.razor"/>
-        <_ContentIncludedByDefault Remove="Components\ShowPages\Projects.razor"/>
-        <_ContentIncludedByDefault Remove="Components\ShowPages\Tools.razor"/>
-        <_ContentIncludedByDefault Remove="Components\ShowPages\YearProj.razor"/>
-        <_ContentIncludedByDefault Remove="Components\ShowPages\_Imports.razor"/>
-        <_ContentIncludedByDefault Remove="Components\Tests\Auth.razor"/>
-        <_ContentIncludedByDefault Remove="Components\WordPages\About.razor"/>
-        <_ContentIncludedByDefault Remove="Components\WordPages\Article.razor"/>
-        <_ContentIncludedByDefault Remove="Components\WordPages\OtherOrg.razor"/>
-        <_ContentIncludedByDefault Remove="Components\WordPages\Structure.razor"/>
-        <_ContentIncludedByDefault Remove="Components\WordPages\_Imports.razor"/>
+      <_ContentIncludedByDefault Remove="wwwroot\Learn\CSharp-1-总序.md" />
+      <_ContentIncludedByDefault Remove="wwwroot\Learn\CSharp-2-语法和变量.md" />
+      <_ContentIncludedByDefault Remove="wwwroot\Learn\CSharp-3-分支与循环.md" />
+      <_ContentIncludedByDefault Remove="wwwroot\Learn\CSharp-4-数组，列表，字典.md" />
+      <_ContentIncludedByDefault Remove="wwwroot\Learn\CSharp-5-String的更多用法.md" />
+      <_ContentIncludedByDefault Remove="wwwroot\Learn\CSharp-6-函数.md" />
+      <_ContentIncludedByDefault Remove="wwwroot\Learn\CSharp-7-结构体，枚举，类.md" />
+      <_ContentIncludedByDefault Remove="wwwroot\Learn\image\CSharp1\1722441043646.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Learn\image\CSharp1\1722441561073.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Learn\image\CSharp2\1722602405405.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Learn\image\CSharp3\1722914526242.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Learn\image\Vue1\1722756873550.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Learn\image\Vue1\1722763082372.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Learn\image\Vue1\1722765657592.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Learn\image\Vue1\1722766104453.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Learn\image\Vue1\1722766146384.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Learn\image\Vue3\1723443855664.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Learn\image\Vue3\1723444007123.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Learn\image\Vue3\1723444146571.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Learn\image\Vue3\1723444553643.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Learn\image\Vue3\1723446059920.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Learn\image\Vue3\1723446690160.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Learn\image\Vue3\1723448594064.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Learn\image\Vue3\1723448938400.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Learn\Vue-1-总序.md" />
+      <_ContentIncludedByDefault Remove="wwwroot\Learn\Vue-2-初识前端三件套.md" />
+      <_ContentIncludedByDefault Remove="wwwroot\Learn\Vue-3-JS简单学习.md" />
     </ItemGroup>
 
 </Project>

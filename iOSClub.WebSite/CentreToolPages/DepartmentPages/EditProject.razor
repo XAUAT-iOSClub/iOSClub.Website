@@ -1,0 +1,152 @@
+﻿@page "/Centre/EditProject/{Id?}"
+@using iOSClub.Data
+@using iOSClub.Data.DataModels
+@using iOSClub.WebSite.Models
+@using Microsoft.EntityFrameworkCore
+@inject IDbContextFactory<iOSContext> DbFactory
+@inject NavigationManager Nav
+@inject MessageService MessageService
+
+<PageTitle>@(string.IsNullOrEmpty(Id) ? "编辑" : "更改")项目 -iStaff</PageTitle>
+
+<PageView FullScreen="true"
+    OnDelete="@(() => Nav.NavigateTo("/Centre/Department"))"
+    Title="编辑项目">
+    <Context>
+        <Form Model="Project"
+              ValidateMode="@FormValidateMode.Rules"
+              RequiredMark="FormRequiredMark.None"
+              OnFinish="OnFinish"
+              OnFinishFailed="OnFinishFailed">
+            <FormItem Class="item" Label="项目名称">
+                <Input @bind-Value="@context.Title"/>
+            </FormItem>
+            <FormItem Class="item" Label="项目名称">
+                <RadioGroup @bind-Value="@context.Department">
+                    @foreach (var item in Departments)
+                    {
+                        <Radio RadioButton Value="@item">@item.Name</Radio>
+                    }
+                </RadioGroup>
+            </FormItem>
+            <FormItem Class="item" Label="项目开始时间">
+                <DatePicker @bind-Value="@context.StartTime" Format="yyyy年MM月dd日" Mask="yyyy年MM月dd日"/>
+            </FormItem>
+            <FormItem Class="item" Label="项目结束时间">
+                <DatePicker @bind-Value="@context.EndTime" Format="yyyy年MM月dd日" Mask="yyyy年MM月dd日"/>
+            </FormItem>
+            <FormItem Class="item" Label="项目描述" Rules="@SignRecord.ProjectDescriptionRules">
+                <TextArea @bind-Value="@context.Description" ></TextArea>
+            </FormItem>
+            <FormItem Style="text-align: center">
+                <Button Type="@ButtonType.Primary" HtmlType="submit">
+                    @if (string.IsNullOrEmpty(Id))
+                    {
+                        <p>添加</p>
+                    }
+                    else
+                    {
+                        <p>更改</p>
+                    }
+                </Button>
+            </FormItem>
+        </Form>
+        <br/>
+    </Context>
+</PageView>
+
+@code {
+    [Parameter] public string? Id { get; set; }
+    private ProjectEditModel Project { get; set; } = new();
+    [CascadingParameter] private MemberModel Member { get; set; } = new();
+    private List<DepartmentModel> Departments { get; set; } = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        await using var context = await DbFactory.CreateDbContextAsync();
+        var staff = await context.Staffs
+            .Include(staffModel => staffModel.Department)
+            .FirstOrDefaultAsync(x => x.UserId == Member.UserId);
+        if (staff == null)
+        {
+            return;
+        }
+
+        if (Member.Identity == "President")
+        {
+            Departments = await context.Departments.ToListAsync();
+        }
+        else if (Member.Identity == "Minister")
+        {
+            Departments.Add(staff.Department!);
+        }
+
+        if (!string.IsNullOrEmpty(Id))
+        {
+            var a = await context.Projects.FirstOrDefaultAsync(x => x.Id.ToString() == Id);
+            if (a == null)
+            {
+                await MessageService.Error("项目不存在");
+                Nav.NavigateTo("/Centre/Project");
+                return;
+            }
+
+            Project = ProjectEditModel.FromProject(a);
+        }
+
+        await base.OnInitializedAsync();
+    }
+
+    private async Task OnFinish()
+    {
+        if(Member.Identity == "Member")return;
+        await using var context = await DbFactory.CreateDbContextAsync();
+        if (string.IsNullOrEmpty(Id))
+        {
+            var p = Project.ToProject();
+            var staff = await context.Staffs.FirstOrDefaultAsync(x => x.UserId == Member.UserId);
+            if (staff == null)
+            {
+                await MessageService.Error("用户不存在");
+                return;
+            }
+
+            if (Project.Department != null)
+            {
+                var department = await context.Departments.FirstOrDefaultAsync(x => x.Name == Project.Department!.Name);
+                p.Department = department;
+            }
+
+            p.Staffs.Add(staff);
+            p.Id = DataTool.StringToHash(p.ToString());
+            await context.Projects.AddAsync(p);
+            await context.SaveChangesAsync();
+            await MessageService.Success("添加成功");
+        }
+        else
+        {
+            var a = await context.Projects.FirstOrDefaultAsync(x => x.Id.ToString() == Id);
+            if (a == null)
+            {
+                await MessageService.Error("项目不存在");
+                Nav.NavigateTo("/Centre/Department");
+                return;
+            }
+
+            a.Title = Project.Title;
+            a.StartTime = Project.StartTime.ToString("yyyy年MM月dd日");
+            a.EndTime = Project.EndTime.ToString("yyyy年MM月dd日");
+            a.Description = Project.Description;
+            await context.SaveChangesAsync();
+            await MessageService.Success("更改成功");
+        }
+
+        Nav.NavigateTo("/Centre/Department");
+    }
+
+    private async Task OnFinishFailed()
+    {
+        await MessageService.Error("出问题了");
+    }
+
+}

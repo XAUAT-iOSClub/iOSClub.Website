@@ -1,0 +1,61 @@
+﻿@page "/Structure"
+@using iOSClub.WebSite.Models
+@using Markdig
+@using Markdig.Syntax
+
+<PageTitle>社团结构 - 西建大iOS Club</PageTitle>
+
+<Breadcrumb Style="margin-bottom: 10px" Class="desktop-phone">
+    <BreadcrumbItem>
+        <a href="/About">社团简介</a>
+    </BreadcrumbItem>
+    <BreadcrumbItem>
+        <a href="/Structure">社团结构</a>
+    </BreadcrumbItem>
+</Breadcrumb>
+
+<GridRow>
+    <GridCol Xs="24" Sm="24" Md="20" Lg="20" Xl="20" Xxl="20">
+        <MarkdownRenderer html="@Content" BaseUrl="ArticleFile"/>
+    </GridCol>
+    <GridCol Md="4" Lg="4" Xl="4" Xxl="4" Class="desktop-phone">
+        <Affix>
+            <Anchor>
+                @foreach (var s in Anchors)
+                {
+                    <AnchorLink Href="@s.Link" Title="@s.Name"/>
+                }
+            </Anchor>
+        </Affix>
+    </GridCol>
+</GridRow>
+
+@code {
+    private string Content { get; set; } = "";
+    private List<MarkAnchorModel> Anchors { get; } = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        var info = new FileInfo("wwwroot/ArticleFile/Structure.md");
+        if (!info.Exists) return;
+        var content = await File.ReadAllTextAsync(info.FullName);
+        Content = content;
+        var pipeline = new MarkdownPipelineBuilder().Build();
+        var document = Markdown.Parse(content, pipeline);
+        Anchors.Clear();
+        await document.ForEachAsync(x =>
+        {
+            if (x is not HeadingBlock { Inline: not null } headingBlock) return Task.CompletedTask;
+            
+
+            Anchors.Add(new MarkAnchorModel()
+            {
+                Name = headingBlock.Inline.FirstChild!.ToString()!,
+                Link = $"/Structure#{headingBlock.Inline.FirstChild!}"
+            });
+
+            return Task.CompletedTask;
+        });
+    }
+
+}

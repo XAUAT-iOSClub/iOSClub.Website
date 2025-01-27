@@ -1,7 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using iOSClub.WebSite.Client.Models;
+using iOSClub.WebSite.Models;
 using Microsoft.IdentityModel.Tokens;
 
 namespace iOSClub.WebSite.Controllers;

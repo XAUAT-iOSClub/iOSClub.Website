@@ -1,0 +1,156 @@
+﻿@page "/Login"
+@using iOSClub.Data
+@using iOSClub.Data.DataModels
+@using iOSClub.WebSite.IdentityModels
+@using iOSClub.WebSite.Models
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Components.Authorization
+@inject IMessageService _message
+@inject IDbContextFactory<iOSContext> DbFactory
+@inject AuthenticationStateProvider authStateProvider
+@inject NavigationManager navigation
+
+<PageTitle>登录到您的iMember - 西建大iOS Club</PageTitle>
+
+<Flex Justify="center" Align="center" Class="page-flex">
+    <div class="login-container">
+        <div style="text-align: center;">
+            <h2 style="font-size: 1.875rem;line-height: 2.25rem;color: rgba(31, 41, 55, 1);margin: 0;">登录</h2>
+            <div style="color: rgba(107, 114, 128, 1);margin-top: 4px;font-size: 0.8rem">使用您的iMember账户</div>
+        </div>
+        <Form Model="Model"
+              OnFinish="Submit"
+              OnFinishFailed="OnFinishFailed">
+            <FormItem Class="item">
+                <div style="margin-bottom: 4px;font-size: .8rem;">姓名</div>
+                <input class="apple-input" placeholder="请输入您的姓名" @bind="@context.Name" required=""/>
+            </FormItem>
+            <FormItem Class="item">
+                <div style="margin-bottom: 4px;font-size: .8rem;">学号</div>
+                <input class="apple-input" placeholder="请输入您的学号" @bind="@context.Id" required=""/>
+            </FormItem>
+            <FormItem>
+                <div style="text-align: center;margin-bottom: 1rem;margin-top: 1rem">
+                    <Button class="apple-button"
+                            Type="@ButtonType.Primary"
+                            HtmlType="submit">提交
+                    </Button>
+                </div>
+                <Paragraph class="Submit" Style="text-align: center">
+                    还没有账户？
+                    <AppleLink Url="Signup" IsIcon="false">立即注册!</AppleLink>
+                </Paragraph>
+            </FormItem>
+        </Form>
+    </div>
+</Flex>
+
+@code {
+    public LoginModel Model { get; } = new();
+
+    private async Task Submit()
+    {
+        if (string.IsNullOrEmpty(Model.Name) || string.IsNullOrEmpty(Model.Id))
+        {
+            await _message.Info("没数据!");
+            return;
+        }
+
+        await using var context = await DbFactory.CreateDbContextAsync();
+
+        var permission = await context.Staffs.FirstOrDefaultAsync(x => x.UserId == Model.Id && x.Name == Model.Name);
+
+        var identity = "Member";
+        if (permission != null) identity = permission.Identity;
+        else
+        {
+            var signModel = await context.Students.FirstOrDefaultAsync(x => x.UserId == Model.Id && x.UserName == Model.Name);
+
+            if (signModel == null)
+            {
+                await _message.Info("用户账号密码出错!");
+                return;
+            }
+        }
+
+        var provider = (AbsProvider)authStateProvider;
+        await provider.UpdateAuthState(new StaffModel() { Identity = identity, UserId = Model.Id, Name = Model.Name });
+
+        await _message.Info("登陆成功!");
+        navigation.NavigateTo("/Centre", true);
+    }
+
+    private void OnFinishFailed()
+    {
+        _message.Error("出错了!");
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var authState = await authStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+
+            if (user.Identity is not null && user.Identity.IsAuthenticated)
+            {
+                navigation.NavigateTo("/Centre");
+            }
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+}
+
+<style>
+
+    body, html {
+        font-size: 18px;
+        overflow: hidden;
+    }
+
+    .login-container {
+        backdrop-filter: blur(10px);
+        background-color: rgba(255, 255, 255, 0.7);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+        border-radius: 1rem;
+        width: 28rem;
+    }
+    
+    @@media screen and (max-width: 768px){
+        .login-container{
+            width: 100%;
+            box-shadow: none;
+        }
+        .page-flex{
+            align-items: flex-start !important;
+        }
+    }
+
+    .apple-input {
+        border: 1px solid #d1d5db;
+        transition: all 0.3s ease;
+        width: 100%;
+        line-height: 1.15;
+        margin: 0;
+        border-radius: .5rem;
+        padding: .5rem;
+        overflow: hidden;
+    }
+
+    .apple-input:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+
+    .apple-button {
+        border-radius: 4px
+    }
+
+    .page-flex{
+        height: calc(100vh - 170px);
+    }
+</style>

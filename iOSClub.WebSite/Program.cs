@@ -4,21 +4,20 @@ using System.Text.Unicode;
 using iOSClub.Data;
 using iOSClub.Data.DataModels;
 using iOSClub.WebSite;
-using iOSClub.WebSite.Client.IdentityModels;
+using iOSClub.WebSite.Components;
 using iOSClub.WebSite.Controllers;
+using iOSClub.WebSite.IdentityModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.WebEncoders;
 using Microsoft.IdentityModel.Tokens;
-using _Imports = iOSClub.WebSite.Client._Imports;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents()
-    .AddInteractiveWebAssemblyComponents();
+    .AddInteractiveServerComponents();
 
 builder.Services.AddAntDesign();
 builder.Services.AddControllers();
@@ -79,11 +78,7 @@ builder.Services.Configure<WebEncoderOptions>(options =>
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseWebAssemblyDebugging();
-}
-else
+if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
     app.UseHsts();
@@ -136,8 +131,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.MapRazorComponents<App>()
-    .AddInteractiveServerRenderMode()
-    .AddInteractiveWebAssemblyRenderMode()
-    .AddAdditionalAssemblies(typeof(_Imports).Assembly);
+    .AddInteractiveServerRenderMode();
 
 app.Run();

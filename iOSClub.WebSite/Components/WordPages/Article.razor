@@ -1,7 +1,10 @@
 ﻿@page "/Article/{Name}"
+@using iOSClub.Data
 @using iOSClub.WebSite.Models
 @using Markdig
 @using Markdig.Syntax
+@using Microsoft.EntityFrameworkCore
+@inject IDbContextFactory<iOSContext> Factory
 
 <PageTitle>@Title - iArticle</PageTitle>
 
@@ -38,29 +41,36 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        if (string.IsNullOrEmpty(Name)) return;
+        await using var db = await Factory.CreateDbContextAsync();
+        var article = await db.Articles.AsNoTracking().FirstOrDefaultAsync(x => x.Path == Name);
+        if (article is null) return;
+        Content = article.Content;
+        Title = article.Title;
 
-        var info = new FileInfo($"wwwroot/ArticleFile/{Name.Replace("-", "/")}.md");
-        if (!info.Exists) return;
-        var content = await File.ReadAllTextAsync(info.FullName);
-        Content = content;
+        // 强制更新UI
+        StateHasChanged();
+
+        // 延迟解析锚点以提升首次渲染速度
+        await ParseAnchorsAsync(Content);
+    }
+
+    private async Task ParseAnchorsAsync(string content)
+    {
         var pipeline = new MarkdownPipelineBuilder().Build();
         var document = Markdown.Parse(content, pipeline);
-        Anchors.Clear();
         var count = 0;
+        Anchors.Clear();
         await document.ForEachAsync(x =>
         {
-            if (x is not HeadingBlock { Inline: not null } headingBlock) return Task.CompletedTask;
-
-            var id = headingBlock.Inline.FirstChild!.ToString()!;
-            count++;
-            if (count == 1)
-            {
-                Title = id;
+            if (x is not HeadingBlock { Inline: not null } headingBlock)
                 return Task.CompletedTask;
-            }
+
+            count++;
+            if (count == 1) return Task.CompletedTask;
             
-            Anchors.Add(new MarkAnchorModel()
+            var id = headingBlock.Inline.FirstChild?.ToString() ?? Guid.NewGuid().ToString();
+            
+            Anchors.Add(new MarkAnchorModel
             {
                 Name = id,
                 Link = $"/Article/{Name}#{id}"
@@ -68,6 +78,9 @@
 
             return Task.CompletedTask;
         });
+
+        // 更新锚点后再次刷新
+        StateHasChanged();
     }
 
 }

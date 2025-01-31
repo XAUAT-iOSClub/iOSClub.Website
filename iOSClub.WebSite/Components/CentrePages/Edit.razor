@@ -1,0 +1,138 @@
+﻿@page "/Edit/{Id?}"
+@using iOSClub.Data
+@using iOSClub.Data.DataModels
+@using iOSClub.WebSite.Models
+@using Markdig
+@using Markdig.Syntax
+@using Microsoft.EntityFrameworkCore
+@inject IDbContextFactory<iOSContext> DbFactory
+@inject NavigationManager Nav
+@inject MessageService MessageService
+
+
+<Form Model="Model"
+      RequiredMark="FormRequiredMark.None"
+      OnFinish="OnFinish"
+      OnFinishFailed="OnFinishFailed">
+    <GridRow>
+        <GridCol Xs="24" Sm="24" Md="12" Lg="12" Xl="12" Xxl="12">
+            <div class="card">
+                <FormItem Class="item" Label="项目路径">
+                    <Input @bind-Value="@context.Path"/>
+                </FormItem>
+                <FormItem Class="item" Label="项目">
+                    <TextArea AutoSize @bind-Value="@context.Content"></TextArea>
+                </FormItem>
+            </div>
+        </GridCol>
+        <GridCol Xs="24" Sm="24" Md="12" Lg="12" Xl="12" Xxl="12">
+            <div class="card">
+                <MarkdownRenderer html="@Model.Content"/>
+            </div>
+        </GridCol>
+    </GridRow>
+    <FormItem Style="text-align: center">
+        <Button Type="@ButtonType.Primary" HtmlType="submit">
+            @if (string.IsNullOrEmpty(Id))
+            {
+                <p>添加</p>
+            }
+            else
+            {
+                <p>更改</p>
+            }
+        </Button>
+    </FormItem>
+</Form>
+
+@code {
+    [Parameter] public string? Id { get; set; }
+    [CascadingParameter] private MemberModel Member { get; set; } = new();
+
+    private ArticleModel Model { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Id is not null)
+        {
+            await using var db = await DbFactory.CreateDbContextAsync();
+            Model = await db.Articles.FirstOrDefaultAsync(x => x.Path == Id) ?? new ArticleModel();
+        }
+    }
+
+    private async Task OnFinish()
+    {
+        if (Member.Identity == "Member") return;
+        await using var context = await DbFactory.CreateDbContextAsync();
+        if (string.IsNullOrEmpty(Id))
+        {
+            var staff = await context.Staffs.FirstOrDefaultAsync(x => x.UserId == Member.UserId);
+            if (staff == null)
+            {
+                await MessageService.Error("用户不存在");
+                return;
+            }
+
+            await context.Articles.AddAsync(Model);
+            await context.SaveChangesAsync();
+            await MessageService.Success("添加成功");
+        }
+        else
+        {
+            var a = await context.Articles.FirstOrDefaultAsync(x => x.Path == Id);
+            if (a == null)
+            {
+                await MessageService.Error("项目不存在");
+                Nav.NavigateTo("/Centre/Department");
+                return;
+            }
+
+            Model.LastWriteTime = DateTime.Now;
+            var pipeline = new MarkdownPipelineBuilder().Build();
+            var content = Model.Content;
+            var document = Markdown.Parse(content, pipeline);
+
+            var title = "";
+
+            foreach (var x in document)
+            {
+                if (x is not HeadingBlock { Inline: not null } headingBlock) continue;
+                var id = headingBlock.Inline.FirstChild!.ToString()!;
+                title = id;
+                break;
+            }
+
+            if (a.Path != Model.Path)
+            {
+                context.Articles.Remove(a);
+                await context.Articles.AddAsync(Model);
+            }
+            else
+            {
+                a.Title = title;
+                a.LastWriteTime = Model.LastWriteTime;
+                a.Content = content;
+            }
+
+            await context.SaveChangesAsync();
+            await MessageService.Success("更改成功");
+        }
+
+        Nav.NavigateTo("/Centre/Department");
+    }
+
+    private async Task OnFinishFailed()
+    {
+        await MessageService.Error("出问题了");
+    }
+
+}
+
+<style>
+    .card{
+        margin: 20px;
+        border-radius: 10px;
+        background: #ffffff;
+        padding: 20px;
+    }
+</style>

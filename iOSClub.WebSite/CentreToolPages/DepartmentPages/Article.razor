@@ -1,0 +1,83 @@
+﻿@page "/Centre/Article"
+@using iOSClub.Data
+@using iOSClub.Data.DataModels
+@using iOSClub.WebSite.Models
+@using Microsoft.EntityFrameworkCore
+@inject IDbContextFactory<iOSContext> DbFactory
+@inject MessageService MessageService
+@inject NavigationManager Nav
+
+<PageView Style="min-height: 100%;" ContextStyle="padding:10px;"
+          FullScreen="true"
+          OnDelete="@(() => Nav.NavigateTo("/Centre"))"
+          Title="社团文章">
+    <Context>
+        <AntList Grid="grid" DataSource="@ArticleModels">
+            <ListItem>
+                <Card Hoverable Style="border-radius: 10px;" BodyStyle="margin: 5px auto">
+                    <Flex Vertical Justify="space-between" Style="height: 200px" Align="flex-start">
+                        <h2>@context.Title</h2>
+                        @if (Member.IsAdmin())
+                        {
+                            <Space>
+                                <SpaceItem>
+                                    <a href="@($"/Edit/{context.Path}")" class="ant-btn">更改项目</a>
+                                </SpaceItem>
+                                <SpaceItem>
+                                    <Button Danger OnClick="() => Delete(context)">删除</Button>
+                                </SpaceItem>
+                            </Space>
+                        }
+                    </Flex>
+                </Card>
+            </ListItem>
+        </AntList>
+        @if (ArticleModels.Count == 0)
+        {
+            <Empty Image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+                   Style="padding: 20px" Description="@("没有项目")"/>
+        }
+    </Context>
+</PageView>
+
+@code {
+
+    private readonly ListGridType grid = new()
+    {
+        Gutter = 16,
+        Xs = 1,
+        Sm = 2,
+        Md = 4,
+        Lg = 4,
+        Xl = 6,
+        Xxl = 3
+    };
+
+    private List<ArticleModel> ArticleModels { get; set; } = [];
+
+    [CascadingParameter] private MemberModel Member { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await using var context = await DbFactory.CreateDbContextAsync();
+        ArticleModels = await context.Articles.ToListAsync();
+    }
+
+    private async Task Delete(ArticleModel article)
+    {
+        await using var context = await DbFactory.CreateDbContextAsync();
+        var articleEntity = await context.Articles.FirstOrDefaultAsync(x => x.Path == article.Path);
+        if (articleEntity != null)
+        {
+            context.Articles.Remove(articleEntity);
+            await context.SaveChangesAsync();
+            await MessageService.Success("删除成功");
+            ArticleModels.Remove(article);
+        }
+        else
+        {
+            await MessageService.Error("删除失败");
+        }
+    }
+
+}

@@ -1,7 +1,10 @@
 ﻿@page "/Structure"
+@using iOSClub.Data
 @using iOSClub.WebSite.Models
 @using Markdig
 @using Markdig.Syntax
+@using Microsoft.EntityFrameworkCore
+@inject IDbContextFactory<iOSContext> Factory
 
 <PageTitle>社团结构 - 西建大iOS Club</PageTitle>
 
@@ -34,28 +37,47 @@
     private string Content { get; set; } = "";
     private List<MarkAnchorModel> Anchors { get; } = [];
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
-        var info = new FileInfo("wwwroot/ArticleFile/Structure.md");
-        if (!info.Exists) return;
-        var content = await File.ReadAllTextAsync(info.FullName);
-        Content = content;
+        await using var db = await Factory.CreateDbContextAsync();
+        var article = await db.Articles.AsNoTracking().FirstOrDefaultAsync(x => x.Path == "Structure");
+        if (article is null) return;
+        Content = article.Content;
+
+        // 强制更新UI
+        StateHasChanged();
+
+        // 延迟解析锚点以提升首次渲染速度
+        await ParseAnchorsAsync(Content);
+    }
+
+    private async Task ParseAnchorsAsync(string content)
+    {
         var pipeline = new MarkdownPipelineBuilder().Build();
         var document = Markdown.Parse(content, pipeline);
+        var count = 0;
         Anchors.Clear();
         await document.ForEachAsync(x =>
         {
-            if (x is not HeadingBlock { Inline: not null } headingBlock) return Task.CompletedTask;
-            
+            if (x is not HeadingBlock { Inline: not null } headingBlock)
+                return Task.CompletedTask;
 
-            Anchors.Add(new MarkAnchorModel()
+            count++;
+            if (count == 1) return Task.CompletedTask;
+            
+            var id = headingBlock.Inline.FirstChild?.ToString() ?? Guid.NewGuid().ToString();
+            
+            Anchors.Add(new MarkAnchorModel
             {
-                Name = headingBlock.Inline.FirstChild!.ToString()!,
-                Link = $"/Structure#{headingBlock.Inline.FirstChild!}"
+                Name = id,
+                Link = $"/About#{id}"
             });
 
             return Task.CompletedTask;
         });
+        
+        // 更新锚点后再次刷新
+        StateHasChanged();
     }
 
 }

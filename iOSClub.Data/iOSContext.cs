@@ -15,7 +15,9 @@ public sealed class iOSContext(DbContextOptions<iOSContext> options) : DbContext
     public DbSet<TodoModel> Todos { get; init; }
     public DbSet<ProjectModel> Projects { get; init; }
     public DbSet<ResourceModel> Resources { get; init; }
-    public  DbSet<DepartmentModel> Departments { get; init; }
+    public DbSet<DepartmentModel> Departments { get; init; }
+    
+    public DbSet<ArticleModel> Articles { get; init; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -23,11 +25,11 @@ public sealed class iOSContext(DbContextOptions<iOSContext> options) : DbContext
             .HasOne(x => x.Student).WithMany()
             .HasForeignKey(e => e.StudentId)
             .IsRequired();
-        
+
         modelBuilder.Entity<StaffModel>()
             .HasMany(x => x.Tasks)
             .WithMany(x => x.Users);
-        
+
         modelBuilder.Entity<StaffModel>()
             .HasMany(x => x.Projects)
             .WithMany(x => x.Staffs);
@@ -36,7 +38,7 @@ public sealed class iOSContext(DbContextOptions<iOSContext> options) : DbContext
             .HasMany(x => x.Staffs)
             .WithOne(x => x.Department)
             .IsRequired(false);
-        
+
         modelBuilder.Entity<DepartmentModel>()
             .HasMany(x => x.Projects)
             .WithOne(x => x.Department)

@@ -2,29 +2,33 @@
 
 <div style="width: 90%" @ref="markdownContainer"></div>
 
-
 @code {
     private ElementReference markdownContainer;
 
     [Parameter] public string html { get; set; } = "";
+
     [Parameter] public string BaseUrl { get; set; } = "";
 
-    protected override void OnParametersSet()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (string.IsNullOrEmpty(html)) return;
-        JSRuntime.InvokeVoidAsync("insertHtml", markdownContainer, html, BaseUrl);
+        if (!string.IsNullOrEmpty(html))
+        {
+            await JSRuntime.InvokeVoidAsync("insertHtml", markdownContainer, html, BaseUrl);
+        }
     }
 
 }
 
 <script>
     window.insertHtml = function (element, html, imageUrl) {
+
+
         const md = markdownit({
             html: true,
             linkify: true,
             typographer: true
         })
-        mermaid.initialize({ startOnLoad: true });
+        mermaid.initialize({startOnLoad: true});
 
         md.use(markdownItAnchor);
 
@@ -41,8 +45,8 @@
                         }
                         token.attrs.push(['class', 'img-fluid'])
                     }
-                    
-                    if (token.type === 'link_open'){
+
+                    if (token.type === 'link_open') {
                         token.attrs.push(['class', 'apple-link'])
                     }
                     // Process recursively
@@ -82,7 +86,7 @@
                 }
             }
         })
-        
+
         md.use(markdownitContainer, 'tip', {
             validate: function (params) {
                 return params.trim().match(/^tip\s+(.*)$/);
@@ -107,10 +111,7 @@
     }
 </script>
 
-<script src="JS/markdown-it.min.js"></script>
-<script src="JS/markdown-it-container.min.js"></script>
-<script src="JS/markdown-it-anchor.js"></script>
-<script src="JS/mermaid.min.js"></script>
+
 
 
 <style>
@@ -168,8 +169,8 @@
         color: rgba(60, 60, 67, .78);
         margin-bottom: 10px;
     }
-    
-    .tip{
+
+    .tip {
         border-color: transparent;
         color: rgba(60, 60, 67);
         background-color: rgba(100, 108, 255, .14);

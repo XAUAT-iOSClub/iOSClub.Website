@@ -1,6 +1,6 @@
 ﻿@inject IJSRuntime JSRuntime
 
-<div style="width: 90%" @ref="markdownContainer"></div>
+<div class="markdown-body" @ref="markdownContainer"></div>
 
 @code {
     private ElementReference markdownContainer;
@@ -163,7 +163,7 @@
     .custom-block {
         border: 1px solid transparent;
         border-radius: 8px;
-        padding: 16px 16px 8px;
+        padding: 8px 16px 8px;
         line-height: 24px;
         font-size: 14px;
         color: rgba(60, 60, 67, .78);
@@ -174,5 +174,99 @@
         border-color: transparent;
         color: rgba(60, 60, 67);
         background-color: rgba(100, 108, 255, .14);
+    }
+    
+    .markdown-body {
+        width: 90%;
+    }
+    
+    @@media (max-width: 768px) {
+        .markdown-body {
+            width: 100%;
+        }
+        table{
+            width: 100%;
+        }
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        font-weight: bold;
+    }
+
+    h1{
+        font-size: 24px;
+        margin-bottom: 16px;
+    }
+
+    h2{
+        font-size: 22px;
+    }
+
+    h3{
+        font-size: 20px;
+    }
+
+    h4{
+        font-size: 18px;
+    }
+
+    h5,h6{
+        font-size: 16px;
+    }
+    
+    @@media (max-width: 768px) {
+        h1{
+            --md-primary-color: #0F4C81;
+            text-align: center;
+            line-height: 1.75;
+            font-family: -apple-system-font, BlinkMacSystemFont, Helvetica Neue, PingFang SC, Hiragino Sans GB, Microsoft YaHei UI, Microsoft YaHei, Arial, sans-serif;
+            font-size: 20px;
+            display: table;
+            padding: 0.5em 1em;
+            border-bottom: 2px solid #0F4C81;
+            color: hsl(0 0% 3.9%);
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            margin: 0 auto 1em;
+        }
+        h2{
+            text-align: center;
+            line-height: 1.75;
+            font-family: -apple-system-font, BlinkMacSystemFont, Helvetica Neue, PingFang SC, Hiragino Sans GB, Microsoft YaHei UI, Microsoft YaHei, Arial, sans-serif;
+            font-size: 18px;
+            display: table;
+            padding: 0.3em 1em;
+            margin: 1.5em auto 1.5em;
+            color: #fff;
+            background: #0F4C81;
+            font-weight: bold;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h3{
+            --md-primary-color: #0F4C81;
+            text-align: left;
+            line-height: 1.2;
+            font-family: -apple-system-font, BlinkMacSystemFont, Helvetica Neue, PingFang SC, Hiragino Sans GB, Microsoft YaHei UI, Microsoft YaHei, Arial, sans-serif;
+            font-size: 16px;
+            padding-left: 12px;
+            border-left: 4px solid #0F4C81;
+            margin: 2em 8px 0.75em 0;
+            color: hsl(0 0% 3.9%);
+            font-weight: bold;
+            border-bottom: none;
+        }
+        ol, ul, menu {
+            padding: .5em;
+        }
+        strong{
+            color: #0F4C81;
+        }
+        li{
+            margin: 0.5em 8px;
+        }
+        p{
+            margin: 1.5em 8px;
+        }
     }
 </style>

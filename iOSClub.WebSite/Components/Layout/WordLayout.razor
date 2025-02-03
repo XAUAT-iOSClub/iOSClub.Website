@@ -12,16 +12,14 @@
     </GridCol>
     <GridCol Xs="24" Sm="24" Md="18" Lg="18" Xl="20" Xxl="20"
              Style="padding: 20px;min-height: 100vh;">
-        <Button Type="@ButtonType.Text" Class="phone-desktop" OnClick="() => _drawerVisible = !_drawerVisible">
-            <Icon Type="menu" Theme="outline"/>
-            <span style="margin-left: 10px">导航</span>
-        </Button>
         @if (_drawerVisible)
         {
             @Menu
         }
         else
         {
+            <Button Type="@ButtonType.Primary" Icon="menu" Class="phone-desktop menu-btn"
+                    OnClick="() => _drawerVisible = !_drawerVisible"></Button>
             @Body
         }
     </GridCol>
@@ -58,8 +56,11 @@
                     </TitleTemplate>
                     <ChildContent>
                         <MenuItem RouterLink="/Article/Competitions" RouterMatch="NavLinkMatch.All">资源支持</MenuItem>
-                        <MenuItem RouterLink="/Article/MobileApplication" RouterMatch="NavLinkMatch.All">移动应用创新赛</MenuItem>
-                        <MenuItem RouterLink="/Article/Swift" RouterMatch="NavLinkMatch.All">WWDC-Swift学生挑战赛</MenuItem>
+                        <MenuItem RouterLink="/Article/MobileApplication" RouterMatch="NavLinkMatch.All">
+                            移动应用创新赛
+                        </MenuItem>
+                        <MenuItem RouterLink="/Article/Swift" RouterMatch="NavLinkMatch.All">WWDC-Swift学生挑战赛
+                        </MenuItem>
                     </ChildContent>
                 </MenuItemGroup>
                 <MenuItemGroup Class="group-block">
@@ -70,7 +71,8 @@
                     </TitleTemplate>
                     <ChildContent>
                         <MenuItem RouterLink="/Article/VisionPro" RouterMatch="NavLinkMatch.All">体验最新产品</MenuItem>
-                        <MenuItem RouterLink="/Article/PressConference" RouterMatch="NavLinkMatch.All">一起看发布会</MenuItem>
+                        <MenuItem RouterLink="/Article/PressConference" RouterMatch="NavLinkMatch.All">一起看发布会
+                        </MenuItem>
                     </ChildContent>
                 </MenuItemGroup>
                 <MenuItemGroup Class="group-block">
@@ -81,8 +83,11 @@
                     </TitleTemplate>
                     <ChildContent>
                         <MenuItem RouterLink="/Article/History-Overview" RouterMatch="NavLinkMatch.All">总述</MenuItem>
-                        <MenuItem RouterLink="/Article/History-Founding" RouterMatch="NavLinkMatch.All">创社史</MenuItem>
-                        <MenuItem RouterLink="/Article/History-Shao Han's Reign" RouterMatch="NavLinkMatch.All">邵韩之治</MenuItem>
+                        <MenuItem RouterLink="/Article/History-Founding" RouterMatch="NavLinkMatch.All">创社史
+                        </MenuItem>
+                        <MenuItem RouterLink="/Article/History-Shao Han's Reign" RouterMatch="NavLinkMatch.All">
+                            邵韩之治
+                        </MenuItem>
                     </ChildContent>
                 </MenuItemGroup>
             </Menu>
@@ -90,12 +95,12 @@
 }
 
 <style>
-    
-    .group-block{
+
+    .group-block {
         padding: 10px;
     }
-    
-    .menu-block{
+
+    .menu-block {
         padding-top: 20px;
         padding-left: 10px;
         padding-bottom: 20px;
@@ -105,7 +110,7 @@
         padding-bottom: 10px;
         border-bottom: 1px solid #ededed;
     }
-    
+
     .ant-back-top-inner {
         height: 40px;
         width: 40px;
@@ -117,31 +122,20 @@
         font-size: 20px;
     }
 
-    h1, h2, h3, h4, h5, h6 {
-        font-weight: bold;
-    }
-    
-    h1{
-        font-size: 24px;
-    }
-    
-    h2{
-        font-size: 22px;
-    }
-    
-    h3{
-        font-size: 20px;
-    }
-    
-    h4{
-        font-size: 18px;
-    }
-    
-    h5,h6{
-        font-size: 16px;
+    @@media screen and (max-width: 768px) {
+        .menu-btn {
+            position: fixed;
+            bottom: 48px;
+            left: 16px;
+            z-index: 999;
+            cursor: pointer;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+        }
     }
 
-    .footer{
+    .footer {
         display: none;
     }
 

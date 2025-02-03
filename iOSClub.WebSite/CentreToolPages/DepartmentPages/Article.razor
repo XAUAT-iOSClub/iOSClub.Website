@@ -40,6 +40,8 @@
     </Context>
 </PageView>
 
+<Button class="add-btn" Icon="plus" OnClick="@(() => Nav.NavigateTo("/Edit"))"></Button>
+
 @code {
 
     private readonly ListGridType grid = new()
@@ -81,3 +83,16 @@
     }
 
 }
+
+<style>
+    .add-btn{
+        position: fixed;
+        right: 40px;
+        bottom: 40px;
+        z-index: 999;
+        cursor: pointer;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+    }
+</style>

@@ -3,6 +3,7 @@
 @using iOSClub.WebSite.Models
 @using Markdig
 @using Markdig.Syntax
+@using Markdig.Syntax.Inlines
 @using Microsoft.EntityFrameworkCore
 @inject IDbContextFactory<iOSContext> Factory
 
@@ -19,7 +20,7 @@
 
 <GridRow>
     <GridCol Xs="24" Sm="24" Md="20" Lg="20" Xl="20" Xxl="20">
-        <MarkdownRenderer html="@Content" BaseUrl="ArticleFile"/>
+        <MarkdownRenderer html="@Content"/>
     </GridCol>
     <GridCol Md="4" Lg="4" Xl="4" Xxl="4" Class="desktop-phone">
         <Affix>
@@ -62,14 +63,22 @@
         Anchors.Clear();
         await document.ForEachAsync(x =>
         {
-            if (x is not HeadingBlock { Inline: not null } headingBlock)
+            if (x is not HeadingBlock { Inline.FirstChild: not null } headingBlock)
                 return Task.CompletedTask;
 
             count++;
             if (count == 1) return Task.CompletedTask;
-            
-            var id = headingBlock.Inline.FirstChild?.ToString() ?? Guid.NewGuid().ToString();
-            
+
+            var id = headingBlock.Inline.FirstChild switch
+            {
+                LineBreakInline line => line.ToString() ?? "",
+                LiteralInline literal => literal.ToString(),
+                EmphasisInline link => link.FirstChild?.ToString() ?? "",
+                _ => ""
+            };
+
+            if (string.IsNullOrEmpty(id)) return Task.CompletedTask;
+
             Anchors.Add(new MarkAnchorModel
             {
                 Name = id,

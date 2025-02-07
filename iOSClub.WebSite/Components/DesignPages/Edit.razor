@@ -162,6 +162,20 @@
                 return;
             }
 
+            var title = "";
+            var pipeline = new MarkdownPipelineBuilder().Build();
+            var content = Model.Content;
+            var document = Markdown.Parse(content, pipeline);
+            foreach (var x in document)
+            {
+                if (x is not HeadingBlock { Inline: not null } headingBlock) continue;
+                var id = headingBlock.Inline.FirstChild!.ToString()!;
+                title = id;
+                break;
+            }
+
+            Model.Title = title;
+            
             await context.Articles.AddAsync(Model);
             await context.SaveChangesAsync();
             await MessageService.Success("添加成功");
@@ -206,8 +220,6 @@
             await context.SaveChangesAsync();
             await MessageService.Success("更改成功");
         }
-
-        Nav.NavigateTo("/Centre/Article");
     }
 
     private async Task OnFinishFailed()

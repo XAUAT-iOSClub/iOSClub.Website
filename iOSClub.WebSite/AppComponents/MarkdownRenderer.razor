@@ -1,6 +1,7 @@
 ﻿@inject IJSRuntime JSRuntime
 
 <div class="markdown-body" @ref="markdownContainer"></div>
+<a target="_blank"></a>
 
 @code {
     private ElementReference markdownContainer;
@@ -38,9 +39,11 @@
             function rewrite(tokens) {
                 for (const token of tokens) {
                     if (token.type === 'image') {
-                        for (const attr of token.attrs) {
-                            if (attr[0] === 'src') {
-                                attr[1] = baseUrl + attr[1];
+                        if (!(imageUrl === undefined || imageUrl === '')){
+                            for (const attr of token.attrs) {
+                                if (attr[0] === 'src') {
+                                    attr[1] = baseUrl + attr[1];
+                                }
                             }
                         }
                         token.attrs.push(['class', 'img-fluid'])
@@ -48,6 +51,7 @@
 
                     if (token.type === 'link_open') {
                         token.attrs.push(['class', 'apple-link'])
+                        token.attrs.push(['target', '_blank'])
                     }
                     // Process recursively
                     if (token.children !== null) {
@@ -117,15 +121,30 @@
 <style>
     .img-fluid {
         max-width: 80%;
+        text-align: center;
+        margin: 0.1em auto 0.5em;
+        border-radius: 8px;
     }
 
-    .blockquote {
-        border-left: 5px solid #e8e8e8;
-        padding-left: 10px;
-    }
-
-    .blockquote p {
+    blockquote {
+        text-align: left;
+        line-height: 1.75;
+        font-family: -apple-system-font, BlinkMacSystemFont, Helvetica Neue, PingFang SC, Hiragino Sans GB, Microsoft YaHei UI, Microsoft YaHei, Arial, sans-serif;
         font-size: 14px;
+        font-style: initial;
+        padding: 1em 1em 1em 2em;
+        border-radius: 6px;
+        color: rgba(0, 0, 0, 0.6);
+        background: #f7f7f7;
+        margin: 2em 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        border: none;
+    }
+
+    blockquote p {
+        font-size: 14px;
+        margin: 0;
+        padding: .4em;
     }
 
     table {
@@ -267,6 +286,16 @@
         }
         p{
             margin: 1.5em 8px;
+        }
+        .img-fluid {
+            --md-primary-color: #0F4C81;
+            text-align: left;
+            line-height: 1.75;
+            font-family: -apple-system-font, BlinkMacSystemFont, Helvetica Neue, PingFang SC, Hiragino Sans GB, Microsoft YaHei UI, Microsoft YaHei, Arial, sans-serif;
+            font-size: 14px;
+            display: block;
+            width: 100% !important;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
     }
 </style>

@@ -28,3 +28,14 @@
 - 有机会免费参加Apple组织的青少年开发者冬、夏令营培训。
 - 定期举行的技术讲座以及区域性学生开发论坛活动。
 - 当然，你也可以结交到很多优秀的学长学姐，以及你的开发者同好们，组建一个快乐温馨的大家庭！
+- 
+## 社团媒体
+
+- Gitee组织：[西安建筑科技大学iOS众创空间官网](https://gitee.com/XAUATiOSClub)
+- Github组织：[西安建筑科技大学iOS众创空间官网](https://github.com/XAUAT-iOSClub)
+- B站: [西建大iOSClub](https://b23.tv/emdiGP6)
+- 知乎: [西建大iOS Club](https://www.zhihu.com/people/83-49-80-67)
+- 掘金: [西安建筑科技大学iOS众创空间俱乐部](https://juejin.cn/user/939445846031627)
+- 抖音: [西建大iOS Club](https://www.douyin.com/user/MS4wLjABAAAA042crZROwmNV69KtvhQSGtyLEZZATt4z1ewoXk-dLxCmt2S_DNus5c2KP_5S2CTY?_sw=4167573395234171&enter_from=general_search&enter_method=general_search&extra_params=%7B%22search_params%22%3A%7B%22search_result_id%22%3A%221612337042431609%22%2C%22relation_tag%22%3A0%2C%22log_pb%22%3A%7B%22impr_id%22%3A%2220241107211419AA5B58FD61D13326A614%22%7D%2C%22search_type%22%3A%22general%22%2C%22impr_id%22%3A%2220241107211419AA5B58FD61D13326A614%22%2C%22search_id%22%3A%2220241107211419AA5B58FD61D13326A614%22%2C%22search_keyword%22%3A%22%20%E8%A5%BF%E5%BB%BA%E5%A4%A7iOS%20Club%22%2C%22token_type%22%3A%22discover_list%22%7D%7D&from_tab_name=main)
+- 微信公众号: 微信搜索 西建大iOS众创空间俱乐部
+- 欢迎给我们写邮箱提意见! 邮箱号: iosclubxauat@163.com

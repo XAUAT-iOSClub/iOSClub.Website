@@ -4,19 +4,7 @@
 @using Markdig
 @using Markdig.Syntax
 @using Microsoft.EntityFrameworkCore
-@inject IJSRuntime Js
-@inject IMessageService _message
 @inject IDbContextFactory<iOSContext> Factory
-
-@code {
-
-    private async Task OnClick(string text)
-    {
-        var result = await Js.InvokeAsync<bool>("copyText", text);
-        await _message.Info("复制" + (result ? "成功" : "失败"));
-    }
-
-}
 
 <PageTitle>关于我们 - 西建大iOS Club</PageTitle>
 
@@ -32,23 +20,6 @@
 <GridRow>
     <GridCol Xs="24" Sm="24" Md="20" Lg="20" Xl="20" Xxl="20">
         <MarkdownRenderer html="@Content" BaseUrl="ArticleFile"/>
-        <h2 id="contact">联系我们</h2>
-        <p>Gitee组织：
-            <AppleLink Url="https://gitee.com/XAUATiOSClub">西安建筑科技大学iOS众创空间官网</AppleLink>
-        </p>
-        <p>Github组织：
-            <AppleLink Url="https://github.com/XAUAT-iOSClub">西安建筑科技大学iOS众创空间官网</AppleLink>
-        </p>
-        <p>B站号:
-            <AppleLink Url="https://b23.tv/emdiGP6">西建大iOSClub</AppleLink>
-        </p>
-        <p>微信公众号: 微信搜索
-            <AppleLink OnClick="@(async () => await OnClick("西建大iOS众创空间俱乐部"))">西建大iOS众创空间俱乐部
-            </AppleLink>
-        </p>
-        <p>欢迎给我们写邮箱提意见! 邮箱号:
-            <AppleLink OnClick="@(async () => await OnClick("iosclubxauat@163.com"))">iosclubxauat@163.com</AppleLink>
-        </p>
     </GridCol>
     <GridCol Md="4" Lg="4" Xl="4" Xxl="4" Class="desktop-phone">
         <Affix>
@@ -105,11 +76,6 @@
             return Task.CompletedTask;
         });
         
-        Anchors.Add(new MarkAnchorModel()
-        {
-            Name = "联系",
-            Link = "/About#contact"
-        });
         // 更新锚点后再次刷新
         StateHasChanged();
     }

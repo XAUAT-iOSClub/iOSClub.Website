@@ -1,0 +1,250 @@
+﻿@page "/Edit/{Id?}"
+@using iOSClub.Data
+@using iOSClub.Data.DataModels
+@using iOSClub.WebSite.IdentityModels
+@using iOSClub.WebSite.Models
+@using Markdig
+@using Markdig.Syntax
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.EntityFrameworkCore
+@inject IDbContextFactory<iOSContext> DbFactory
+@inject NavigationManager Nav
+@inject AuthenticationStateProvider authStateProvider
+@inject MessageService MessageService
+
+<Form Model="Model"
+      RequiredMark="FormRequiredMark.None"
+      OnFinish="OnFinish"
+      OnFinishFailed="OnFinishFailed">
+    <Layout Style="height: 100vh">
+        <Header Class="Layout-Header">
+            <Flex Align="center" Justify="space-between" Style="width: 100%">
+                <a href="/Centre/Article">
+                    <Flex Gap="large">
+                        <Image Src="iOS_Club_LOGO.png" Preview="false" Style="width:40px; height:40px"/>
+                        <div class="Layout-Title">Edit</div>
+                    </Flex>
+                </a>
+                <Space Size="@("large")">
+                    <SpaceItem>
+                        <Button Type="@ButtonType.Text" OnClick="() => IsOpen = !IsOpen">
+                            <Icon Type="@(IsOpen ? "menu-fold" : "menu-unfold")" Theme="outline"/>
+                        </Button>
+                    </SpaceItem>
+                    <SpaceItem>
+                        <Button Type="@ButtonType.Primary" HtmlType="submit" class="menu-button">
+                            @if (string.IsNullOrEmpty(Id))
+                            {
+                                <p>添加</p>
+                            }
+                            else
+                            {
+                                <p>更改</p>
+                            }
+                        </Button>
+                    </SpaceItem>
+                </Space>
+            </Flex>
+        </Header>
+        <Layout>
+            @if (IsOpen)
+            {
+                <Sider Theme="SiderTheme.Light">
+                    <Button Block Type="@ButtonType.Text" OnClick="@(() => Nav.NavigateTo("/Edit"))">
+                        新建
+                    </Button>
+                    <Menu Mode="MenuMode.Inline">
+                        @foreach (var a in MarkdownAttributes)
+                        {
+                            <div>
+                                <MenuItem RouterLink="@($"/Edit/{a.Key}")"
+                                          RouterMatch="NavLinkMatch.All">@a.Value</MenuItem>
+                            </div>
+                        }
+                    </Menu>
+                </Sider>
+            }
+            <Content Style="overflow: auto">
+                <GridRow>
+                    <GridCol Xs="24" Sm="24" Md="12" Lg="12" Xl="12" Xxl="12">
+                        <div class="card">
+                            <FormItem Class="item" Label="文章路径">
+                                <Input @bind-Value="@context.Path"/>
+                            </FormItem>
+                            <FormItem Class="item">
+                                <TextArea AutoSize Bordered Placeholder="请输入相关内容"
+                                          @bind-Value="@context.Content"></TextArea>
+                            </FormItem>
+                        </div>
+                    </GridCol>
+                    <GridCol Xs="24" Sm="24" Md="12" Lg="12" Xl="12" Xxl="12">
+                        <div class="card">
+                            <MarkdownRenderer html="@Model.Content"/>
+                        </div>
+                    </GridCol>
+                </GridRow>
+
+            </Content>
+        </Layout>
+    </Layout>
+
+</Form>
+
+@code {
+    [Parameter] public string? Id { get; set; }
+    private bool IsOpen { get; set; }
+    private MemberModel Member { get; set; } = new() { UserName = "游客" };
+    private Dictionary<string, string> MarkdownAttributes { get; set; } = new();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) return;
+
+        var m = await ((JwtProvider)authStateProvider).GetPermission();
+
+        if (m != null)
+        {
+            await using var context = await DbFactory.CreateDbContextAsync();
+            var model = await context.Students.FirstOrDefaultAsync(x => x.UserId == m.UserId && x.UserName == m.Name);
+
+            if (model == null)
+            {
+                var f = await context.Staffs.FirstOrDefaultAsync(x => x.UserId == m.UserId && x.Name == m.Name);
+                if (f == null)
+                {
+                    await ((JwtProvider)authStateProvider).Logout();
+                    return;
+                }
+
+                model = new MemberModel()
+                {
+                    UserId = f.UserId,
+                    UserName = f.Name,
+                    Identity = f.Identity
+                };
+            }
+
+            Member = MemberModel.AutoCopy<StudentModel, MemberModel>(model);
+            Member.Identity = m.Identity;
+            StateHasChanged();
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    private ArticleModel Model { get; set; } = new();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await using var db = await DbFactory.CreateDbContextAsync();
+        if (MarkdownAttributes.Count == 0)
+            MarkdownAttributes = await db.Articles.ToDictionaryAsync(x => x.Path, x => x.Title);
+        if (Id is not null)
+        {
+            Model = await db.Articles.FirstOrDefaultAsync(x => x.Path == Id) ?? new ArticleModel();
+            IsOpen = true;
+            return;
+        }
+
+        Model = new ArticleModel();
+    }
+
+    private async Task OnFinish()
+    {
+        if (Member.Identity == "Member") return;
+        await using var context = await DbFactory.CreateDbContextAsync();
+        if (string.IsNullOrEmpty(Id))
+        {
+            var staff = await context.Staffs.FirstOrDefaultAsync(x => x.UserId == Member.UserId);
+            if (staff == null)
+            {
+                await MessageService.Error("用户不存在");
+                return;
+            }
+
+            await context.Articles.AddAsync(Model);
+            await context.SaveChangesAsync();
+            await MessageService.Success("添加成功");
+        }
+        else
+        {
+            var a = await context.Articles.FirstOrDefaultAsync(x => x.Path == Id);
+            if (a == null)
+            {
+                await MessageService.Error("项目不存在");
+                Nav.NavigateTo("/Centre/Article");
+                return;
+            }
+
+            Model.LastWriteTime = DateTime.Now;
+            var pipeline = new MarkdownPipelineBuilder().Build();
+            var content = Model.Content;
+            var document = Markdown.Parse(content, pipeline);
+
+            var title = "";
+
+            foreach (var x in document)
+            {
+                if (x is not HeadingBlock { Inline: not null } headingBlock) continue;
+                var id = headingBlock.Inline.FirstChild!.ToString()!;
+                title = id;
+                break;
+            }
+
+            if (a.Path != Model.Path)
+            {
+                context.Articles.Remove(a);
+                await context.Articles.AddAsync(Model);
+            }
+            else
+            {
+                a.Title = title;
+                a.LastWriteTime = Model.LastWriteTime;
+                a.Content = content;
+            }
+
+            await context.SaveChangesAsync();
+            await MessageService.Success("更改成功");
+        }
+
+        Nav.NavigateTo("/Centre/Article");
+    }
+
+    private async Task OnFinishFailed()
+    {
+        await MessageService.Error("出问题了");
+    }
+
+}
+
+<style>
+    .card {
+        margin: 20px;
+        border-radius: 10px;
+        background: #ffffff;
+        padding: 20px;
+    }
+
+    html body {
+        background: #f3f5f7;
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    .Layout-Header {
+        background: #ffffff;
+    }
+
+    .Layout-Title {
+        font-size: 24px;
+        font-weight: bold;
+        color: #191c1f;
+    }
+
+    .menu-button {
+        border-radius: 10px;
+        margin-left: 20px;
+    }
+
+
+</style>

@@ -204,42 +204,4 @@
         height: 0 !important
     }
 
-    .page-row {
-        display: flex;
-        flex-flow: row
-    }
-
-    .page-col-1 {
-        padding: 10px;
-        flex-direction: column;
-        flex: 0 0 20%;
-        max-width: 100%;
-        display: grid;
-        align-items: center;
-        justify-items: center;
-        text-align: center
-    }
-
-    @@media screen and (max-width: 767px) {
-        .page-row {
-            flex-flow: column
-        }
-
-        .page-col-1 {
-            display: none
-        }
-
-        .page-col-2 {
-            flex: 0 0 100% !important;
-            padding: 0 !important
-        }
-    }
-
-    .page-col-2 {
-        padding-left: 10px;
-        flex-direction: column;
-        flex: 0 0 80%;
-        max-width: 100% !important
-    }
-
 </style>

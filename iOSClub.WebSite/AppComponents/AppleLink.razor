@@ -2,20 +2,12 @@
 {
     <a class="apple-link" href="@Url" target="_blank">
         @ChildContent
-        @if (IsIcon)
-        {
-            <Icon Type="link" Theme="outline"/>
-        }
     </a>
 }
 else
 {
     <a class="apple-link" @onclick="OnClick">
         @ChildContent
-        @if (IsIcon)
-        {
-            <Icon Type="link" Theme="outline"/>
-        }
     </a>
 }
 

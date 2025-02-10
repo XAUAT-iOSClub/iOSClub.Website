@@ -60,6 +60,16 @@
       <_ContentIncludedByDefault Remove="wwwroot\Learn\Vue-1-总序.md" />
       <_ContentIncludedByDefault Remove="wwwroot\Learn\Vue-2-初识前端三件套.md" />
       <_ContentIncludedByDefault Remove="wwwroot\Learn\Vue-3-JS简单学习.md" />
+      <_ContentIncludedByDefault Remove="wwwroot\ArticleFile\About.md" />
+      <_ContentIncludedByDefault Remove="wwwroot\ArticleFile\Competitions.md" />
+      <_ContentIncludedByDefault Remove="wwwroot\ArticleFile\History\Founding.md" />
+      <_ContentIncludedByDefault Remove="wwwroot\ArticleFile\History\Overview.md" />
+      <_ContentIncludedByDefault Remove="wwwroot\ArticleFile\History\Shao Han's Reign.md" />
+      <_ContentIncludedByDefault Remove="wwwroot\ArticleFile\MobileApplication.md" />
+      <_ContentIncludedByDefault Remove="wwwroot\ArticleFile\PressConference.md" />
+      <_ContentIncludedByDefault Remove="wwwroot\ArticleFile\Structure.md" />
+      <_ContentIncludedByDefault Remove="wwwroot\ArticleFile\Swift.md" />
+      <_ContentIncludedByDefault Remove="wwwroot\ArticleFile\VisionPro.md" />
     </ItemGroup>
 
 </Project>

@@ -6,8 +6,6 @@ using iOSClub.Data.DataModels;
 using iOSClub.WebSite.Components;
 using iOSClub.WebSite.Controllers;
 using iOSClub.WebSite.IdentityModels;
-using Markdig;
-using Markdig.Syntax;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -117,12 +115,6 @@ using (var scope = app.Services.CreateScope())
         context.Staffs.Add(model);
     }
 
-    if (!context.Articles.Any())
-    {
-        var dir = new DirectoryInfo("wwwroot/ArticleFile");
-        await Initialize(context, dir);
-    }
-
     await context.SaveChangesAsync();
     await context.DisposeAsync();
 }
@@ -142,41 +134,3 @@ app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
 app.Run();
-
-return;
-
-async Task Initialize(iOSContext context, DirectoryInfo dir, string parentPath = "")
-{
-    foreach (var info in dir.GetFileSystemInfos())
-    {
-        if (info.Name.EndsWith(".md"))
-        {
-            var pipeline = new MarkdownPipelineBuilder().Build();
-            var content = File.ReadAllText(info.FullName);
-            var document = Markdown.Parse(content, pipeline);
-
-            var title = "";
-
-            foreach (var x in document)
-            {
-                if (x is not HeadingBlock { Inline: not null } headingBlock) continue;
-                var id = headingBlock.Inline.FirstChild!.ToString()!;
-                title = id;
-                break;
-            }
-
-            var model = new ArticleModel()
-            {
-                Path = parentPath + info.Name.Replace(".md", ""),
-                Title = title,
-                Content = content
-            };
-            context.Articles.Add(model);
-        }
-
-        if (info is DirectoryInfo directoryInfo)
-        {
-            await Initialize(context, directoryInfo, parentPath + directoryInfo.Name + "-");
-        }
-    }
-}

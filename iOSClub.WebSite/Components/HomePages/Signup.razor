@@ -127,37 +127,6 @@
 
             await context.SaveChangesAsync();
 
-            using var client = new HttpClient();
-
-            var appId = Environment.GetEnvironmentVariable("APP_ID", EnvironmentVariableTarget.Process);
-            var appSecret = Environment.GetEnvironmentVariable("APP_SECRET", EnvironmentVariableTarget.Process);
-
-            if (!string.IsNullOrEmpty(appId) && !string.IsNullOrEmpty(appSecret))
-            {
-                var content = new FormUrlEncodedContent([
-                    new KeyValuePair<string, string>("grant_type", "client_credentials"),
-                    new KeyValuePair<string, string>("client_id", appId),
-                    new KeyValuePair<string, string>("client_secret", appSecret),
-                    new KeyValuePair<string, string>("resource", "https://default.logto.app/api"),
-                    new KeyValuePair<string, string>("scope", "all")
-                ]);
-
-                // 发送请求并获取响应
-                var response = await client.PostAsync("https://logtoasfd.zeabur.app/oidc/token", content);
-                var responseContent = await response.Content.ReadAsStringAsync();
-                var obj = JsonNode.Parse(responseContent);
-                var accessToken = obj?["access_token"]?.GetValue<string>();
-                using var httpClient = new HttpClient();
-                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-                await httpClient.PostAsJsonAsync("https://logtoasfd.zeabur.app/api/users",
-                    new UserClass()
-                    {
-                        PrimaryPhone = "86" + Model.PhoneNum,
-                        Password = Model.UserId,
-                        Name = Model.UserName
-                    });
-            }
-
             if (isWeiXin)
             {
                 Nav.NavigateTo("/IOSPic");

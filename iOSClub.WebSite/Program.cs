@@ -114,6 +114,35 @@ using (var scope = app.Services.CreateScope())
 
         context.Staffs.Add(model);
     }
+    else
+    {
+        var sqlConversion = Environment.GetEnvironmentVariable("CONVERSION", EnvironmentVariableTarget.Process);
+        if (!string.IsNullOrEmpty(sqlConversion))
+        {
+            var newContext = DesignTimeDbContextFactory.Create(sqlConversion);
+            try
+            {
+                newContext.Database.Migrate();
+            }
+            catch (Exception e)
+            {
+                newContext.Database.EnsureCreated();
+                Console.WriteLine(e.Message);
+            }
+            
+            await newContext.Students.AddRangeAsync(context.Students);
+            await newContext.SaveChangesAsync();
+            await newContext.Departments.AddRangeAsync(context.Departments);
+            await newContext.Staffs.AddRangeAsync(context.Staffs.Where(staff => staff.Identity == "President"));
+            await newContext.SaveChangesAsync();
+            await newContext.Tasks.AddRangeAsync(context.Tasks);
+            await newContext.Projects.AddRangeAsync(context.Projects);
+            await newContext.Resources.AddRangeAsync(context.Resources);
+            await newContext.Todos.AddRangeAsync(context.Todos);
+            await newContext.Articles.AddRangeAsync(context.Articles);
+            await newContext.SaveChangesAsync();
+        }
+    }
 
     await context.SaveChangesAsync();
     await context.DisposeAsync();

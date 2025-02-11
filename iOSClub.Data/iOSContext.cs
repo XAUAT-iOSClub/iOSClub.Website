@@ -46,12 +46,20 @@ public sealed class iOSContext(DbContextOptions<iOSContext> options) : DbContext
     }
 }
 
+[Serializable]
 public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<iOSContext>
 {
     public iOSContext CreateDbContext(string[] args)
     {
         var optionsBuilder = new DbContextOptionsBuilder<iOSContext>();
         optionsBuilder.UseSqlite("Data Source=Data.db");
+        return new iOSContext(optionsBuilder.Options);
+    }
+    
+    public static iOSContext Create(string s)
+    {
+        var optionsBuilder = new DbContextOptionsBuilder<iOSContext>();
+        optionsBuilder.UseNpgsql(s);
         return new iOSContext(optionsBuilder.Options);
     }
 }

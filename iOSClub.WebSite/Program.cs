@@ -130,17 +130,20 @@ using (var scope = app.Services.CreateScope())
                 Console.WriteLine(e.Message);
             }
 
-            await newContext.Students.AddRangeAsync(context.Students);
-            await newContext.SaveChangesAsync();
-            await newContext.Departments.AddRangeAsync(context.Departments.Include(x => x.Staffs));
-            await newContext.Staffs.AddRangeAsync(context.Staffs.Where(staff => staff.Identity == "President"));
-            await newContext.SaveChangesAsync();
-            await newContext.Tasks.AddRangeAsync(context.Tasks);
-            await newContext.Projects.AddRangeAsync(context.Projects);
-            await newContext.Resources.AddRangeAsync(context.Resources);
-            await newContext.Todos.AddRangeAsync(context.Todos);
-            await newContext.Articles.AddRangeAsync(context.Articles);
-            await newContext.SaveChangesAsync();
+            if (!context.Staffs.Any())
+            {
+                await newContext.Students.AddRangeAsync(context.Students);
+                await newContext.SaveChangesAsync();
+                await newContext.Departments.AddRangeAsync(context.Departments.Include(x => x.Staffs));
+                await newContext.Staffs.AddRangeAsync(context.Staffs.Where(staff => staff.Identity == "President"));
+                await newContext.SaveChangesAsync();
+                await newContext.Tasks.AddRangeAsync(context.Tasks);
+                await newContext.Projects.AddRangeAsync(context.Projects);
+                await newContext.Resources.AddRangeAsync(context.Resources);
+                await newContext.Todos.AddRangeAsync(context.Todos);
+                await newContext.Articles.AddRangeAsync(context.Articles);
+                await newContext.SaveChangesAsync();
+            }
         }
     }
 

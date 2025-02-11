@@ -129,10 +129,10 @@ using (var scope = app.Services.CreateScope())
                 newContext.Database.EnsureCreated();
                 Console.WriteLine(e.Message);
             }
-            
+
             await newContext.Students.AddRangeAsync(context.Students);
             await newContext.SaveChangesAsync();
-            await newContext.Departments.AddRangeAsync(context.Departments);
+            await newContext.Departments.AddRangeAsync(context.Departments.Include(x => x.Staffs));
             await newContext.Staffs.AddRangeAsync(context.Staffs.Where(staff => staff.Identity == "President"));
             await newContext.SaveChangesAsync();
             await newContext.Tasks.AddRangeAsync(context.Tasks);

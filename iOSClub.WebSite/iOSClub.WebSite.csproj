@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net9.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
@@ -12,17 +12,17 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.10"/>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.2" />
         <PackageReference Include="AntDesign" Version="0.20.4.2" />
         <PackageReference Include="AntDesign.Charts" Version="0.5.6" />
-        <PackageReference Include="Markdig" Version="0.38.0" />
-        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.1.2" />
+        <PackageReference Include="Markdig" Version="0.40.0" />
+        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.6.0" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.1.2" />
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.6.0" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.10">
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.2">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
@@ -30,46 +30,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\iOSClub.Data\iOSClub.Data.csproj"/>
-    </ItemGroup>
-
-    <ItemGroup>
-      <_ContentIncludedByDefault Remove="wwwroot\Learn\CSharp-1-总序.md" />
-      <_ContentIncludedByDefault Remove="wwwroot\Learn\CSharp-2-语法和变量.md" />
-      <_ContentIncludedByDefault Remove="wwwroot\Learn\CSharp-3-分支与循环.md" />
-      <_ContentIncludedByDefault Remove="wwwroot\Learn\CSharp-4-数组，列表，字典.md" />
-      <_ContentIncludedByDefault Remove="wwwroot\Learn\CSharp-5-String的更多用法.md" />
-      <_ContentIncludedByDefault Remove="wwwroot\Learn\CSharp-6-函数.md" />
-      <_ContentIncludedByDefault Remove="wwwroot\Learn\CSharp-7-结构体，枚举，类.md" />
-      <_ContentIncludedByDefault Remove="wwwroot\Learn\image\CSharp1\1722441043646.png" />
-      <_ContentIncludedByDefault Remove="wwwroot\Learn\image\CSharp1\1722441561073.png" />
-      <_ContentIncludedByDefault Remove="wwwroot\Learn\image\CSharp2\1722602405405.png" />
-      <_ContentIncludedByDefault Remove="wwwroot\Learn\image\CSharp3\1722914526242.png" />
-      <_ContentIncludedByDefault Remove="wwwroot\Learn\image\Vue1\1722756873550.png" />
-      <_ContentIncludedByDefault Remove="wwwroot\Learn\image\Vue1\1722763082372.png" />
-      <_ContentIncludedByDefault Remove="wwwroot\Learn\image\Vue1\1722765657592.png" />
-      <_ContentIncludedByDefault Remove="wwwroot\Learn\image\Vue1\1722766104453.png" />
-      <_ContentIncludedByDefault Remove="wwwroot\Learn\image\Vue1\1722766146384.png" />
-      <_ContentIncludedByDefault Remove="wwwroot\Learn\image\Vue3\1723443855664.png" />
-      <_ContentIncludedByDefault Remove="wwwroot\Learn\image\Vue3\1723444007123.png" />
-      <_ContentIncludedByDefault Remove="wwwroot\Learn\image\Vue3\1723444146571.png" />
-      <_ContentIncludedByDefault Remove="wwwroot\Learn\image\Vue3\1723444553643.png" />
-      <_ContentIncludedByDefault Remove="wwwroot\Learn\image\Vue3\1723446059920.png" />
-      <_ContentIncludedByDefault Remove="wwwroot\Learn\image\Vue3\1723446690160.png" />
-      <_ContentIncludedByDefault Remove="wwwroot\Learn\image\Vue3\1723448594064.png" />
-      <_ContentIncludedByDefault Remove="wwwroot\Learn\image\Vue3\1723448938400.png" />
-      <_ContentIncludedByDefault Remove="wwwroot\Learn\Vue-1-总序.md" />
-      <_ContentIncludedByDefault Remove="wwwroot\Learn\Vue-2-初识前端三件套.md" />
-      <_ContentIncludedByDefault Remove="wwwroot\Learn\Vue-3-JS简单学习.md" />
-      <_ContentIncludedByDefault Remove="wwwroot\ArticleFile\About.md" />
-      <_ContentIncludedByDefault Remove="wwwroot\ArticleFile\Competitions.md" />
-      <_ContentIncludedByDefault Remove="wwwroot\ArticleFile\History\Founding.md" />
-      <_ContentIncludedByDefault Remove="wwwroot\ArticleFile\History\Overview.md" />
-      <_ContentIncludedByDefault Remove="wwwroot\ArticleFile\History\Shao Han's Reign.md" />
-      <_ContentIncludedByDefault Remove="wwwroot\ArticleFile\MobileApplication.md" />
-      <_ContentIncludedByDefault Remove="wwwroot\ArticleFile\PressConference.md" />
-      <_ContentIncludedByDefault Remove="wwwroot\ArticleFile\Structure.md" />
-      <_ContentIncludedByDefault Remove="wwwroot\ArticleFile\Swift.md" />
-      <_ContentIncludedByDefault Remove="wwwroot\ArticleFile\VisionPro.md" />
     </ItemGroup>
 
 </Project>

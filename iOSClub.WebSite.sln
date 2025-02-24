@@ -4,8 +4,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iOSClub.WebSite", "iOSClub.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iOSClub.Data", "iOSClub.Data\iOSClub.Data.csproj", "{FB9E556A-953E-460D-82AE-A09408967E10}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{E595B84A-9D94-4983-941B-A429C2644E62}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,9 +18,5 @@ Global
 		{FB9E556A-953E-460D-82AE-A09408967E10}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB9E556A-953E-460D-82AE-A09408967E10}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB9E556A-953E-460D-82AE-A09408967E10}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E595B84A-9D94-4983-941B-A429C2644E62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E595B84A-9D94-4983-941B-A429C2644E62}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E595B84A-9D94-4983-941B-A429C2644E62}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E595B84A-9D94-4983-941B-A429C2644E62}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -259,8 +259,14 @@
             .Include(x => x.Tasks)
             .FirstOrDefaultAsync(x => x.UserId == Member.UserId);
 
-        var data = await client.GetFromJsonAsync<CategoryModel>("https://link.xauat.site/api/Link/GetCategory/社团出品");
-        Tools = data?.Links.ToArray() ?? [];
+        var re = await client.GetAsync("https://link.xauat.site/api/Link/GetCategory/社团出品");
+        if (re.IsSuccessStatusCode)
+        {
+            var data = await re.Content.ReadFromJsonAsync<CategoryModel>();
+            Tools = data?.Links.ToArray() ?? [];
+        }
+
+
         if (Staff == null || Staff.Identity == "Member") return;
         Resources = await context.Resources.ToArrayAsync();
         if (Staff.Identity != "Department")

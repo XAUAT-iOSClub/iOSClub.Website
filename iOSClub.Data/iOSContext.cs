@@ -4,6 +4,7 @@ using System.Text;
 using iOSClub.Data.DataModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace iOSClub.Data;
 
@@ -16,7 +17,7 @@ public sealed class iOSContext(DbContextOptions<iOSContext> options) : DbContext
     public DbSet<ProjectModel> Projects { get; init; }
     public DbSet<ResourceModel> Resources { get; init; }
     public DbSet<DepartmentModel> Departments { get; init; }
-    
+
     public DbSet<ArticleModel> Articles { get; init; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -44,6 +45,11 @@ public sealed class iOSContext(DbContextOptions<iOSContext> options) : DbContext
             .WithOne(x => x.Department)
             .IsRequired(false);
     }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning));
+    }
 }
 
 [Serializable]
@@ -55,7 +61,7 @@ public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<iOSContext
         optionsBuilder.UseSqlite("Data Source=Data.db");
         return new iOSContext(optionsBuilder.Options);
     }
-    
+
     public static iOSContext Create(string s)
     {
         var optionsBuilder = new DbContextOptionsBuilder<iOSContext>();

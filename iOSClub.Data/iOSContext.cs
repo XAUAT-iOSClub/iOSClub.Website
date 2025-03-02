@@ -45,11 +45,6 @@ public sealed class iOSContext(DbContextOptions<iOSContext> options) : DbContext
             .WithOne(x => x.Department)
             .IsRequired(false);
     }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning));
-    }
 }
 
 [Serializable]

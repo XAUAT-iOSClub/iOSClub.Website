@@ -9,6 +9,7 @@ using iOSClub.WebSite.IdentityModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.WebEncoders;
 using Microsoft.IdentityModel.Tokens;
 
@@ -69,7 +70,9 @@ else
 {
     builder.Services.AddDbContextFactory<iOSContext>(opt =>
         opt.UseNpgsql(sql,
-            o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
+                o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery))
+            .ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning)) // <--- This line ✨
+            .EnableDetailedErrors());
 }
 
 builder.Services.Configure<WebEncoderOptions>(options =>

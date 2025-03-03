@@ -17,7 +17,7 @@ public sealed class iOSContext(DbContextOptions<iOSContext> options) : DbContext
     public DbSet<ProjectModel> Projects { get; init; }
     public DbSet<ResourceModel> Resources { get; init; }
     public DbSet<DepartmentModel> Departments { get; init; }
-    public DbSet<DataProtectionKey> DataProtectionKeys { get; set; } = null!;
+    public DbSet<DataProtectionKey> DataProtectionKeys { get; init; }
 
     public DbSet<ArticleModel> Articles { get; init; }
 

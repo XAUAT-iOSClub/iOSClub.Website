@@ -18,6 +18,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.WebEncoders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Win32;
+using NpgsqlDataProtection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -71,6 +72,9 @@ if (string.IsNullOrEmpty(sql))
     builder.Services.AddDbContextFactory<iOSContext>(opt =>
         opt.UseSqlite("Data Source=Data.db",
             o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
+    
+    builder.Services.AddDataProtection()
+        .PersistKeysToFileSystem(new DirectoryInfo("./keys"));
 }
 else
 {
@@ -79,15 +83,12 @@ else
                 o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery))
             .ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning)) // <--- This line ✨
             .EnableDetailedErrors());
+    
+    builder.Services.AddDataProtection()
+        .PersistKeysToPostgres(sql,true);
 }
 
-builder.Services.AddDataProtection()
-    .PersistKeysToDbContext<iOSContext>()
-    .UseCryptographicAlgorithms(new AuthenticatedEncryptorConfiguration()
-    {
-        EncryptionAlgorithm = EncryptionAlgorithm.AES_256_CBC,
-        ValidationAlgorithm = ValidationAlgorithm.HMACSHA256
-    });
+
 
 builder.Services.Configure<WebEncoderOptions>(options =>
     options.TextEncoderSettings = new TextEncoderSettings(UnicodeRanges.All));

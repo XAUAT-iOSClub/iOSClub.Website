@@ -2,13 +2,12 @@
 using System.Security.Cryptography;
 using System.Text;
 using iOSClub.Data.DataModels;
-using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
 namespace iOSClub.Data;
 
-public sealed class iOSContext(DbContextOptions<iOSContext> options) : DbContext(options), IDataProtectionKeyContext
+public sealed class iOSContext(DbContextOptions<iOSContext> options) : DbContext(options)
 {
     public DbSet<StudentModel> Students { get; init; }
     public DbSet<StaffModel> Staffs { get; init; }
@@ -17,7 +16,6 @@ public sealed class iOSContext(DbContextOptions<iOSContext> options) : DbContext
     public DbSet<ProjectModel> Projects { get; init; }
     public DbSet<ResourceModel> Resources { get; init; }
     public DbSet<DepartmentModel> Departments { get; init; }
-    public DbSet<DataProtectionKey> DataProtectionKeys { get; init; }
 
     public DbSet<ArticleModel> Articles { get; init; }
 

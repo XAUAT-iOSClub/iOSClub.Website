@@ -81,7 +81,7 @@ else
             .EnableDetailedErrors());
 }
 
-builder.Services.AddDataProtection().SetApplicationName("iOS Club")
+builder.Services.AddDataProtection()
     .PersistKeysToDbContext<iOSContext>()
     .UseCryptographicAlgorithms(new AuthenticatedEncryptorConfiguration()
     {

@@ -8,10 +8,16 @@ using iOSClub.WebSite.Controllers;
 using iOSClub.WebSite.IdentityModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
+using Microsoft.AspNetCore.DataProtection.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.WebEncoders;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Win32;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -74,6 +80,14 @@ else
             .ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning)) // <--- This line ✨
             .EnableDetailedErrors());
 }
+
+builder.Services.AddDataProtection().SetApplicationName("iOS Club")
+    .PersistKeysToDbContext<iOSContext>()
+    .UseCryptographicAlgorithms(new AuthenticatedEncryptorConfiguration()
+    {
+        EncryptionAlgorithm = EncryptionAlgorithm.AES_256_CBC,
+        ValidationAlgorithm = ValidationAlgorithm.HMACSHA256
+    });
 
 builder.Services.Configure<WebEncoderOptions>(options =>
     options.TextEncoderSettings = new TextEncoderSettings(UnicodeRanges.All));

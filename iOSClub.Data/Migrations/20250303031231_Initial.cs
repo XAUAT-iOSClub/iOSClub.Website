@@ -12,10 +12,39 @@ namespace iOSClub.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Articles",
+                columns: table => new
+                {
+                    Path = table.Column<string>(type: "varchar(128)", nullable: false),
+                    Title = table.Column<string>(type: "varchar(32)", nullable: false),
+                    Content = table.Column<string>(type: "TEXT", nullable: false),
+                    LastWriteTime = table.Column<DateTime>(type: "DATE", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Articles", x => x.Path);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DataProtectionKeys",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    FriendlyName = table.Column<string>(type: "TEXT", nullable: true),
+                    Xml = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DataProtectionKeys", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Departments",
                 columns: table => new
                 {
-                    Name = table.Column<string>(type: "varchar(20)", nullable: false)
+                    Name = table.Column<string>(type: "varchar(20)", nullable: false),
+                    Description = table.Column<string>(type: "varchar(32)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -222,6 +251,12 @@ namespace iOSClub.Data.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Articles");
+
+            migrationBuilder.DropTable(
+                name: "DataProtectionKeys");
+
             migrationBuilder.DropTable(
                 name: "ProjectModelStaffModel");
 

@@ -97,7 +97,7 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
-    app.UseHsts();
+    //app.UseHsts();
 }
 
 using (var scope = app.Services.CreateScope())
@@ -131,7 +131,7 @@ using (var scope = app.Services.CreateScope())
     await context.DisposeAsync();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 app.UseAntiforgery();

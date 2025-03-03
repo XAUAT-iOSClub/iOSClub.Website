@@ -9,22 +9,22 @@ using iOSClub.WebSite.IdentityModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
-using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
-using Microsoft.AspNetCore.DataProtection.KeyManagement;
-using Microsoft.AspNetCore.DataProtection.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.WebEncoders;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.Win32;
 using NpgsqlDataProtection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents();
+    .AddInteractiveServerComponents(
+        o =>
+        {
+            o.MaxBufferedUnacknowledgedRenderBatches = 1024 * 1024 * 1024;
+            o.DisconnectedCircuitMaxRetained = 1024;
+        });
 
 builder.Services.AddAntDesign();
 builder.Services.AddControllers();
@@ -72,7 +72,7 @@ if (string.IsNullOrEmpty(sql))
     builder.Services.AddDbContextFactory<iOSContext>(opt =>
         opt.UseSqlite("Data Source=Data.db",
             o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
-    
+
     builder.Services.AddDataProtection()
         .PersistKeysToFileSystem(new DirectoryInfo("./keys"));
 }
@@ -83,11 +83,10 @@ else
                 o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery))
             .ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning)) // <--- This line ✨
             .EnableDetailedErrors());
-    
-    builder.Services.AddDataProtection()
-        .PersistKeysToPostgres(sql,true);
-}
 
+    builder.Services.AddDataProtection()
+        .PersistKeysToPostgres(sql, true);
+}
 
 
 builder.Services.Configure<WebEncoderOptions>(options =>

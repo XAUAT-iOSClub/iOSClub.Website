@@ -80,9 +80,7 @@ else
 {
     builder.Services.AddDbContextFactory<iOSContext>(opt =>
         opt.UseNpgsql(sql,
-                o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery))
-            .ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning)) // <--- This line ✨
-            .EnableDetailedErrors());
+            o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
 
     builder.Services.AddDataProtection()
         .PersistKeysToPostgres(sql, true);

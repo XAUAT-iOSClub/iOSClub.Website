@@ -16,7 +16,7 @@ public class PresidentController(IDbContextFactory<iOSContext> factory)
     : ControllerBase
 {
     // GET: api/Member
-    [HttpDelete("{id}")]
+    [HttpGet("{id}")]
     public async Task<IActionResult> Delete(string id)
     {
         await using var context = await factory.CreateDbContextAsync();

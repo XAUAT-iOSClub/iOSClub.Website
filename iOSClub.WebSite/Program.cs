@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.WebEncoders;
 using Microsoft.IdentityModel.Tokens;
 using NpgsqlDataProtection;
@@ -19,12 +18,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents(
-        o =>
-        {
-            o.MaxBufferedUnacknowledgedRenderBatches = 1024 * 1024 * 1024;
-            o.DisconnectedCircuitMaxRetained = 1024;
-        });
+    .AddInteractiveServerComponents();
 
 builder.Services.AddAntDesign();
 builder.Services.AddControllers();

@@ -55,13 +55,6 @@ public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<iOSContext
         optionsBuilder.UseSqlite("Data Source=Data.db");
         return new iOSContext(optionsBuilder.Options);
     }
-
-    public static iOSContext Create(string s)
-    {
-        var optionsBuilder = new DbContextOptionsBuilder<iOSContext>();
-        optionsBuilder.UseNpgsql(s);
-        return new iOSContext(optionsBuilder.Options);
-    }
 }
 
 public static class DataTool

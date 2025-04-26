@@ -87,211 +87,113 @@
           FullScreen="true"
           OnDelete="@(() => Nav.NavigateTo("/Centre"))"
           Title="社团部门">
-<Extra>
-    @if (Member.Identity is "President" or "Minister")
-    {
-        <Space Wrap Class="desktop-phone-flex">
-            <SpaceItem>
-                <Button Type="@ButtonType.Primary">下载文件</Button>
-            </SpaceItem>
-            <SpaceItem>
-                <Upload Name="files">
-                    <label class="ant-btn" for="fileInput">上传Json数据</label>
-                </Upload>
-            </SpaceItem>
-            <SpaceItem>
-                <Button Type="@ButtonType.Primary" OnClick="() => OpenDepartment()">添加部门</Button>
-            </SpaceItem>
-        </Space>
-        <Button Type="@ButtonType.Primary" Class="phone-desktop" OnClick="() => _operaVisible = !_operaVisible">操作</Button>
-    }
-</Extra>
-<Context>
-    <Tabs Centered @bind-ActiveKey="@Key">
-        <TabPane Tab="总览" Key="总览">
-            <Flex Justify="space-between" Wrap="wrap">
-                <h2>社长/团支书/秘书长</h2>
-                @if (Member.Identity is "President" or "Minister")
-                {
-                    <Space Wrap>
-                        <SpaceItem>
-                            <Button OnClick="() => OpenAddMember()">添加成员</Button>
-                        </SpaceItem>
-                        <SpaceItem>
-                            <Button Danger OnClick="() => DeleteAll(Staffs.Ministers)">全部删除</Button>
-                        </SpaceItem>
-                    </Space>
-                }
-            </Flex>
-            <br/>
-            <Space Wrap>
-                @foreach (var item in Staffs.Ministers)
-                {
-                    <SpaceItem>
-                        <Popconfirm Title="确定删除这条数据?"
-                                    Placement="Placement.TopLeft"
-                                    OnConfirm="@(async () => await Delete(item, Staffs.Ministers))">
-                            <Button Type="@ButtonType.Primary">@item.Name</Button>
-                        </Popconfirm>
-                    </SpaceItem>
-                }
-            </Space>
-
-            <Divider/>
-            <Flex Justify="space-between">
-                <h2>成员</h2>
-                <Space Wrap>
-                    <SpaceItem>
-                        <Statistic GroupSeparator=" " Title="所有部员" Value="@Staffs.Member.Count" TValue="int" Class="desktop-phone">
-                            <PrefixTemplate>
-                                <Icon Type="team" Theme="outline"/>
-                            </PrefixTemplate>
-                        </Statistic>
-                    </SpaceItem>
-                    @if (Member.Identity is "President" or "Minister")
-                    {
-                        <SpaceItem>
-                            <Button Type="@ButtonType.Primary" OnClick="@CsvDownload">下载部员信息</Button>
-                        </SpaceItem>
-                    }
-                </Space>
-            </Flex>
-            <br/>
-            <Table TItem="MemberModel" DataSource="@Staffs.Member" Responsive>
-                <PropertyColumn Title="姓名" Property="c => c.UserName"/>
-                <PropertyColumn Title="学号" Property="c => c.UserId"/>
-                <PropertyColumn Title="学院" Property="c => c.Academy"/>
-                <PropertyColumn Title="政治面貌" Property="c => c.PoliticalLandscape"/>
-                <PropertyColumn Title="性别" Property="c => c.Gender"/>
-                <PropertyColumn Title="专业班级" Property="c => c.ClassName"/>
-                <PropertyColumn Title="手机号码" Property="c => c.PhoneNum"/>
-                <PropertyColumn Title="身份" Property="c => c.Identity"/>
-                <ActionColumn Title="操作">
-                    <Button Danger OnClick="@(async () => await Delete(context))">删除</Button>
-                </ActionColumn>
-            </Table>
-            <Divider/>
-            <Flex Justify="space-between">
-                <h2>项目</h2>
-                <Button OnClick="() => AddProj()" Type="@ButtonType.Primary">添加</Button>
-            </Flex>
-            <AntList Grid="grid" DataSource="@Staffs.Projects">
-                <ListItem>
-                    <Card Hoverable Style="border-radius: 10px;" BodyStyle="margin: 5px auto">
-                        <Flex Vertical Justify="space-between" Style="height: 200px" Align="flex-start">
-                            <div>
-                                <h2>@context.Title</h2>
-                                <div style="margin-top: 10px">
-                                    <Tag Icon="apple" Color="blue-inverse">@context.Department?.Name</Tag>
-                                </div>
-                                <Paragraph Type="secondary">@context.Description</Paragraph>
-                            </div>
-
-                            @if (Member.IsAdmin())
-                            {
-                                <Space>
-                                    <SpaceItem>
-                                        <a href="@($"/Centre/Project/{context.Id}")" class="ant-btn">去看看</a>
-                                    </SpaceItem>
-                                    <SpaceItem>
-                                        <Button OnClick="() => AddProj(context.Id)">更改项目</Button>
-                                    </SpaceItem>
-                                    <SpaceItem>
-                                        <Button Danger OnClick="() => DeleteProj(context, Staffs.Projects)">删除</Button>
-                                    </SpaceItem>
-                                </Space>
-                            }
-                        </Flex>
-                    </Card>
-                </ListItem>
-            </AntList>
-            @if (Staffs.Projects.Count == 0)
-            {
-                <Empty Image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
-                       Style="padding: 20px" Description="@("没有项目")"/>
-            }
-            <Divider/>
-            <h2>部门分布</h2>
-            <AntDesign.Charts.Bar Data="_departmentData" Config="_departmentConfig"/>
-            <Divider/>
-            <h2>学院分布</h2>
-            <AntDesign.Charts.Pie Data="_collegeData" Config="_collegeConfig"/>
-            <Divider/>
-            <h2>男女比例</h2>
-            <AntDesign.Charts.Pie Data="_genderData" Config="_collegeConfig"/>
-        </TabPane>
-        @foreach (var department in Departments)
+    <Extra>
+        @if (Member.Identity is "President" or "Minister")
         {
-            <TabPane Tab="@department.Name" Key="@department.Name">
+            <Space Wrap Class="desktop-phone-flex">
+                <SpaceItem>
+                    <Button Type="@ButtonType.Primary">下载文件</Button>
+                </SpaceItem>
+                <SpaceItem>
+                    <Upload Name="files">
+                        <label class="ant-btn" for="fileInput">上传Json数据</label>
+                    </Upload>
+                </SpaceItem>
+                <SpaceItem>
+                    <Button Type="@ButtonType.Primary" OnClick="() => OpenDepartment()">添加部门</Button>
+                </SpaceItem>
+            </Space>
+            <Button Type="@ButtonType.Primary" Class="phone-desktop" OnClick="() => _operaVisible = !_operaVisible">
+                操作
+            </Button>
+        }
+    </Extra>
+    <Context>
+        <Tabs Centered @bind-ActiveKey="@Key">
+            <TabPane Tab="总览" Key="总览">
                 <Flex Justify="space-between" Wrap="wrap">
-                    <h2>部长/副部长</h2>
-                    @if (Member.Identity is "President" or "Minister")
-                    {
-                        <Space Wrap Size=@(("8", "8"))>
-                            <SpaceItem>
-                                <Button OnClick="() => OpenAddMember(department)">添加成员</Button>
-                            </SpaceItem>
-                            <SpaceItem>
-                                <Button Danger OnClick="async () => await DeleteAll(department.Ministers)">全部删除</Button>
-                            </SpaceItem>
-                            <SpaceItem>
-                                <Button Type="@ButtonType.Primary" OnClick="() => OpenDepartment(department)">更改部门</Button>
-                            </SpaceItem>
-                            <SpaceItem>
-                                <Button Type="@ButtonType.Primary" Danger
-                                        OnClick="async () => await DeleteDepartment(department)">
-                                    删除部门
-                                </Button>
-                            </SpaceItem>
-                        </Space>
-                    }
-                </Flex>
-                <br/>
-                <Space Wrap>
-                    @foreach (var item in department.Ministers)
-                    {
-                        <SpaceItem>
-                            <Popconfirm Title="确定删除这条数据?"
-                                        Placement="Placement.TopLeft"
-                                        OnConfirm="@(async () => await Delete(item, department.Ministers))">
-                                <Button Type="@ButtonType.Primary">@item.Name</Button>
-                            </Popconfirm>
-                        </SpaceItem>
-                    }
-                </Space>
-                <Divider/>
-                <Flex Justify="space-between">
-                    <h2>成员</h2>
+                    <h2>社长/团支书/秘书长</h2>
                     @if (Member.Identity is "President" or "Minister")
                     {
                         <Space Wrap>
                             <SpaceItem>
-                                <Button OnClick="@(() => OpenAddMember(department, "Department"))">添加成员</Button>
+                                <Button OnClick="() => OpenAddMember()">添加成员</Button>
                             </SpaceItem>
                             <SpaceItem>
-                                <Button Danger OnClick="() => DeleteAll(department.Ministers)">全部删除</Button>
+                                <Button Danger OnClick="() => DeleteAll(Staffs.Ministers)">全部删除</Button>
                             </SpaceItem>
                         </Space>
                     }
                 </Flex>
                 <br/>
-                <Table TItem="StaffModel" DataSource="@department.Member" Responsive>
-                    <PropertyColumn Title="姓名" Property="c => c.Name"/>
-                    <PropertyColumn Title="学号" Property="c => c.UserId"/>
-                    <ActionColumn Title="操作">
-                        <Space>
+                <Space Wrap>
+                    @if (Member.IsAdmin())
+                    {
+                        @foreach (var item in Staffs.Ministers)
+                        {
                             <SpaceItem>
-                                <Button Danger OnClick="@(async () => await Delete(context, department.Member))">删除</Button>
+                                <Popconfirm Title="确定删除这条数据?"
+                                            Placement="Placement.TopLeft"
+                                            OnConfirm="@(async () => await Delete(item, Staffs.Ministers))">
+                                    <Button Type="@ButtonType.Primary">@item.Name</Button>
+                                </Popconfirm>
                             </SpaceItem>
-                        </Space>
-                    </ActionColumn>
+                        }
+                    }
+                    else
+                    {
+                        @foreach (var item in Staffs.Ministers)
+                        {
+                            <SpaceItem>
+                                <Button Type="@ButtonType.Primary">@item.Name</Button>
+                            </SpaceItem>
+                        }
+                    }
+                </Space>
+
+                <Divider/>
+                <Flex Justify="space-between">
+                    <h2>成员</h2>
+                    <Space Wrap>
+                        <SpaceItem>
+                            <Statistic GroupSeparator=" " Title="所有部员" Value="@Staffs.Member.Count" TValue="int"
+                                       Class="desktop-phone">
+                                <PrefixTemplate>
+                                    <Icon Type="team" Theme="outline"/>
+                                </PrefixTemplate>
+                            </Statistic>
+                        </SpaceItem>
+                        @if (Member.Identity is "President" or "Minister")
+                        {
+                            <SpaceItem>
+                                <Button Type="@ButtonType.Primary" OnClick="@CsvDownload">下载部员信息</Button>
+                            </SpaceItem>
+                        }
+                    </Space>
+                </Flex>
+                <br/>
+                <Table TItem="MemberModel" DataSource="@Staffs.Member" Responsive>
+                    <PropertyColumn Title="姓名" Property="c => c.UserName"/>
+                    <PropertyColumn Title="学号" Property="c => c.UserId"/>
+                    <PropertyColumn Title="学院" Property="c => c.Academy"/>
+                    <PropertyColumn Title="政治面貌" Property="c => c.PoliticalLandscape"/>
+                    <PropertyColumn Title="性别" Property="c => c.Gender"/>
+                    <PropertyColumn Title="专业班级" Property="c => c.ClassName"/>
+                    <PropertyColumn Title="手机号码" Property="c => c.PhoneNum"/>
+                    <PropertyColumn Title="身份" Property="c => c.Identity"/>
+                    @if (Member.IsAdmin())
+                    {
+                        <ActionColumn Title="操作">
+                            <Button Danger OnClick="@(async () => await Delete(context))">删除</Button>
+                        </ActionColumn>
+                    }
                 </Table>
                 <Divider/>
                 <Flex Justify="space-between">
                     <h2>项目</h2>
                     <Button OnClick="() => AddProj()" Type="@ButtonType.Primary">添加</Button>
                 </Flex>
-                <AntList Grid="grid" DataSource="@department.Projects">
+                <AntList Grid="grid" DataSource="@Staffs.Projects">
                     <ListItem>
                         <Card Hoverable Style="border-radius: 10px;" BodyStyle="margin: 5px auto">
                             <Flex Vertical Justify="space-between" Style="height: 200px" Align="flex-start">
@@ -313,7 +215,8 @@
                                             <Button OnClick="() => AddProj(context.Id)">更改项目</Button>
                                         </SpaceItem>
                                         <SpaceItem>
-                                            <Button Danger OnClick="() => DeleteProj(context, department.Projects)">删除</Button>
+                                            <Button Danger OnClick="() => DeleteProj(context, Staffs.Projects)">删除
+                                            </Button>
                                         </SpaceItem>
                                     </Space>
                                 }
@@ -321,14 +224,137 @@
                         </Card>
                     </ListItem>
                 </AntList>
-                @if (department.Projects.Count == 0)
+                @if (Staffs.Projects.Count == 0)
                 {
                     <Empty Image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
                            Style="padding: 20px" Description="@("没有项目")"/>
                 }
                 <Divider/>
+                <h2>部门分布</h2>
+                <AntDesign.Charts.Bar Data="_departmentData" Config="_departmentConfig"/>
+                <Divider/>
+                <h2>学院分布</h2>
+                <AntDesign.Charts.Pie Data="_collegeData" Config="_collegeConfig"/>
+                <Divider/>
+                <h2>男女比例</h2>
+                <AntDesign.Charts.Pie Data="_genderData" Config="_collegeConfig"/>
             </TabPane>
-        }
-    </Tabs>
-</Context>
+            @foreach (var department in Departments)
+            {
+                <TabPane Tab="@department.Name" Key="@department.Name">
+                    <Flex Justify="space-between" Wrap="wrap">
+                        <h2>部长/副部长</h2>
+                        @if (Member.Identity is "President" or "Minister")
+                        {
+                            <Space Wrap Size=@(("8", "8"))>
+                                <SpaceItem>
+                                    <Button OnClick="() => OpenAddMember(department)">添加成员</Button>
+                                </SpaceItem>
+                                <SpaceItem>
+                                    <Button Danger OnClick="async () => await DeleteAll(department.Ministers)">
+                                        全部删除
+                                    </Button>
+                                </SpaceItem>
+                                <SpaceItem>
+                                    <Button Type="@ButtonType.Primary" OnClick="() => OpenDepartment(department)">
+                                        更改部门
+                                    </Button>
+                                </SpaceItem>
+                                <SpaceItem>
+                                    <Button Type="@ButtonType.Primary" Danger
+                                            OnClick="async () => await DeleteDepartment(department)">
+                                        删除部门
+                                    </Button>
+                                </SpaceItem>
+                            </Space>
+                        }
+                    </Flex>
+                    <br/>
+                    <Space Wrap>
+                        @foreach (var item in department.Ministers)
+                        {
+                            <SpaceItem>
+                                <Popconfirm Title="确定删除这条数据?"
+                                            Placement="Placement.TopLeft"
+                                            OnConfirm="@(async () => await Delete(item, department.Ministers))">
+                                    <Button Type="@ButtonType.Primary">@item.Name</Button>
+                                </Popconfirm>
+                            </SpaceItem>
+                        }
+                    </Space>
+                    <Divider/>
+                    <Flex Justify="space-between">
+                        <h2>成员</h2>
+                        @if (Member.Identity is "President" or "Minister")
+                        {
+                            <Space Wrap>
+                                <SpaceItem>
+                                    <Button OnClick="@(() => OpenAddMember(department, "Department"))">添加成员</Button>
+                                </SpaceItem>
+                                <SpaceItem>
+                                    <Button Danger OnClick="() => DeleteAll(department.Ministers)">全部删除</Button>
+                                </SpaceItem>
+                            </Space>
+                        }
+                    </Flex>
+                    <br/>
+                    <Table TItem="StaffModel" DataSource="@department.Member" Responsive>
+                        <PropertyColumn Title="姓名" Property="c => c.Name"/>
+                        <PropertyColumn Title="学号" Property="c => c.UserId"/>
+                        @if (Member.IsAdmin())
+                        {
+                            <ActionColumn Title="操作">
+                                <Button Danger OnClick="@(async () => await Delete(context, department.Member))">
+                                    删除
+                                </Button>
+                            </ActionColumn>
+                        }
+                    </Table>
+                    <Divider/>
+                    <Flex Justify="space-between">
+                        <h2>项目</h2>
+                        <Button OnClick="() => AddProj()" Type="@ButtonType.Primary">添加</Button>
+                    </Flex>
+                    <AntList Grid="grid" DataSource="@department.Projects">
+                        <ListItem>
+                            <Card Hoverable Style="border-radius: 10px;" BodyStyle="margin: 5px auto">
+                                <Flex Vertical Justify="space-between" Style="height: 200px" Align="flex-start">
+                                    <div>
+                                        <h2>@context.Title</h2>
+                                        <div style="margin-top: 10px">
+                                            <Tag Icon="apple" Color="blue-inverse">@context.Department?.Name</Tag>
+                                        </div>
+                                        <Paragraph Type="secondary">@context.Description</Paragraph>
+                                    </div>
+
+                                    @if (Member.IsAdmin())
+                                    {
+                                        <Space>
+                                            <SpaceItem>
+                                                <a href="@($"/Centre/Project/{context.Id}")" class="ant-btn">去看看</a>
+                                            </SpaceItem>
+                                            <SpaceItem>
+                                                <Button OnClick="() => AddProj(context.Id)">更改项目</Button>
+                                            </SpaceItem>
+                                            <SpaceItem>
+                                                <Button Danger OnClick="() => DeleteProj(context, department.Projects)">
+                                                    删除
+                                                </Button>
+                                            </SpaceItem>
+                                        </Space>
+                                    }
+                                </Flex>
+                            </Card>
+                        </ListItem>
+                    </AntList>
+                    @if (department.Projects.Count == 0)
+                    {
+                        <Empty Image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+                               Style="padding: 20px" Description="@("没有项目")"/>
+                    }
+                    <Divider/>
+                </TabPane>
+            }
+        </Tabs>
+    </Context>
 </PageView>

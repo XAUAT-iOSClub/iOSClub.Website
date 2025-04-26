@@ -152,43 +152,43 @@
                 </Space>
 
                 <Divider/>
-                <Flex Justify="space-between">
-                    <h2>成员</h2>
-                    <Space Wrap>
-                        <SpaceItem>
-                            <Statistic GroupSeparator=" " Title="所有部员" Value="@Staffs.Member.Count" TValue="int"
-                                       Class="desktop-phone">
-                                <PrefixTemplate>
-                                    <Icon Type="team" Theme="outline"/>
-                                </PrefixTemplate>
-                            </Statistic>
-                        </SpaceItem>
-                        @if (Member.Identity is "President" or "Minister")
-                        {
+                @if (Member.IsAdmin())
+                {
+                    <Flex Justify="space-between">
+                        <h2>成员</h2>
+                        <Space Wrap>
                             <SpaceItem>
-                                <Button Type="@ButtonType.Primary" OnClick="@CsvDownload">下载部员信息</Button>
+                                <Statistic GroupSeparator=" " Title="所有部员" Value="@Staffs.Member.Count" TValue="int"
+                                           Class="desktop-phone">
+                                    <PrefixTemplate>
+                                        <Icon Type="team" Theme="outline"/>
+                                    </PrefixTemplate>
+                                </Statistic>
                             </SpaceItem>
-                        }
-                    </Space>
-                </Flex>
-                <br/>
-                <Table TItem="MemberModel" DataSource="@Staffs.Member" Responsive>
-                    <PropertyColumn Title="姓名" Property="c => c.UserName"/>
-                    <PropertyColumn Title="学号" Property="c => c.UserId"/>
-                    <PropertyColumn Title="学院" Property="c => c.Academy"/>
-                    <PropertyColumn Title="政治面貌" Property="c => c.PoliticalLandscape"/>
-                    <PropertyColumn Title="性别" Property="c => c.Gender"/>
-                    <PropertyColumn Title="专业班级" Property="c => c.ClassName"/>
-                    <PropertyColumn Title="手机号码" Property="c => c.PhoneNum"/>
-                    <PropertyColumn Title="身份" Property="c => c.Identity"/>
-                    @if (Member.IsAdmin())
-                    {
+                            @if (Member.Identity is "President" or "Minister")
+                            {
+                                <SpaceItem>
+                                    <Button Type="@ButtonType.Primary" OnClick="@CsvDownload">下载部员信息</Button>
+                                </SpaceItem>
+                            }
+                        </Space>
+                    </Flex>
+                    <br/>
+                    <Table TItem="MemberModel" DataSource="@Staffs.Member" Responsive>
+                        <PropertyColumn Title="姓名" Property="c => c.UserName"/>
+                        <PropertyColumn Title="学号" Property="c => c.UserId"/>
+                        <PropertyColumn Title="学院" Property="c => c.Academy"/>
+                        <PropertyColumn Title="政治面貌" Property="c => c.PoliticalLandscape"/>
+                        <PropertyColumn Title="性别" Property="c => c.Gender"/>
+                        <PropertyColumn Title="专业班级" Property="c => c.ClassName"/>
+                        <PropertyColumn Title="手机号码" Property="c => c.PhoneNum"/>
+                        <PropertyColumn Title="身份" Property="c => c.Identity"/>
                         <ActionColumn Title="操作">
                             <Button Danger OnClick="@(async () => await Delete(context))">删除</Button>
                         </ActionColumn>
-                    }
-                </Table>
-                <Divider/>
+                    </Table>
+                    <Divider/>
+                }
                 <Flex Justify="space-between">
                     <h2>项目</h2>
                     <Button OnClick="() => AddProj()" Type="@ButtonType.Primary">添加</Button>

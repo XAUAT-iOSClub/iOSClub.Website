@@ -50,6 +50,15 @@ public class MemberModel : StudentModel
     {
         return AutoCopy<StudentModel, MemberModel>(model);
     }
+    
+    public static MemberModel CopyFrom(StudentModel model, string identity)
+    {
+        var a = AutoCopy<StudentModel, MemberModel>(model);
+
+        a.Identity = identity;
+
+        return a;
+    }
 
     public static string GetCsv(List<MemberModel> models)
     {

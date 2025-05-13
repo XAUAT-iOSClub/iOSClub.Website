@@ -16,7 +16,7 @@ public class ProjectController(iOSContext context, IHttpContextAccessor httpCont
     #region GetValue
 
     [HttpGet]
-    [Authorize(Roles = "Founder, President, TechnologyMinister, PracticalMinister, NewMediaMinister")]
+    [Authorize(Roles = "Founder, President, Minister")]
     public async Task<ActionResult<List<ProjectModel>>> GetAllData()
     {
         return await context.Projects
@@ -65,7 +65,7 @@ public class ProjectController(iOSContext context, IHttpContextAccessor httpCont
     #region Project
 
     [HttpPost]
-    [Authorize(Roles = "Founder, President, TechnologyMinister, PracticalMinister, NewMediaMinister")]
+    [Authorize(Roles = "Founder, President, Minister")]
     public async Task<ActionResult<ProjectModel>> CreateOrUpdateProject([FromBody] ProjectModel model)
     {
         var member = httpContextAccessor.HttpContext?.User.GetUser();
@@ -113,7 +113,7 @@ public class ProjectController(iOSContext context, IHttpContextAccessor httpCont
     }
 
     [HttpGet("{id}/{projId}")]
-    [Authorize(Roles = "Founder, President, TechnologyMinister, PracticalMinister, NewMediaMinister")]
+    [Authorize(Roles = "Founder, President, Minister")]
     public async Task<ActionResult> LetChangeProject(string id, string projId)
     {
         var member = httpContextAccessor.HttpContext?.User.GetUser();
@@ -238,7 +238,7 @@ public class ProjectController(iOSContext context, IHttpContextAccessor httpCont
     }
 
     [HttpGet("{id}/{taskId}")]
-    [Authorize(Roles = "Founder, President, TechnologyMinister, PracticalMinister, NewMediaMinister")]
+    [Authorize(Roles = "Founder, President, Minister")]
     public async Task<ActionResult> LetChangeTask(string id, string taskId)
     {
         var member = httpContextAccessor.HttpContext?.User.GetUser();

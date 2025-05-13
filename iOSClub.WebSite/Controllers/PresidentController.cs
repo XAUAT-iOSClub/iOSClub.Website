@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace iOSClub.WebSite.Controllers;
 
-[Authorize(Roles = "Founder, President, TechnologyMinister, PracticalMinister, NewMediaMinister")]
+[Authorize(Roles = "Founder, President, Minister")]
 [TokenActionFilter]
 [Route("api/[controller]/[action]")]
 [ApiController]
@@ -62,8 +62,6 @@ public class PresidentController(IDbContextFactory<iOSContext> factory)
         // 1. 使用高效的键集分页而非偏移分页(Keyset Pagination instead of Offset Pagination)
         // 假设 Student 表有一个名为 Id 的主键列
 
-        // 2. 分离计数查询和数据查询，并使用异步并行执行
-        var countTask = context.Students.CountAsync();
         // 3. 优化JOIN查询：先获取分页后的学生数据，再一次性关联员工数据
         var skipCount = (pageNum - 1) * pageSize;
         var studentIdsQuery = context.Students
@@ -79,14 +77,10 @@ public class PresidentController(IDbContextFactory<iOSContext> factory)
         var staffQuery = context.Staffs
             .Where(s => studentIds.Contains(s.UserId))
             .AsNoTracking(); // 并行执行两个查询
-        var studentsTask = studentsQuery.ToListAsync();
-        var staffsTask = staffQuery.ToListAsync();
 
-        await Task.WhenAll(countTask, studentsTask, staffsTask); // 并行
-
-        var totalCount = await countTask;
-        var students = await studentsTask;
-        var staffs = await staffsTask;
+        var totalCount = await context.Students.CountAsync();
+        var students = await studentsQuery.ToListAsync();
+        var staffs = await staffQuery.ToListAsync();
 
         // 5. 在内存中执行连接操作
         var staffMap = staffs.ToDictionary(s => s.UserId);

@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.WebEncoders;
 using Microsoft.IdentityModel.Tokens;
 using NpgsqlDataProtection;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,11 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddAntDesign();
 builder.Services.AddControllers();
+builder.Services.AddOpenApi(opt =>
+{
+    opt.AddDocumentTransformer<BearerSecuritySchemeTransformer>();
+});
+
 
 // 身份验证
 builder.Services.AddScoped<AuthenticationStateProvider, JwtProvider>();
@@ -91,6 +97,7 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
     //app.UseHsts();
 }
+app.MapOpenApi();
 
 using (var scope = app.Services.CreateScope())
 {
@@ -140,6 +147,7 @@ app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.MapScalarApiReference();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();

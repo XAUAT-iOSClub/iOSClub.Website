@@ -21,5 +21,4 @@ RUN dotnet publish "iOSClub.WebSite.csproj" -c $BUILD_CONFIGURATION -o /app/publ
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-RUN ls -lh /app/iOSClub.Data.dll /app/iOSClub.WebSite.dll
 ENTRYPOINT ["dotnet", "iOSClub.WebSite.dll"]

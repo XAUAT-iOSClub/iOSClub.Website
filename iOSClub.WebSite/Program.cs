@@ -123,6 +123,7 @@ using (var scope = app.Services.CreateScope())
         }
         catch (Exception ex)
         {
+            await context.Database.EnsureCreatedAsync();
             Console.WriteLine("Migration error: " + ex);
             throw; //强烈建议抛出来，不要做空catch，方便看日志
         }

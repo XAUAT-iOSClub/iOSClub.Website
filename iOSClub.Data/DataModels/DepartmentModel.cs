@@ -3,8 +3,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace iOSClub.Data.DataModels;
 
-public class DepartmentModel
+public class DepartmentModel : DataModel
 {
+    [Column(TypeName = "varchar(32)")]
+    public string Key { get; set; } = "";
+
     /// <summary>
     /// 部门名称
     /// </summary>
@@ -12,8 +15,7 @@ public class DepartmentModel
     [Column(TypeName = "varchar(20)")]
     public string Name { get; set; } = "";
 
-    [Column(TypeName = "varchar(32)")] 
-    public string? Description { get; set; }
+    [Column(TypeName = "varchar(32)")] public string? Description { get; set; }
 
     /// <summary>
     /// 部员

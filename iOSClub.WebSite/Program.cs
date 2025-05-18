@@ -23,10 +23,7 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddAntDesign();
 builder.Services.AddControllers();
-builder.Services.AddOpenApi(opt =>
-{
-    opt.AddDocumentTransformer<BearerSecuritySchemeTransformer>();
-});
+builder.Services.AddOpenApi(opt => { opt.AddDocumentTransformer<BearerSecuritySchemeTransformer>(); });
 
 
 // 身份验证
@@ -97,6 +94,7 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
     //app.UseHsts();
 }
+
 app.MapOpenApi();
 
 using (var scope = app.Services.CreateScope())
@@ -131,6 +129,15 @@ using (var scope = app.Services.CreateScope())
         }
 
         context.Staffs.Add(model);
+    }
+
+    if (context.Departments.Any())
+    {
+        var departments = await context.Departments.Where(x => string.IsNullOrEmpty(x.Key)).ToListAsync();
+        foreach (var department in departments)
+        {
+            department.Key = department.GetHashKey();
+        }
     }
 
     await context.SaveChangesAsync();

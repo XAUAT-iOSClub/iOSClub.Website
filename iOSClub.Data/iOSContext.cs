@@ -97,4 +97,5 @@ public static class DataTool
 public abstract class DataModel
 {
     public override string ToString() => $"{GetType()} : {DataTool.GetProperties(this)}";
+    public string GetHashKey() => DataTool.StringToHash(ToString());
 }

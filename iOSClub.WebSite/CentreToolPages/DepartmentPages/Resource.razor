@@ -33,14 +33,14 @@
         else
         {
             <AntList Grid="grid" DataSource="@Resources">
-                <ListItem >
+                <ListItem>
                     <Card Hoverable Style="border-radius: 10px;" BodyStyle="margin: 5px auto">
                         <Flex Vertical Justify="space-between" Style="height: 200px" Align="flex-start">
                             <div>
                                 <Title Level="2">@context.Name</Title>
                                 <Paragraph>@context.Description</Paragraph>
                                 <div>
-                                    @foreach (var s in context.Tag?.Split(",", StringSplitOptions.RemoveEmptyEntries) ?? [])
+                                    @foreach (var s in context.Tag?.Split(",", StringSplitOptions.RemoveEmptyEntries) ?? Array.Empty<string>())
                                     {
                                         <Tag Color="blue-inverse">@s</Tag>
                                     }
@@ -51,7 +51,8 @@
                             {
                                 <Space>
                                     <SpaceItem>
-                                        <Button Type="@ButtonType.Primary" OnClick="@(() => Update(context))">更改</Button>
+                                        <Button Type="@ButtonType.Primary" OnClick="@(() => Update(context))">更改
+                                        </Button>
                                     </SpaceItem>
                                     <SpaceItem>
                                         <Button Danger OnClick="@(() => Delete(context))">删除</Button>
@@ -141,7 +142,7 @@
         Xxl = 3,
     };
 
-    
+
     private List<ResourceModel> Resources { get; set; } = [];
     [CascadingParameter] private MemberModel Member { get; set; } = new();
 

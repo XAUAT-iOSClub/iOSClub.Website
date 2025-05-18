@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.WebEncoders;
 using Microsoft.IdentityModel.Tokens;
 using NpgsqlDataProtection;
@@ -104,6 +106,13 @@ using (var scope = app.Services.CreateScope())
 
     var pending = context.Database.GetPendingMigrations();
     var enumerable = pending as string[] ?? pending.ToArray();
+
+    Console.WriteLine("Model hash: " + context.Model.GetHashCode());
+    foreach (var m in enumerable)
+        Console.WriteLine("Pending migration: " + m);
+
+    var diff = context.GetService<IMigrator>().GenerateScript();
+    Console.WriteLine(diff); // 这会输出所有差异的SQL
     if (enumerable.Length != 0)
     {
         Console.WriteLine("Pending migrations: " + string.Join("; ", enumerable));

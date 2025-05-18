@@ -102,16 +102,25 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<iOSContext>();
 
-    if (context.Database.GetPendingMigrations().Any())
+    var pending = context.Database.GetPendingMigrations();
+    var enumerable = pending as string[] ?? pending.ToArray();
+    if (enumerable.Length != 0)
     {
+        Console.WriteLine("Pending migrations: " + string.Join("; ", enumerable));
         try
         {
             await context.Database.MigrateAsync();
+            Console.WriteLine("Migrations applied successfully.");
         }
-        catch
+        catch (Exception ex)
         {
-            await context.Database.EnsureCreatedAsync();
+            Console.WriteLine("Migration error: " + ex);
+            throw; //强烈建议抛出来，不要做空catch，方便看日志
         }
+    }
+    else
+    {
+        Console.WriteLine("No pending migrations.");
     }
 
     if (!context.Staffs.Any())
@@ -146,7 +155,7 @@ using (var scope = app.Services.CreateScope())
 
 //app.UseHttpsRedirection();
 
-app.UseStaticFiles();
+app.MapStaticAssets();
 app.UseAntiforgery();
 
 app.UseCors();

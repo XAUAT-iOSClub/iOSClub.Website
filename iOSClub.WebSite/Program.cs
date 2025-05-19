@@ -10,8 +10,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.WebEncoders;
 using Microsoft.IdentityModel.Tokens;
 using NpgsqlDataProtection;
@@ -66,6 +65,7 @@ builder.Services.AddHttpClient();
 
 // 数据库
 var sql = Environment.GetEnvironmentVariable("SQL", EnvironmentVariableTarget.Process);
+
 if (string.IsNullOrEmpty(sql))
 {
     builder.Services.AddDbContextFactory<iOSContext>(opt =>
@@ -78,8 +78,11 @@ if (string.IsNullOrEmpty(sql))
 else
 {
     builder.Services.AddDbContextFactory<iOSContext>(opt =>
+    {
         opt.UseNpgsql(sql,
-            o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
+            o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
+        opt.ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning));
+    });
 
     builder.Services.AddDataProtection()
         .PersistKeysToPostgres(sql, true);
@@ -108,11 +111,6 @@ using (var scope = app.Services.CreateScope())
     var enumerable = pending as string[] ?? pending.ToArray();
 
     Console.WriteLine("Model hash: " + context.Model.GetHashCode());
-    foreach (var m in enumerable)
-        Console.WriteLine("Pending migration: " + m);
-
-    var diff = context.GetService<IMigrator>().GenerateScript();
-    Console.WriteLine(diff); // 这会输出所有差异的SQL
     if (enumerable.Length != 0)
     {
         Console.WriteLine("Pending migrations: " + string.Join("; ", enumerable));
@@ -123,9 +121,8 @@ using (var scope = app.Services.CreateScope())
         }
         catch (Exception ex)
         {
-            await context.Database.EnsureCreatedAsync();
             Console.WriteLine("Migration error: " + ex);
-             //强烈建议抛出来，不要做空catch，方便看日志
+            throw; // 让异常冒泡，方便定位问题
         }
     }
     else

@@ -28,4 +28,13 @@ public class ArticleModel
     /// </summary>
     [Column(TypeName = "DATE")]
     public DateTime LastWriteTime { get; set; } = DateTime.Now;
+
+    /// <summary>
+    /// Founder : 创始人
+    /// President : 社长,团支书
+    /// Minister : 部长
+    /// Department : 部员成员
+    /// </summary>
+    [Column(TypeName = "varchar(20)")]
+    public string? Identity { get; set; }
 }

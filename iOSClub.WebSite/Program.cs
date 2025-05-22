@@ -110,7 +110,6 @@ using (var scope = app.Services.CreateScope())
     var pending = context.Database.GetPendingMigrations();
     var enumerable = pending as string[] ?? pending.ToArray();
 
-    Console.WriteLine("Model hash: " + context.Model.GetHashCode());
     if (enumerable.Length != 0)
     {
         Console.WriteLine("Pending migrations: " + string.Join("; ", enumerable));

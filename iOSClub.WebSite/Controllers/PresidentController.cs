@@ -104,6 +104,44 @@ public class PresidentController(IDbContextFactory<iOSContext> factory)
         return GZipServer.CompressString(JsonConvert.SerializeObject(response)); // 使用System.Text.Json代替Newtonsoft
     }
 
+    [HttpGet]
+    public async Task<ActionResult<string>> GetStaffsByPage(int pageNum = 1, int pageSize = 10)
+    {
+        if (pageNum < 1 || pageSize < 1 || pageSize > 100) // 限制最大页大小
+        {
+            return BadRequest("Invalid pagination parameters");
+        }
+
+        await using var context = await factory.CreateDbContextAsync();
+
+        var skipCount = (pageNum - 1) * pageSize;
+        var studentQuery = context.Staffs
+            .OrderBy(s => s.UserId) // 确保结果一致性的排序
+            .Skip(skipCount)
+            .Take(pageSize)
+            .Select(x => new { x.UserId, x.Identity });
+
+        var re = from student in studentQuery
+            join studentModel in context.Students on student.UserId equals studentModel.UserId
+            select MemberModel.CopyFrom(studentModel, student.Identity);
+
+        var totalCount = await context.Students.CountAsync();
+        // 5. 在内存中执行连接操作
+
+        var response = new
+        {
+            TotalCount = totalCount,
+            PageSize = pageSize,
+            CurrentPage = pageNum,
+            TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize),
+            Data = await re.ToListAsync()
+        };
+
+        // 6. 使用更高效的序列化
+        return GZipServer.CompressString(JsonConvert.SerializeObject(response)); // 使用System.Text.Json代替Newtonsoft
+    }
+
+
     [HttpPost]
     public async Task<ActionResult<List<StudentModel>>> UpdateMany(List<StudentModel> list)
     {

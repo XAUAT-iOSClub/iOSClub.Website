@@ -18,6 +18,8 @@ public class StudentModel
     [Column(TypeName = "varchar(20)")] public string ClassName { get; set; } = "";
     [Column(TypeName = "varchar(11)")] public string PhoneNum { get; set; } = "";
     [Column(TypeName = "DATE")] public DateTime JoinTime { get; set; } = DateTime.Today;
+    [Column(TypeName = "varchar(256)")] public string PasswordHash { get; set; } = "";
+    [Column(TypeName = "varchar(256)")] public string? EMail { get; set; }
 
     public override string ToString()
     {
@@ -39,7 +41,7 @@ public class StudentModel
 
     public static string GetCsv(IEnumerable<StudentModel> models)
     {
-        var builder = new StringBuilder("姓名,学号,性别,学院,政治面貌,专业班级,电话号码");
+        var builder = new StringBuilder("姓名,学号,性别,学院,政治面貌,专业班级,电话号码,电子邮箱,密码(Hash)");
         foreach (var model in models)
             builder.Append("\n" + model);
 

@@ -159,7 +159,7 @@ a, .btn-link {
     border-radius: .2em;
 }
 
-:is(.apple-link,.vp-doc a[href*="://"],.vp-doc a[target=_blank]):not(:is(.no-icon,svg a,:has(img,svg))):after {
+:is(.apple-link, a[href*="://"], a[target=_blank]):not(:is(.no-icon,svg a,:has(img,svg))):after {
     display: inline-block;
     margin-top: -1px;
     margin-left: 4px;

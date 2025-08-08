@@ -17,7 +17,7 @@ public sealed class BearerSecuritySchemeTransformer(IAuthenticationSchemeProvide
             var requirements = new Dictionary<string,
                 OpenApiSecurityScheme>
             {
-                ["Bearer"] = new OpenApiSecurityScheme
+                ["Bearer"] = new()
                 {
                     Type = SecuritySchemeType.Http,
                     Scheme = "bearer", // "bearer" refers to the header name here

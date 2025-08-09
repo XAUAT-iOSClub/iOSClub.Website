@@ -1,5 +1,6 @@
 ﻿using iOSClub.Data;
 using iOSClub.Data.DataModels;
+using iOSClub.WebSite.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,5 +24,17 @@ public class ArticleController(
     {
         await using var context = await factory.CreateDbContextAsync();
         return await context.Articles.FirstOrDefaultAsync(x => x.Path == id);
+    }
+
+    [HttpGet("Rss")]
+    public async Task<IActionResult> GetRss()
+    {
+        var RssModels = await RssArticle.GetArticleAsync();
+        var Entries = await WebArticle.GetArticleAsync();
+        return Ok(new
+        {
+            RssModels,
+            Entries
+        });
     }
 }

@@ -37,4 +37,6 @@ public class ArticleModel
     /// </summary>
     [Column(TypeName = "varchar(20)")]
     public string? Identity { get; set; }
+    
+    public int Watch { get; set; }
 }
